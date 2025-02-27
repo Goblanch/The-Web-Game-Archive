@@ -22,6 +22,7 @@ const UserRegister = () => {
             return;
         }
 
+        setError("");
         console.log(userName);
         console.log(name);
         console.log(lastName);
