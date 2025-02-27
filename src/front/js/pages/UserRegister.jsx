@@ -9,16 +9,29 @@ const UserRegister = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [error, setError] = useState("");
 
 
     const handleOnSubmit = (e) => {
         e.preventDefault();
+
+        if (!checkPassword()) {
+            setError("Passwords do not match. Please make sure they match.")
+            setPassword("");
+            setConfirmPassword("");
+            return;
+        }
+
         console.log(userName);
         console.log(name);
         console.log(lastName);
         console.log(email);
         console.log(password);
         console.log(confirmPassword);
+    }
+
+    const checkPassword = () => {
+        return password === confirmPassword;
     }
 
     const handleGotoLogin = () => {
@@ -28,6 +41,13 @@ const UserRegister = () => {
     return (
         <div className="container">
             <h1 className="mt-3 mb-5 text text-center">Create an Account</h1>
+
+            {error && (
+                <div className="bg bg-danger border rounded mb-4 p-3">
+                    <h3 className="text text-light">Error</h3>
+                    <p className="text text-light">{error}</p>
+                </div>
+            )}
 
             <form onSubmit={handleOnSubmit}>
                 <div className="row mb-5">
@@ -41,6 +61,7 @@ const UserRegister = () => {
                             id="user-name"
                             placeholder="Enter your user name"
                             onChange={(e) => setUserName(e.target.value)}
+                            required
                         />
                     </div>
                 </div>
@@ -56,6 +77,7 @@ const UserRegister = () => {
                             id="name"
                             placeholder="Enter your name"
                             onChange={(e) => setName(e.target.value)}
+                            required
                         />
                     </div>
                 </div>
@@ -85,6 +107,7 @@ const UserRegister = () => {
                             id="email"
                             placeholder="Enter your email"
                             onChange={(e) => setEmail(e.target.value)}
+                            required
                         />
                     </div>
                 </div>
@@ -99,6 +122,8 @@ const UserRegister = () => {
                             id="password"
                             placeholder="Enter your password"
                             onChange={(e) => setPassword(e.target.value)}
+                            value={password}
+                            required
                         />
                     </div>
                 </div>
@@ -113,6 +138,8 @@ const UserRegister = () => {
                             id="repeat-password"
                             placeholder="Repeat your password"
                             onChange={(e) => setConfirmPassword(e.target.value)}
+                            value={confirmPassword}
+                            required
                         />
                     </div>
                 </div>
