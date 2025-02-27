@@ -6,6 +6,15 @@ import { BackendURL } from "./component/backendURL";
 import { Home } from "./pages/home";
 import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
+import LeaderBoards from "./pages/LeaderBoards.jsx";
+import Users from "./pages/Users.jsx";
+import HigherLower from "./pages/HigherLower.jsx";
+import FairPrice from "./FairPrice.jsx";
+import Potterdle from "./Potterdle.jsx";
+import MithrilClicker from "./MithrilClicker.jsx";
+import Pokemon from "./Pokemon.jsx";
+import Aimlabs from "./Aimlabs.jsx";
+
 import injectContext from "./store/appContext";
 
 import { Navbar } from "./component/navbar";
@@ -26,8 +35,18 @@ const Layout = () => {
                     <Navbar />
                     <Routes>
                         <Route element={<Home />} path="/" />
-                        <Route element={<Demo />} path="/demo" />
-                        <Route element={<Single />} path="/single/:theid" />
+                        <Route element={<LeaderBoards />} path="/leaderboards" />
+                        <Route element={<Users />} path="/users" />
+                        <Route element={<HigherLower />} path="/higherlower" />
+                        <Route element={<FairPrice />} path="/fairprice" />
+                        <Route element={<Potterdle />} path="/potterdle" />
+                        <Route element={<MithrilClicker />} path="/mithrilclicker" />
+                        <Route element={<Pokemon />} path="/pokemon" />
+                        <Route element={<Aimlabs />} path="/aimlabs" />
+
+                        {/* Estos venían con el template y de momento no nos hacen falta pero los dejo por si acaso */}
+                        {/* <Route element={<Single />} path="/single/:theid" /> */}
+                        {/* <Route element={<Demo />} path="/demo" /> */}
                         <Route element={<h1>Not found!</h1>} />
                     </Routes>
                     <Footer />
