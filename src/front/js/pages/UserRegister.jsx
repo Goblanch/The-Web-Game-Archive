@@ -3,8 +3,21 @@ import { useNavigate } from "react-router-dom";
 
 const UserRegister = () => {
 
+    const [userName, setUserName] = useState("");
+    const [name, setName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+
+
     const handleOnRegister = () => {
-        console.log("REGISTRAR");
+        console.log(userName);
+        console.log(name);
+        console.log(lastName);
+        console.log(email);
+        console.log(password);
+        console.log(confirmPassword);
     }
 
     const handleGotoLogin = () => {
@@ -20,7 +33,13 @@ const UserRegister = () => {
                     <h6 className="text">USERNAME</h6>
                 </div>
                 <div className="col-lg-10 col-md-12">
-                    <input type="text" className="form-control" name="" id="user-name" placeholder="Enter your user name" />
+                    <input
+                        type="text"
+                        className="form-control"
+                        id="user-name"
+                        placeholder="Enter your user name"
+                        onChange={(e) => setUserName(e.target.value)}
+                    />
                 </div>
             </div>
 
@@ -29,7 +48,13 @@ const UserRegister = () => {
                     <h6>NAME</h6>
                 </div>
                 <div className="col-lg-10 col-md-12">
-                    <input type="text" className="form-control" name="" id="name" placeholder="Enter your name" />
+                    <input
+                        type="text"
+                        className="form-control"
+                        id="name"
+                        placeholder="Enter your name"
+                        onChange={(e) => setName(e.target.value)}
+                    />
                 </div>
             </div>
 
@@ -38,7 +63,12 @@ const UserRegister = () => {
                     <h6>LAST NAME</h6>
                 </div>
                 <div className="col-lg-10 col-md-12">
-                    <input type="text" className="form-control" name="" id="last-name" placeholder="Enter your last name" />
+                    <input type="text"
+                        className="form-control"
+                        id="last-name"
+                        placeholder="Enter your last name"
+                        onChange={(e) => setLastName(e.target.value)}
+                    />
                 </div>
             </div>
 
@@ -47,7 +77,13 @@ const UserRegister = () => {
                     <h6>EMAIL</h6>
                 </div>
                 <div className="col-lg-10 col-md-12">
-                    <input type="text" className="form-control" name="" id="email" placeholder="Enter your email" />
+                    <input
+                        type="text"
+                        className="form-control"
+                        id="email"
+                        placeholder="Enter your email"
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
                 </div>
             </div>
 
@@ -56,7 +92,12 @@ const UserRegister = () => {
                     <h6>PASSWORD</h6>
                 </div>
                 <div className="col-lg-2 col-md-12">
-                    <input type="password" className="form-control" name="" id="password" placeholder="Enter your password" />
+                    <input type="password"
+                        className="form-control"
+                        id="password"
+                        placeholder="Enter your password"
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
                 </div>
             </div>
 
@@ -65,7 +106,12 @@ const UserRegister = () => {
                     <h6>PASSWORD</h6>
                 </div>
                 <div className="col-lg-2 col-md-12">
-                    <input type="password" className="form-control" name="" id="repeat-password" placeholder="Repeat your password" />
+                    <input type="password"
+                        className="form-control"
+                        id="repeat-password"
+                        placeholder="Repeat your password"
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                    />
                 </div>
             </div>
 
