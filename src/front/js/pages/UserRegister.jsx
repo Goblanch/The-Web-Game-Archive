@@ -11,6 +11,8 @@ const UserRegister = () => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
 
+    const navigate = useNavigate();
+
 
     const handleOnSubmit = (e) => {
         e.preventDefault();
@@ -23,12 +25,8 @@ const UserRegister = () => {
         }
 
         setError("");
-        console.log(userName);
-        console.log(name);
-        console.log(lastName);
-        console.log(email);
-        console.log(password);
-        console.log(confirmPassword);
+
+        // Hacer llamada a la api aquí
     }
 
     const checkPassword = () => {
@@ -36,7 +34,7 @@ const UserRegister = () => {
     }
 
     const handleGotoLogin = () => {
-        console.log("Go to login")
+        navigate('/user-login');
     }
 
     return (
