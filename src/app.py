@@ -6,7 +6,7 @@ from flask import Flask, request, jsonify, url_for, send_from_directory
 from flask_migrate import Migrate
 from flask_swagger import swagger
 from api.utils import APIException, generate_sitemap
-from api.models import db
+from api.models import db ,User , Minigames , Played_games
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
@@ -66,7 +66,74 @@ def serve_any_other_file(path):
     return response
 
 
+
+
+#######################----METODOS DE LA TABLA User------#####################
+@app.route('/users', methods=['GET'])
+def get_all_users():
+
+    all_users = User.query.all()
+
+    users_info = [user.serialize() for user in all_users]
+
+    return jsonify(users_info), 200
+
+@app.route('/singup', methods = ["POST"])
+def post_user():
+
+   request_new_user = request.get_json()
+
+   user = User.query.filter_by(email = request_new_user["email"]).first()
+
+   if "email" not in request_new_user or "password" not in request_new_user:
+                          
+        return jsonify({"msg": "Tienes que introducir email y password para poder registrarte"}), 400
+
+   elif user is not None:
+       
+       return jsonify({"msg": "Ya existe el usuario que deseas crear"}), 400
+   
+   new_user = User(email = request_new_user["email"], 
+                   password = request_new_user["password"], 
+                   user_name = request_new_user["user_name"],
+                   name = request_new_user["name"],
+                   last_name = request_new_user["last_name"],
+                   user_img = request_new_user["user_img"],
+                   total_points = request_new_user["total_points"],
+                   )
+   
+   db.session.add(new_user)
+   db.session.commit()
+
+   return jsonify({"msg":"Usuario creado correctamente"} ,new_user.serialize()), 200
+
+
+#######################----METODOS DE LA TABLA Minigames------#####################
+
+@app.route('/minigames', methods=['GET'])
+def get_all_minigames():
+
+    all_minigames = Minigames.query.all()
+
+    minigame_info = [minigame.serialize() for minigame in all_minigames]
+
+    return jsonify(minigame_info), 200
+
+
+
+#######################----METODOS DE LA TABLA Played_games------#####################
+
+@app.route('/played_games', methods=['GET'])
+def get_all_usergames():
+
+    all_usergames = Played_games.query.all()
+
+    usergame_info = [usergame.serialize() for usergame in all_usergames]
+
+    return jsonify(usergame_info), 200
+
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3001))
     app.run(host='0.0.0.0', port=PORT, debug=True)
+
