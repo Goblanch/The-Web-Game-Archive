@@ -15,6 +15,7 @@ import MithrilClicker from "./MithrilClicker.jsx";
 import Pokemon from "./Pokemon.jsx";
 import Aimlabs from "./Aimlabs.jsx";
 import UserRegister from "./pages/UserRegister.jsx";
+import UserLogin from "./pages/UserLogin.jsx";
 
 import injectContext from "./store/appContext";
 
@@ -45,6 +46,7 @@ const Layout = () => {
                         <Route element={<Pokemon />} path="/pokemon" />
                         <Route element={<Aimlabs />} path="/aimlabs" />
                         <Route element={<UserRegister />} path="/user-register" />
+                        <Route element={<UserLogin />} path="/user-login" />
 
                         {/* Estos venían con el template y de momento no nos hacen falta pero los dejo por si acaso */}
                         {/* <Route element={<Single />} path="/single/:theid" /> */}
