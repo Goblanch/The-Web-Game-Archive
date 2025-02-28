@@ -13,7 +13,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					background: "white",
 					initial: "white"
 				}
-			]
+			], 
+			randomPokemon: null
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -46,6 +47,28 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				//reset the global store
 				setStore({ demo: demo });
+			},
+
+			getRandomPokemon : async () => {
+				try{
+
+					const randomId = Math.floor(Math.random() * 1010) + 1;
+
+					const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${randomId}`);
+
+					if(!response.ok){
+						throw new Error(response.statusText);
+					}
+
+					const data = await response.json();
+
+					setStore({ randomPokemon: data });
+
+					return data;
+
+				}catch(error){
+					console.log("Error getting random pokemon:", error);
+				}
 			}
 		}
 	};
