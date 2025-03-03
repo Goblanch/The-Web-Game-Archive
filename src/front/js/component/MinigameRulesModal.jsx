@@ -58,10 +58,6 @@ const MinigameRulesModal = ({ gameName }) => {
                             </div>
                         </div>
                     </div>
-                    {/* Fondo del modal */}
-                    <div
-                        onClick={() => setShowModal(false)}
-                    ></div>
                 </div>
             )}
         </div>
