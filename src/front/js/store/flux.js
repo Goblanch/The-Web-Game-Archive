@@ -13,7 +13,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					background: "white",
 					initial: "white"
 				}
-			]
+			], 
+			randomPokemon: null
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -46,6 +47,37 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				//reset the global store
 				setStore({ demo: demo });
+			},
+
+			getRandomPokemon : async () => {
+				
+				try {
+					setStore({ randomPokemon: null });
+					const randomId = Math.floor(Math.random() * 1010) + 1;
+			
+					const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${randomId}`);
+					if (!response.ok) throw new Error(response.statusText);
+			
+					const pokemon = await response.json();
+			
+					const speciesResponse = await fetch(pokemon.species.url);
+					if (!speciesResponse.ok) throw new Error(speciesResponse.statusText);
+			
+					const species = await speciesResponse.json();
+			
+					// Actualizar el store con los datos completos
+					const randomPokemon = {
+						...pokemon,
+						color: species.color, // Agregar el color
+						generation: species.generation.name, // Agregar la generación
+					};
+
+					setStore({ randomPokemon });
+			
+					return randomPokemon;
+				} catch (error) {
+					console.log("Error getting random pokemon:", error);
+				}
 			}
 		}
 	};
