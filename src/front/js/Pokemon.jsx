@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "./store/appContext";
 import MinigameRulesModal from "./component/MinigameRulesModal.jsx"
+import GameOverModal from "./component/GameOverModal.jsx";
 import PokemonHints from "./component/PokemonHints.jsx";
 import PokemonGameData from "./component/PokemonGameData.jsx";
 
@@ -17,6 +18,7 @@ const Pokemon = () => {
     const [lives, setLives] = useState(4);
     const [score, setScore] = useState(0);
     const [streak, setStreak] = useState(0);
+    const [gameOver, setGameOver] = useState(false);
 
     const pokemonGameData = minigamesData.find(game => game.name === "pokemon");
     const points = pokemonGameData ? pokemonGameData.points : 0;
@@ -42,16 +44,25 @@ const Pokemon = () => {
     const handleBadGuess = () => {
         setHintTrigger((prev) => prev + 1);
         setLives((prev) => prev - 1);
+        setUserInput("");
         console.log(store.randomPokemon.name);
     }
 
     const handleGameOver = () => {
         console.log("GAME OVER");
         setShowSilhouette(false);
+        setGameOver(true);
         // TODO: añadir llamada a api de usuarios para insertar nueva fila de DB de partidas jugadas.
+    }
+
+    const handleRetry = () => {
+        setGameOver(false);
+        setShowSilhouette(true);
         setHintTrigger(0);
         setScore(0);
         setStreak(0);
+        setLives(4);
+        actions.getRandomPokemon();
     }
 
     const handleNextPokemon = () => {
@@ -68,7 +79,12 @@ const Pokemon = () => {
 
     return (
         <div className="container mt-4">
-            <MinigameRulesModal gameName={"pokemon"}/>
+            <MinigameRulesModal gameName={"pokemon"} />
+            <GameOverModal
+                score={score}
+                onRetry={handleRetry}
+                show={gameOver}
+            />
 
             <div className="row">
                 <div className="col-lg-3 order-2 order-lg-1 mt-3 mt-lg-0">
