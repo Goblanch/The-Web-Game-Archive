@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Context } from "./store/appContext";
 import MinigameRulesModal from "./component/MinigameRulesModal.jsx"
 import PokemonHints from "./component/PokemonHints.jsx";
+import PokemonGameData from "./component/PokemonGameData.jsx";
 
 const Pokemon = () => {
 
@@ -10,6 +11,9 @@ const Pokemon = () => {
     const [userInput, setUserInput] = useState("");
     const [showSilhouette, setShowSilhouette] = useState(true);
     const [hintTrigger, setHintTrigger] = useState(0);
+    const [lives, setLives] = useState(4);
+    const [score, setScore] = useState(0);
+    const [streak, setStreak] = useState(0);
 
     const handleUserGuess = () => {
         const formattedInput = userInput.toLowerCase();
@@ -18,6 +22,7 @@ const Pokemon = () => {
             handleCorrectGuess();
         } else {
             setHintTrigger((prev) => prev + 1);
+            setLives((prev) => prev - 1);
             console.log(store.randomPokemon.name);
         }
     }
@@ -38,6 +43,7 @@ const Pokemon = () => {
         setShowSilhouette(true);
         setUserInput("");
         setHintTrigger(0);
+        setLives(4);
     }
 
     useEffect(() => {
@@ -96,6 +102,14 @@ const Pokemon = () => {
                 ) : (
                     <button onClick={handleNextPokemon} className="btn btn-danger">Next Pokémon</button>
                 )}
+            </div>
+
+            <div className="d-flex ms-auto me-3">
+                <PokemonGameData
+                    remainingLives={lives}
+                    score={score}
+                    streak={streak}
+                />
             </div>
 
         </div>
