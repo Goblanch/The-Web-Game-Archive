@@ -9,7 +9,7 @@ const Pokemon = () => {
 
     const [userInput, setUserInput] = useState("");
     const [showSilhouette, setShowSilhouette] = useState(true);
-    const [hints, setHints] = useState([]);
+    const [hintTrigger, setHintTrigger] = useState(0);
 
     const handleUserGuess = () => {
         const formattedInput = userInput.toLowerCase();
@@ -17,21 +17,13 @@ const Pokemon = () => {
         if (formattedInput === store.randomPokemon.name) {
             handleCorrectGuess();
         } else {
-            const nextHint = getNextHint();
-
-            if (!nextHint) {
-                handleGameOver();
-                return;
-            }
-
-            setHints((prevHints) => [...prevHints, nextHint]);
+            setHintTrigger((prev) => prev + 1);
         }
     }
 
     const handleCorrectGuess = () => {
         console.log("SUCESS");
         setShowSilhouette(false);
-        setHints([]);
     }
 
     const handleGameOver = () => {
@@ -42,7 +34,7 @@ const Pokemon = () => {
         actions.getRandomPokemon();
         setShowSilhouette(true);
         setUserInput("");
-        setHints([]);
+        setHintTrigger(0);
     }
 
     useEffect(() => {
@@ -85,6 +77,7 @@ const Pokemon = () => {
                     <button onClick={handleUserGuess}>Guess</button>
                     <PokemonHints
                         pokemon={store.randomPokemon}
+                        triggerHint={hintTrigger}
                         onGameOver={handleGameOver}
                     />
                 </div>

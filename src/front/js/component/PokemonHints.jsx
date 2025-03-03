@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-const PokemonHints = ({ pokemon, onGameOver }) => {
+const PokemonHints = ({ pokemon, triggerHint, onGameOver }) => {
     const [hints, setHints] = useState([]);
 
     const getNextHint = () => {
@@ -19,15 +19,16 @@ const PokemonHints = ({ pokemon, onGameOver }) => {
         return null;
     }
 
-    const handleHintRequest = () => {
-        const nextHint = getNextHint();
-        if (!nextHint) {
-            onGameOver();
-            return;
+    useEffect(() => {
+        if (triggerHint) {
+            const nextHint = getNextHint();
+            if (!nextHint) {
+                onGameOver();
+                return;
+            }
+            setHints((prevHints) => [...prevHints, nextHint]);
         }
-
-        setHints((prevHints) => [...prevHints, nextHint]);
-    }
+    }, [triggerHint])
 
     return (
         <div>
@@ -41,7 +42,6 @@ const PokemonHints = ({ pokemon, onGameOver }) => {
                     </ul>
                 </div>
             )}
-            <button onClick={handleHintRequest}>Get a Hint</button>
         </div>
     )
 }
