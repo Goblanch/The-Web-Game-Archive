@@ -10,14 +10,17 @@ from api.models import db ,User , Minigames , Played_games
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
+from flask_jwt_extended import JWTManager, create_access_token , jwt_required , get_jwt_identity
+from werkzeug.security import check_password_hash
 
-# from models import Person
 
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
 static_file_dir = os.path.join(os.path.dirname(
     os.path.realpath(__file__)), '../public/')
 app = Flask(__name__)
 app.url_map.strict_slashes = False
+
+
 
 # database condiguration
 db_url = os.getenv("DATABASE_URL")
@@ -41,6 +44,10 @@ setup_commands(app)
 app.register_blueprint(api, url_prefix='/api')
 
 # Handle/serialize errors like a JSON object
+
+################ INICIALIZO JWT#####################
+jwt = JWTManager(app)
+
 
 
 @app.errorhandler(APIException)
@@ -74,6 +81,10 @@ def get_all_users():
 
     all_users = User.query.all()
 
+    if not all_users:
+
+        return jsonify({'msg':"No hay ningun usuario en la base de datos"}), 404
+
     users_info = [user.serialize() for user in all_users]
 
     return jsonify(users_info), 200
@@ -89,7 +100,7 @@ def post_user():
                           
         return jsonify({"msg": "Tienes que introducir email y password para poder registrarte"}), 400
 
-   elif user is not None:
+   if user is not None:
        
        return jsonify({"msg": "Ya existe el usuario que deseas crear"}), 400
    
@@ -107,6 +118,108 @@ def post_user():
 
    return jsonify({"msg":"Usuario creado correctamente"} ,new_user.serialize()), 200
 
+@app.route('/user/<int:id_us>', methods = ['DELETE'])
+def delete_user(id_us):
+
+
+    user_to_delete = User.query.filter_by(id_user = id_us).first()
+
+    if user_to_delete :
+
+        db.session.delete(user_to_delete)
+        db.session.commit()
+        return jsonify({"msg":"El usuario se ha borrado correctameente"},user_to_delete.serialize()),200
+
+    return jsonify({'msg': "No existe el usuario que deseas borrar con este id:" + id_us}),400
+    
+@app.route('/user/<int:id_us>', methods = ['PUT'])
+def update_user(id_us):
+
+    data = request.get_json()
+
+    if not data:
+
+         return jsonify({'msg':"No has enviado la data para modificar"}), 404 
+
+    user_to_update = User.query.filter_by(id_user = id_us).first()
+
+    if user_to_update is None:
+
+        return jsonify({'msg':"No se encuentra el usuario que intentas editar"}), 404
+    
+    user_to_update.user_name = data.get('user_name', user_to_update.user_name)
+    user_to_update.email = data.get('email', user_to_update.email)
+    user_to_update.password = data.get('password', user_to_update.password)
+    user_to_update.name = data.get('name', user_to_update.name)
+    user_to_update.last_name = data.get('last_name', user_to_update.last_name)
+    user_to_update.user_img = data.get('user_img', user_to_update.user_img)
+
+    try:
+
+        db.session.commit()
+
+        return jsonify({"msg": "Se modifico el ususario correctamente"},user_to_update.serialize()),200
+    
+    except Exception as e:
+
+        db.session.rollback()  # En caso de un error, rollback
+        return jsonify({'msg': f"Error al modificar el usuario: {str(e)}"}), 500
+
+@app.route('/user/totalpoints/<int:id_us>', methods = ['PUT'])
+def update_totalpoints(id_us):
+
+    data =   request.get_json()
+
+    if 'total_points' not in data:
+
+        return jsonify({'msg':"No has enviado el campo total_points"}), 400
+
+    try:
+
+        new_points_to_add = int(data['total_points'])
+
+    except ValueError:
+
+        return jsonify({'msg': "El valor de 'total_points' debe ser un número entero válido"}), 400
+
+    user_points_update = User.query.filter_by(id_user = id_us).first()
+
+    if user_points_update is None:
+
+         return jsonify({'msg':"No se encuentra el usuario que intentas editar"}), 404
+    
+    new_total_points = new_points_to_add + user_points_update.total_points
+
+    user_points_update.total_points = new_total_points
+
+    try:
+        db.session.commit()
+
+        return jsonify({'msg':'Los Total Points se modificaron correctamente'}, new_total_points), 200
+
+    except Exception as e:
+
+        db.session.rollback()  # En caso de un error, rollback
+        return jsonify({'msg': f"Error al modificar los puntos: {str(e)}"}), 500
+
+@app.route('/user/login', methods = ['POST'])
+def login():
+
+    data = request.get_json()
+
+    if not data:
+
+        return jsonify({'msg':"No has enviado la data para poder logearte"}), 400
+
+    user = User.query.filter_by(email = data['email'], password = data['password']).first()
+
+    if user is None:
+
+        return jsonify({'msg': 'El user o la password no coinciden'}), 401
+    
+    access_token = create_access_token(identity = str(user.id_user))
+
+    return jsonify({ "token": access_token,"id_user": user.id_user})
 
 #######################----METODOS DE LA TABLA Minigames------#####################
 
@@ -114,6 +227,10 @@ def post_user():
 def get_all_minigames():
 
     all_minigames = Minigames.query.all()
+
+    if not all_minigames:
+
+        return jsonify({'msg':"No hay ningun minijuego en la base de datos"}), 404
 
     minigame_info = [minigame.serialize() for minigame in all_minigames]
 
@@ -127,6 +244,10 @@ def get_all_minigames():
 def get_all_usergames():
 
     all_usergames = Played_games.query.all()
+
+    if not all_usergames:
+        
+        return jsonify({'msg': 'No hay ningun juego jugado todavia'}), 400
 
     usergame_info = [usergame.serialize() for usergame in all_usergames]
 
