@@ -68,6 +68,8 @@ const Pokemon = () => {
 
     return (
         <div className="container mt-4">
+            <MinigameRulesModal gameName={"pokemon"}/>
+
             <div className="row">
                 <div className="col-lg-3 order-2 order-lg-1 mt-3 mt-lg-0">
                     <PokemonHints
