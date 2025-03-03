@@ -42,21 +42,21 @@ const Pokemon = () => {
     }, [])
 
     return (
-        <div>
+        <div className="container d-flex flex-column align-items-center mt-3">
 
             <MinigameRulesModal gameName={"Who's that Pokémon?"} />
 
             {store.randomPokemon ? (
 
-                <div>
-                    <h1>{store.randomPokemon.name}</h1>
+                <div className="d-flex flex-column align-items-center">
+                    <h1>Who's that Pokémon?</h1>
                     <h1 style={{ display: showSilhouette ? "none" : "block" }}>
                         {store.randomPokemon.name}
                     </h1>
                     <img
                         src={store.randomPokemon.sprites.front_default}
                         alt={store.randomPokemon.name}
-                        className={showSilhouette ? "pokemon-silhouette" : ""}
+                        className={showSilhouette ? "img-fluid h-50 w-50 pokemon-silhouette" : "img-fluid h-50 w-50"}
                         draggable="false"
                     />
                 </div>
@@ -65,16 +65,19 @@ const Pokemon = () => {
             )}
 
             {showSilhouette ? (
-                <div>
+                <div className="d-flex">
                     <input
                         type="text"
+                        className="form-control me-2"
                         name="user-guest"
                         id="user-guest"
                         placeholder="Who's that Pokémon?"
                         value={userInput}
                         onChange={(e) => setUserInput(e.target.value)}
                     />
-                    <button onClick={handleUserGuess}>Guess</button>
+                    <button onClick={handleUserGuess} className="btn btn-danger">
+                        Guess
+                    </button>
                     <PokemonHints
                         pokemon={store.randomPokemon}
                         triggerHint={hintTrigger}
