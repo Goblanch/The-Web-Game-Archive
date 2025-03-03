@@ -1,12 +1,13 @@
 [
     {
-        "name": "Who's that Pokémon?",
+        "name": "pokemon",
         "description": "A guessing game where you identify Pokémon silhouettes.",
         "rules": [
             "You will be shown a silhouette of a Pokémon.",
             "Type the name of the Pokémon to guess",
             "Earn points for correct answers."
-        ]
+        ],
+        "points": 5
     },
     {
         "name": "Cookie Clicker Clone",

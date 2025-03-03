@@ -4,6 +4,9 @@ import MinigameRulesModal from "./component/MinigameRulesModal.jsx"
 import PokemonHints from "./component/PokemonHints.jsx";
 import PokemonGameData from "./component/PokemonGameData.jsx";
 
+import WhosThatPokemonImg from "../../../public/whosthatpokemon.png";
+import minigamesData from "../../../public/minigames.json";
+
 const Pokemon = () => {
 
     const { store, actions } = useContext(Context);
@@ -15,27 +18,38 @@ const Pokemon = () => {
     const [score, setScore] = useState(0);
     const [streak, setStreak] = useState(0);
 
+    const pokemonGameData = minigamesData.find(game => game.name === "pokemon");
+    const points = pokemonGameData ? pokemonGameData.points : 0;
+
     const handleUserGuess = () => {
         const formattedInput = userInput.toLowerCase();
 
         if (formattedInput === store.randomPokemon.name) {
             handleCorrectGuess();
         } else {
-            setHintTrigger((prev) => prev + 1);
-            setLives((prev) => prev - 1);
-            console.log(store.randomPokemon.name);
+            handleBadGuess();
         }
     }
 
     const handleCorrectGuess = () => {
         console.log("SUCESS");
+        setScore((prev) => prev + points);
+        setStreak((prev) => prev + 1);
         setShowSilhouette(false);
+    }
+
+    const handleBadGuess = () => {
+        setHintTrigger((prev) => prev + 1);
+        setLives((prev) => prev - 1);
+        console.log(store.randomPokemon.name);
     }
 
     const handleGameOver = () => {
         console.log("GAME OVER");
         setShowSilhouette(false);
         setHintTrigger(0);
+        setScore(0);
+        setStreak(0);
     }
 
     const handleNextPokemon = () => {
@@ -53,7 +67,7 @@ const Pokemon = () => {
     return (
         <div className="container d-flex justify-content-center">
 
-            {/* <MinigameRulesModal gameName={"Who's that Pokémon?"} /> */}
+            {/* <MinigameRulesModal gameName={"pokemon"} /> */}
 
             <div className="d-flex mt-3">
                 <PokemonHints
@@ -70,6 +84,7 @@ const Pokemon = () => {
 
                     <div className="d-flex flex-column align-items-center">
                         <h1>Who's that Pokémon?</h1>
+                        {/* <img className="img-fluid h-50 w-50" src={WhosThatPokemonImg} alt="" /> */}
                         <h1 style={{ display: showSilhouette ? "none" : "block" }}>
                             {store.randomPokemon.name}
                         </h1>
@@ -104,7 +119,7 @@ const Pokemon = () => {
                 )}
             </div>
 
-            <div className="d-flex ms-auto me-3">
+            <div className="d-flex ms-auto me-3 mt-3">
                 <PokemonGameData
                     remainingLives={lives}
                     score={score}
