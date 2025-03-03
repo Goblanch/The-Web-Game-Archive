@@ -24,6 +24,7 @@ const PokemonHints = ({ pokemon, triggerHint, onGameOver }) => {
             const nextHint = getNextHint();
             if (!nextHint) {
                 onGameOver();
+                setHints([]);
                 return;
             }
             setHints((prevHints) => [...prevHints, nextHint]);
@@ -32,16 +33,16 @@ const PokemonHints = ({ pokemon, triggerHint, onGameOver }) => {
 
     return (
         <div>
-            {hints.length > 0 && (
-                <div>
-                    <h2>Hints:</h2>
-                    <ul>
+            <div>
+                <h2>Hints</h2>
+                <div style={{ maxHeight: "200px", overflowY: "auto" }}>
+                    <ul className="list-group">
                         {hints.map((hint, index) => (
-                            <li key={index}>{hint}</li>
+                            <li className="list-group-item" key={index}>{hint}</li>
                         ))}
                     </ul>
                 </div>
-            )}
+            </div>
         </div>
     )
 }

@@ -18,6 +18,7 @@ const Pokemon = () => {
             handleCorrectGuess();
         } else {
             setHintTrigger((prev) => prev + 1);
+            console.log(store.randomPokemon.name);
         }
     }
 
@@ -28,6 +29,8 @@ const Pokemon = () => {
 
     const handleGameOver = () => {
         console.log("GAME OVER");
+        setShowSilhouette(false);
+        setHintTrigger(0);
     }
 
     const handleNextPokemon = () => {
@@ -42,51 +45,59 @@ const Pokemon = () => {
     }, [])
 
     return (
-        <div className="container d-flex flex-column align-items-center mt-3">
+        <div className="container d-flex justify-content-center">
 
-            <MinigameRulesModal gameName={"Who's that Pokémon?"} />
+            {/* <MinigameRulesModal gameName={"Who's that Pokémon?"} /> */}
 
-            {store.randomPokemon ? (
+            <div className="d-flex mt-3">
+                <PokemonHints
+                    pokemon={store.randomPokemon}
+                    triggerHint={hintTrigger}
+                    onGameOver={handleGameOver}
+                />
+            </div>
 
-                <div className="d-flex flex-column align-items-center">
-                    <h1>Who's that Pokémon?</h1>
-                    <h1 style={{ display: showSilhouette ? "none" : "block" }}>
-                        {store.randomPokemon.name}
-                    </h1>
-                    <img
-                        src={store.randomPokemon.sprites.front_default}
-                        alt={store.randomPokemon.name}
-                        className={showSilhouette ? "img-fluid h-50 w-50 pokemon-silhouette" : "img-fluid h-50 w-50"}
-                        draggable="false"
-                    />
-                </div>
-            ) : (
-                <p>Cargando Pokémon...</p>
-            )}
 
-            {showSilhouette ? (
-                <div className="d-flex">
-                    <input
-                        type="text"
-                        className="form-control me-2"
-                        name="user-guest"
-                        id="user-guest"
-                        placeholder="Who's that Pokémon?"
-                        value={userInput}
-                        onChange={(e) => setUserInput(e.target.value)}
-                    />
-                    <button onClick={handleUserGuess} className="btn btn-danger">
-                        Guess
-                    </button>
-                    <PokemonHints
-                        pokemon={store.randomPokemon}
-                        triggerHint={hintTrigger}
-                        onGameOver={handleGameOver}
-                    />
-                </div>
-            ) : (
-                <button onClick={handleNextPokemon}>Next Pokémon</button>
-            )}
+
+            <div className="d-flex flex-column align-items-center mt-3 mx-auto">
+                {store.randomPokemon ? (
+
+                    <div className="d-flex flex-column align-items-center">
+                        <h1>Who's that Pokémon?</h1>
+                        <h1 style={{ display: showSilhouette ? "none" : "block" }}>
+                            {store.randomPokemon.name}
+                        </h1>
+                        <img
+                            src={store.randomPokemon.sprites.front_default}
+                            alt={store.randomPokemon.name}
+                            className={showSilhouette ? "img-fluid pokemon-silhouette" : "img-fluid"}
+                            draggable="false"
+                        />
+                    </div>
+                ) : (
+                    <p>Cargando Pokémon...</p>
+                )}
+
+                {showSilhouette ? (
+                    <div className="d-flex">
+                        <input
+                            type="text"
+                            className="form-control me-2"
+                            name="user-guest"
+                            id="user-guest"
+                            placeholder="Who's that Pokémon?"
+                            value={userInput}
+                            onChange={(e) => setUserInput(e.target.value)}
+                        />
+                        <button onClick={handleUserGuess} className="btn btn-danger">
+                            Guess
+                        </button>
+                    </div>
+                ) : (
+                    <button onClick={handleNextPokemon} className="btn btn-danger">Next Pokémon</button>
+                )}
+            </div>
+
         </div>
     );
 }
