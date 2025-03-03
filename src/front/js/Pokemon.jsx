@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "./store/appContext";
+import MinigameRulesModal from "./component/MinigameRulesModal.jsx"
+import PokemonHints from "./component/PokemonHints.jsx";
 
 const Pokemon = () => {
 
@@ -36,25 +38,6 @@ const Pokemon = () => {
         console.log("GAME OVER");
     }
 
-    const getNextHint = () => {
-        const pokemon = store.randomPokemon;
-
-        const possibleHints = [
-            `Color: ${pokemon.color.name}`,
-            `Generación: ${pokemon.generation}`,
-            `Tipo: ${pokemon.types.map((t) => t.type.name).join(", ")}`,
-        ];
-
-        // Devuelve la siguiente pista no mostrada
-        for (const hint of possibleHints) {
-            if (!hints.includes(hint)) {
-                return hint;
-            }
-        }
-
-        return null; // No más pistas disponibles
-    };
-
     const handleNextPokemon = () => {
         actions.getRandomPokemon();
         setShowSilhouette(true);
@@ -68,6 +51,8 @@ const Pokemon = () => {
 
     return (
         <div>
+
+            <MinigameRulesModal gameName={"Who's that Pokémon?"} />
 
             {store.randomPokemon ? (
 
@@ -98,16 +83,10 @@ const Pokemon = () => {
                         onChange={(e) => setUserInput(e.target.value)}
                     />
                     <button onClick={handleUserGuess}>Guess</button>
-                    {hints.length > 0 && (
-                        <div>
-                            <h2>Pistas:</h2>
-                            <ul>
-                                {hints.map((hint, index) => (
-                                    <li key={index}>{hint}</li>
-                                ))}
-                            </ul>
-                        </div>
-                    )}
+                    <PokemonHints
+                        pokemon={store.randomPokemon}
+                        onGameOver={handleGameOver}
+                    />
                 </div>
             ) : (
                 <button onClick={handleNextPokemon}>Next Pokémon</button>
