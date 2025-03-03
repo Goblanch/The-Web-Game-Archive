@@ -67,68 +67,71 @@ const Pokemon = () => {
     }, [])
 
     return (
-        <div className="container d-flex justify-content-center">
+        <div className="container mt-4">
+            <div className="row">
+                <div className="col-lg-3 order-2 order-lg-1 mt-3 mt-lg-0">
+                    <PokemonHints
+                        pokemon={store.randomPokemon}
+                        triggerHint={hintTrigger}
+                        onGameOver={handleGameOver}
+                    />
+                </div>
 
-            {/* <MinigameRulesModal gameName={"pokemon"} /> */}
+                <div className="col-lg-6 order-1 order-lg-2 d-flex flex-column align-items-center">
+                    {store.randomPokemon ? (
+                        <div className="text-center">
+                            <h1>Who's that Pokémon?</h1>
+                            <img
+                                src={store.randomPokemon.sprites.front_default}
+                                alt={store.randomPokemon.name}
+                                className={
+                                    showSilhouette ? "img-fluid pokemon-silhouette" : "img-fluid"
+                                }
+                                draggable="false"
+                            />
+                            <h1
+                                style={{ display: showSilhouette ? "none" : "block" }}
+                                className="mt-3"
+                            >
+                                {store.randomPokemon.name}
+                            </h1>
+                        </div>
+                    ) : (
+                        <p>Loading Pokémon...</p>
+                    )}
 
-            <div className="d-flex mt-3">
-                <PokemonHints
-                    pokemon={store.randomPokemon}
-                    triggerHint={hintTrigger}
-                    onGameOver={handleGameOver}
-                />
-            </div>
-
-
-
-            <div className="d-flex flex-column align-items-center mt-3 mx-auto">
-                {store.randomPokemon ? (
-
-                    <div className="d-flex flex-column align-items-center">
-                        <h1>Who's that Pokémon?</h1>
-                        {/* <img className="img-fluid h-50 w-50" src={WhosThatPokemonImg} alt="" /> */}
-                        <h1 style={{ display: showSilhouette ? "none" : "block" }}>
-                            {store.randomPokemon.name}
-                        </h1>
-                        <img
-                            src={store.randomPokemon.sprites.front_default}
-                            alt={store.randomPokemon.name}
-                            className={showSilhouette ? "img-fluid pokemon-silhouette" : "img-fluid"}
-                            draggable="false"
-                        />
+                    <div className="mt-3">
+                        {showSilhouette ? (
+                            <div className="d-flex">
+                                <input
+                                    type="text"
+                                    className="form-control me-2"
+                                    name="user-guess"
+                                    id="user-guess"
+                                    placeholder="Who's that Pokémon?"
+                                    value={userInput}
+                                    onChange={(e) => setUserInput(e.target.value)}
+                                />
+                                <button onClick={handleUserGuess} className="btn btn-danger">
+                                    Guess
+                                </button>
+                            </div>
+                        ) : (
+                            <button onClick={handleNextPokemon} className="btn btn-danger">
+                                Next Pokémon
+                            </button>
+                        )}
                     </div>
-                ) : (
-                    <p>Cargando Pokémon...</p>
-                )}
+                </div>
 
-                {showSilhouette ? (
-                    <div className="d-flex">
-                        <input
-                            type="text"
-                            className="form-control me-2"
-                            name="user-guest"
-                            id="user-guest"
-                            placeholder="Who's that Pokémon?"
-                            value={userInput}
-                            onChange={(e) => setUserInput(e.target.value)}
-                        />
-                        <button onClick={handleUserGuess} className="btn btn-danger">
-                            Guess
-                        </button>
-                    </div>
-                ) : (
-                    <button onClick={handleNextPokemon} className="btn btn-danger">Next Pokémon</button>
-                )}
+                <div className="col-lg-3 order-3 mt-3 mt-lg-0">
+                    <PokemonGameData
+                        remainingLives={lives}
+                        score={score}
+                        streak={streak}
+                    />
+                </div>
             </div>
-
-            <div className="d-flex ms-auto me-3 mt-3">
-                <PokemonGameData
-                    remainingLives={lives}
-                    score={score}
-                    streak={streak}
-                />
-            </div>
-
         </div>
     );
 }
