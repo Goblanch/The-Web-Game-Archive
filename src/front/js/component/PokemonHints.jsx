@@ -6,8 +6,8 @@ const PokemonHints = ({ pokemon, triggerHint, onGameOver }) => {
     const getNextHint = () => {
         const possibleHints = [
             `Color: ${pokemon.color.name}`,
-            `Generación: ${pokemon.generation}`,
-            `Tipo: ${pokemon.types.map((t) => t.type.name).join(", ")}`,
+            `Generation: ${pokemon.generation}`,
+            `Type: ${pokemon.types.map((t) => t.type.name).join(", ")}`,
         ];
 
         for (const hint of possibleHints) {
