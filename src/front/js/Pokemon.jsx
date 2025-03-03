@@ -34,6 +34,7 @@ const Pokemon = () => {
     const handleCorrectGuess = () => {
         console.log("SUCESS");
         setScore((prev) => prev + points);
+        // TODO: Añadir llamada a api de usuarios para añadir puntos.
         setStreak((prev) => prev + 1);
         setShowSilhouette(false);
     }
@@ -47,6 +48,7 @@ const Pokemon = () => {
     const handleGameOver = () => {
         console.log("GAME OVER");
         setShowSilhouette(false);
+        // TODO: añadir llamada a api de usuarios para insertar nueva fila de DB de partidas jugadas.
         setHintTrigger(0);
         setScore(0);
         setStreak(0);

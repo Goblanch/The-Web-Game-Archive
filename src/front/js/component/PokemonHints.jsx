@@ -31,6 +31,10 @@ const PokemonHints = ({ pokemon, triggerHint, onGameOver }) => {
         }
     }, [triggerHint])
 
+    useEffect(() => {
+        setHints([]);
+    }, [pokemon])
+
     return (
         <div>
             <div>
