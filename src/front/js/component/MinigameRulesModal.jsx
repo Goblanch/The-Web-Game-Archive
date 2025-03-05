@@ -7,7 +7,9 @@ const MinigameRulesModal = ({ gameName, onRulesClosed }) => {
 
     const handleCloseModal = () => {
         setShowModal(false);
-        onRulesClosed();
+        if (onRulesClosed) {
+            onRulesClosed();
+        }
     }
 
     useEffect(() => {

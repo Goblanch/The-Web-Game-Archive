@@ -16,8 +16,9 @@
             "You have limited time to raise as much points as you can",
             "You have limited time to click on the button"
         ],
-        "game_time": 10000,
-        "click_time": 2000
+        "points": 1,
+        "game_time": 10,
+        "click_time": 2
     },
     {
         "name": "Cookie Clicker Clone",
