@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from "react";
 
 
-const MinigameRulesModal = ({ gameName }) => {
+const MinigameRulesModal = ({ gameName, onRulesClosed }) => {
     const [rules, setRules] = useState([]);
     const [showModal, setShowModal] = useState(true);
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        onRulesClosed();
+    }
 
     useEffect(() => {
         import("../../../../public/minigames.json").then((module) => {
@@ -33,7 +38,7 @@ const MinigameRulesModal = ({ gameName }) => {
                                 <button
                                     type="button"
                                     className="btn-close"
-                                    onClick={() => setShowModal(false)}
+                                    onClick={handleCloseModal}
                                 ></button>
                             </div>
                             <div className="modal-body">
@@ -51,7 +56,7 @@ const MinigameRulesModal = ({ gameName }) => {
                                 <button
                                     type="button"
                                     className="btn btn-primary"
-                                    onClick={() => setShowModal(false)}
+                                    onClick={handleCloseModal}
                                 >
                                     Close
                                 </button>
