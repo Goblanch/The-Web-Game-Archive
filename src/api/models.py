@@ -1,6 +1,12 @@
 from flask_sqlalchemy import SQLAlchemy
+from flask_jwt_extended import JWTManager, create_access_token
+from flask import Flask, request, jsonify
+from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
+app = Flask(__name__)
+
+jwt = JWTManager(app)
 
 class User(db.Model):
     id_user = db.Column(db.Integer, primary_key=True)
@@ -9,7 +15,7 @@ class User(db.Model):
     last_name = db.Column(db.String(30), unique=False, nullable=True)
     user_img = db.Column(db.String(200), unique=False, nullable=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(80), unique=False, nullable=False)
+    password = db.Column(db.String(1000), unique=False, nullable=False)
     total_points = db.Column(db.Integer, unique=False, nullable=False)
     relation_favorite = db.relationship('Played_games' , backref='user')
 
@@ -29,6 +35,12 @@ class User(db.Model):
             # do not serialize the password, its a security breach
         }
     
+    # Metodos para establecer y verificar la password
+    def set_password(self,password):
+        self.password = generate_password_hash(password)
+
+    def check_password(self,password):
+        return check_password_hash(self.password,password)
 
 class Minigames(db.Model):
     id_minigame = db.Column(db.Integer, primary_key=True)

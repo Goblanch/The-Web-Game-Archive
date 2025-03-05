@@ -11,7 +11,7 @@ from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
 from flask_jwt_extended import JWTManager, create_access_token , jwt_required , get_jwt_identity
-from werkzeug.security import check_password_hash
+
 
 
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
@@ -47,8 +47,6 @@ app.register_blueprint(api, url_prefix='/api')
 
 ################ INICIALIZO JWT#####################
 jwt = JWTManager(app)
-
-
 
 @app.errorhandler(APIException)
 def handle_invalid_usage(error):
@@ -94,11 +92,11 @@ def post_user():
 
    request_new_user = request.get_json()
 
-   user = User.query.filter_by(email = request_new_user["email"]).first()
-
    if "email" not in request_new_user or "password" not in request_new_user:
                           
         return jsonify({"msg": "Tienes que introducir email y password para poder registrarte"}), 400
+
+   user = User.query.filter_by(email = request_new_user["email"]).first()
 
    if user is not None:
        
@@ -112,11 +110,20 @@ def post_user():
                    user_img = request_new_user["user_img"],
                    total_points = request_new_user["total_points"],
                    )
-   
-   db.session.add(new_user)
-   db.session.commit()
 
-   return jsonify({"msg":"Usuario creado correctamente"} ,new_user.serialize()), 200
+   ####----Establezco el hash de la password-----######
+   new_user.set_password(new_user.password)
+   
+   try:
+        db.session.add(new_user)
+        db.session.commit()
+
+        return jsonify({"msg":"Usuario creado correctamente" ,"user": new_user.serialize()}), 200
+
+   except Exception as e:
+
+        db.session.rollback()
+        return jsonify({'msg': f"Error al crear el usuario: {str(e)}"}), 500
 
 @app.route('/user/<int:id_us>', methods = ['DELETE'])
 def delete_user(id_us):
@@ -153,6 +160,9 @@ def update_user(id_us):
     user_to_update.name = data.get('name', user_to_update.name)
     user_to_update.last_name = data.get('last_name', user_to_update.last_name)
     user_to_update.user_img = data.get('user_img', user_to_update.user_img)
+
+      ####----Establezco el hash de la password-----######
+    user_to_update.set_password(user_to_update.password)
 
     try:
 
@@ -211,16 +221,48 @@ def login():
 
         return jsonify({'msg':"No has enviado la data para poder logearte"}), 400
 
-    user = User.query.filter_by(email = data['email'], password = data['password']).first()
+    user = User.query.filter_by(email = data['email']).first()
 
-    if user is None:
+     # Verificar que el usuario existe y que la contraseña es correcta
+    if user is None or not user.check_password(data['password']):
 
-        return jsonify({'msg': 'El user o la password no coinciden'}), 401
-    
+        return jsonify({'msg': 'El usuario o la contraseña no coinciden'}), 401
+
     access_token = create_access_token(identity = str(user.id_user))
 
     return jsonify({ "token": access_token,"id_user": user.id_user})
 
+@app.route('/user/password/<int:id_us>', methods = ['PUT'])
+def change_password(id_us):
+
+    data = request.get_json()
+
+    if not data:
+
+        return jsonify({'msg':"Debes enviar la password para cambiarla"}), 400
+
+    user = User.query.filter_by(id_user = id_us).first()
+
+    if user is None or not user.check_password(data['password']):
+
+        return jsonify({'msg':f"No existe el usuario con este id:{id_us} , o la password es incirrecta"}), 401
+
+    user.password = data.get('new_password', user.password)
+
+    user.set_password(user.password)
+
+    try:
+
+        db.session.commit()
+
+        return jsonify({'msg':"La password se cambio correctamente"}), 200
+
+    except Exception as e:
+
+        db.session.rollback()
+
+        return jsonify({'msg':f"Error al modificar la password en la Base de datos: {str(e)}"}), 500
+    
 #######################----METODOS DE LA TABLA Minigames------#####################
 
 @app.route('/minigames', methods=['GET'])
@@ -236,6 +278,19 @@ def get_all_minigames():
 
     return jsonify(minigame_info), 200
 
+
+# @app.route('/minigames/<int:id_mini', methods = ['POST'])
+# def post_minigame(id_mini):
+
+#     data = request.get_json()
+
+#     if not data:
+
+#         return jsonify({'msg': "No has enviado data para crear el minijuego"}), 400
+
+#     minigame = Minigames.querry.filter_by(id_minigame)
+
+    
 
 
 #######################----METODOS DE LA TABLA Played_games------#####################
