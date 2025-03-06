@@ -66,6 +66,7 @@ class Played_games(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id_user'))
     minigame_id = db.Column(db.Integer, db.ForeignKey('minigames.id_minigame'))
     game_data = db.Column(db.String(3000), unique=False, nullable=False)
+    game_points =  db.Column(db.Integer, unique=False, nullable=False)
     
 
     def __repr__(self):
@@ -76,8 +77,8 @@ class Played_games(db.Model):
             "id_played_games": self.id_played_games,
             "user_id": self.user_id,
             "minigame_id": self.minigame_id,
-            "game_data": self.game_data
-            
-
+            "game_data": self.game_data,
+            "game_points": self.game_points
+        
             # do not serialize the password, its a security breach
         }

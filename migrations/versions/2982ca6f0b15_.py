@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 4636ae66dac2
+Revision ID: 2982ca6f0b15
 Revises: 
-Create Date: 2025-03-04 13:08:48.399127
+Create Date: 2025-03-06 11:21:29.453996
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '4636ae66dac2'
+revision = '2982ca6f0b15'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -32,7 +32,7 @@ def upgrade():
     sa.Column('last_name', sa.String(length=30), nullable=True),
     sa.Column('user_img', sa.String(length=200), nullable=True),
     sa.Column('email', sa.String(length=120), nullable=False),
-    sa.Column('password', sa.String(length=80), nullable=False),
+    sa.Column('password', sa.String(length=1000), nullable=False),
     sa.Column('total_points', sa.Integer(), nullable=False),
     sa.PrimaryKeyConstraint('id_user'),
     sa.UniqueConstraint('email'),
@@ -43,6 +43,7 @@ def upgrade():
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.Column('minigame_id', sa.Integer(), nullable=True),
     sa.Column('game_data', sa.String(length=3000), nullable=False),
+    sa.Column('game_points', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['minigame_id'], ['minigames.id_minigame'], ),
     sa.ForeignKeyConstraint(['user_id'], ['user.id_user'], ),
     sa.PrimaryKeyConstraint('id_played_games')
