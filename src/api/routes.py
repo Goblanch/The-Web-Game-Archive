@@ -280,7 +280,7 @@ def post_minigame():
         db.session.add(new_minigame)
         db.session.commit()
 
-        return jsonify({"msg":"Minijuego creado correctamente" ,"user": new_minigame.serialize()}), 200
+        return jsonify({"msg":"Minijuego creado correctamente" ,"minigame": new_minigame.serialize()}), 200
 
     except Exception as e:
 
@@ -295,7 +295,7 @@ def put_minigame():
 
     if not data:
 
-        return jsonify({'msg': "No has enviato informacion para editar el minijuego"}), 404
+        return jsonify({'msg': "No has enviado informacion para editar el minijuego"}), 404
 
     title_formatted = data["title"].replace(" ", "").lower()
 
