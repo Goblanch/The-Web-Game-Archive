@@ -249,24 +249,30 @@ def get_all_minigames():
     return jsonify(minigame_info), 200
 
 
-@api.route('/minigame/<int:id_mini>', methods = ['POST'])
-def post_minigame(id_mini):
+@api.route('/minigame', methods = ['POST'])
+def post_minigame():
 
     data = request.get_json()
 
     if not data:
 
         return jsonify({'msg': "No has enviado data para crear el minijuego"}), 400
+    
+    title_formatted = data["title"].replace(" ", "").lower()
 
-    minigame = Minigames.query.filter_by(id_minigame  = id_mini).first()
+    minigame = Minigames.query.filter_by(title = title_formatted).first()
 
     if minigame is not None:
 
-        return jsonify({'msg': f"Ya existe un Minigame con ese id:{id_mini}"})
+        return jsonify({'msg': f"Ya existe un Minigame con ese title:{data['title']}"})
 
     new_minigame = Minigames(
-                            title = data['title'],
-                            description = data['description']
+                            title = title_formatted,
+                            description = data['description'],
+                            points_per_win = data['points_per_win'],
+                            lives = data['lives'],
+                            game_time = data['game_time'],
+                            click_time = data['click_time']
     
                             )
 
@@ -282,8 +288,8 @@ def post_minigame(id_mini):
         return jsonify({'msg': f"Error al crear el minigame: {str(e)}"}), 500
 
 
-@api.route('/minigame/<int:id_mini>', methods = ['PUT'])
-def put_minigame(id_mini):
+@api.route('/minigame', methods = ['PUT'])
+def put_minigame():
 
     data = request.get_json()
 
@@ -291,26 +297,35 @@ def put_minigame(id_mini):
 
         return jsonify({'msg': "No has enviato informacion para editar el minijuego"}), 404
 
-    minigame = Minigames.query.filter_by(id_minigame = id_mini).first()
+    title_formatted = data["title"].replace(" ", "").lower()
+
+    minigame = Minigames.query.filter_by(title = title_formatted).first()
 
     if minigame is None:
 
-        return jsonify({'msg': f"El minijuego con la id:{id_mini} no existe"}), 400
+        return jsonify({'msg': f"El minijuego con el title:{data['title']} no existe"}), 400
 
-    minigame.title = data.get('title' , minigame.title)
+    minigame.title = title_formatted
     minigame.description = data.get('description' , minigame.description)
+    minigame.points_per_win = data.get('points_per_win',minigame.points_per_win)
+    minigame.lives = data.get('lives',minigame.lives)
+    minigame.game_time = data.get('game_time',minigame.game_time)
+    minigame.click_time = data.get('click_time',minigame.click_time)
 
     try:
 
         db.session.commit()
 
-        return jsonify({'msg' : "Se ha modificado el minjuego correctamen"}), 200
+        return jsonify({'msg' : "Se ha modificado el minjuego correctamente"}), 200
     
     except Exception as e :
 
         db.session.rollback()
 
         return jsonify({'msg': f"Fallo al modificar el minijuego en la Base de datos : {str(e)}"})
+    
+
+
 
 
 @api.route('/minigame/<int:id_mini>', methods = ['DELETE'])
@@ -322,7 +337,7 @@ def delete_minigame(id_mini):
     if minigame_to_delete is None:
 
 
-        return jsonify({'msg': "No existe el usuario que deseas borrar con este id:" + id_mini}), 400
+        return jsonify({'msg': "No existe el minigame que deseas borrar con este id:" + id_mini}), 400
 
 
     try:
@@ -335,7 +350,9 @@ def delete_minigame(id_mini):
 
         db.session.rollback()
 
-        return jsonify({'msg': f"Fallo al modificar el minijuego en la Base de datos : {str(e)}"})
+        return jsonify({'msg': f"Fallo al borrar el minijuego en la Base de datos : {str(e)}"})
+    
+
 
 
 
@@ -376,7 +393,9 @@ def post_played_games():
                                     user_id = data["user_id"],
                                     minigame_id = data["minigame_id"],
                                     game_data = data["game_data"],
-                                    game_points = data["game_points"]
+                                    game_points = data["game_points"],
+                                    record = data["record"],
+                                    mithril_per_second = data["mithril_per_second"]
                                     )
     
     try:
@@ -392,6 +411,50 @@ def post_played_games():
 
         return jsonify({'msg': f"Fallo al crear played_games en la Base de datos : {str(e)}"}), 500
 
+############################################################################################################
+############################################################################################################
+############################################################################################################
+############################################################################################################
+
+
+@api.route("/played_games/<int:id_played_gam>" , methods = ['PUT'])
+def put_game_data(id_played_gam):
+
+    data = request.get_json()
+
+    if "game_data" not in data:
+
+        return jsonify({"msg": "No has enviado la info de played_games"}), 400
+    
+    played_game = Played_games.query.filter_by(id_played_games = id_played_gam).first()
+
+    if played_game is None:
+
+        return jsonify({"msg": f"No existe el played_game con esta id : {str(id_played_gam)}"}), 400
+    
+    played_game.game_data = data.get("game_data", played_game.game_data)
+    played_game.game_points = data.get("game_points", played_game.game_points)
+    played_game.record = data.get("record", played_game.record)
+    played_game.mithril_per_second = data.get("mithril_per_second", played_game.mithril_per_second)
+
+    try:
+
+        db.session.commit()
+
+        return({"msg" : "EL played_game ha sido editado correctamente"}), 200
+    
+    except Exception as e:
+
+        return({"msg" : "Fallo al editar el played_game en la base de datos"}), 500
+
+
+
+
+
+############################################################################################################
+############################################################################################################
+############################################################################################################
+############################################################################################################
 
 @api.route('/played_games/game_points/<int:id_played_gam>' , methods = ['PUT'])
 def put_game_points(id_played_gam):
@@ -414,7 +477,7 @@ def put_game_points(id_played_gam):
 
     except ValueError:
 
-        return jsonify({'msg': "El valor de 'total_points' debe ser un número entero válido"}), 400
+        return jsonify({'msg': "El valor de 'game_points' debe ser un número entero válido"}), 400
 
     new_game_points = new_points_to_add + played_game.game_points
 
@@ -453,30 +516,4 @@ def delete_played_games(id_played_gam):
 
         return jsonify({'msg': f"Fallo al borrar played_games en la Base de datos : {str(e)}"}), 500
     
-@api.route("/played_games/game_data/<int:id_played_gam>" , methods = ['PUT'])
-def put_game_data(id_played_gam):
 
-    data = request.get_json()
-
-    if "game_data" not in data:
-
-        return jsonify({"msg": "No has enviado los game_points para sumarles"}), 400
-    
-    played_game = Played_games.query.filter_by(id_played_games = id_played_gam).first()
-
-    if played_game is None:
-
-        return jsonify({"msg": f"No existe el played_game con esta id : {str(id_played_gam)}"}), 400
-    
-    played_game.game_data = data.get("game_data", played_game)
-
-    try:
-
-        db.session.commit()
-
-        return({"msg" : "La game_data ha sido editada correctamente"}), 200
-    
-    except Exception as e:
-
-        return({"msg" : "Fallo al editar la game_data en la base de datos"}), 500
-    

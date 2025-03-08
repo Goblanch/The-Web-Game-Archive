@@ -46,6 +46,10 @@ class Minigames(db.Model):
     id_minigame = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(30), unique=True, nullable=False)
     description = db.Column(db.String(300), unique=False, nullable=False)
+    points_per_win = db.Column(db.Integer, unique=False, nullable=False)
+    lives = db.Column(db.Integer, unique=False, nullable=True)
+    game_time = db.Column(db.Float, unique=False, nullable=True)
+    click_time = db.Column(db.Float, unique=False, nullable=True)
     relation_favorite = db.relationship('Played_games' , backref='minigames')
     
 
@@ -57,6 +61,11 @@ class Minigames(db.Model):
             "id_minigame": self.id_minigame,
             "title": self.title,
             "description": self.description,
+            "points_per_win": self.points_per_win,
+            "lives": self.lives,
+            "game_time ": self.game_time,
+            "click_time": self.click_time
+            
 
             # do not serialize the password, its a security breach
         }
@@ -67,7 +76,9 @@ class Played_games(db.Model):
     minigame_id = db.Column(db.Integer, db.ForeignKey('minigames.id_minigame'))
     game_data = db.Column(db.String(3000), unique=False, nullable=False)
     game_points =  db.Column(db.Integer, unique=False, nullable=False)
-    
+    record = db.Column(db.Integer, unique=False, nullable=True)
+    mithril_per_second = db.Column(db.Float, unique=False, nullable=True)
+
 
     def __repr__(self):
         return f'<Played_games {self.id_played_games}>'
@@ -78,7 +89,9 @@ class Played_games(db.Model):
             "user_id": self.user_id,
             "minigame_id": self.minigame_id,
             "game_data": self.game_data,
-            "game_points": self.game_points
+            "game_points": self.game_points,
+            "record": self.record,
+            "mithril_per_second": self.click_time
         
             # do not serialize the password, its a security breach
         }
