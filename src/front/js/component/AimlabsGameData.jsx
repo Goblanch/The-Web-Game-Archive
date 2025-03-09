@@ -3,18 +3,22 @@ import PropTypes from "prop-types";
 
 const AimlabsGameData = ({ gameTime, clickTime, score }) => {
     return (
-        <div style={{
-            backgroundColor: "#f8f9fa",
-            padding: "10px",
-            display: "flex",
-            justifyContent: "space-between",
-        }}>
-            <span>Tiempo de partida: {gameTime}s</span>
-            <span>Tiempo para clic: {clickTime}s</span>
-            <span>Puntuación: {score}</span>
+        <div className="d-flex justify-content-around align-items-center bg-dark text-light p-3 rounded shadow-lg">
+            <div className="text-center">
+                <h5 className="mb-1">Tiempo de Partida</h5>
+                <span className="fs-4 fw-bold text-warning">{gameTime}s</span>
+            </div>
+            <div className="text-center">
+                <h5 className="mb-1">Tiempo para Clic</h5>
+                <span className="fs-4 fw-bold text-danger">{clickTime}s</span>
+            </div>
+            <div className="text-center">
+                <h5 className="mb-1">Puntuación</h5>
+                <span className="fs-4 fw-bold text-success">{score}</span>
+            </div>
         </div>
     );
-}
+};
 
 AimlabsGameData.propTypes = {
     gameTime: PropTypes.number.isRequired,

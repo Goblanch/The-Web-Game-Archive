@@ -19,14 +19,11 @@ const Aimlabs = () => {
     const gameTimer = useRef(null);
 
     const generateRandomPosition = () => {
-        const windowWidth = window.innerWidth;
-        const windowHeight = window.innerHeight;
+        const buttonSizeVW = 10; // Button width in vw
+        const buttonSizeVH = 5;  // Button height in vh
 
-        const buttonSize = 50; // Tamaño aprox. TODO: intentar tomar el tamaño total del botón.
-        const navbarHeight = 150;
-
-        const randomTop = navbarHeight + Math.random() * (windowHeight - navbarHeight - buttonSize);
-        const randomLeft = Math.random() * (windowWidth - buttonSize);
+        const randomTop = Math.random() * (100 - buttonSizeVH);
+        const randomLeft = Math.random() * (100 - buttonSizeVW);
 
         return { top: randomTop, left: randomLeft };
     };
@@ -99,8 +96,8 @@ const Aimlabs = () => {
     }, [gameStarted, clickTime]);
 
     return (
-        <div>
-            <h1>Aimlabs</h1>
+        <div className="container-fluid bg-secondary vh-100 d-flex flex-column justify-content-start align-items-center">
+            <h1 className="text-warning fw-bold mb-4">Aimlabs</h1>
             <MinigameRulesModal gameName={"aimlabs"} onRulesClosed={handleStart} />
 
             <AimlabsGameData gameTime={gameTime} clickTime={clickTime} score={score} />
@@ -110,13 +107,15 @@ const Aimlabs = () => {
                     <div
                         style={{
                             position: "absolute",
-                            top: `${position.top}px`,
-                            left: `${position.left}px`,
+                            top: `${position.top}%`,
+                            left: `${position.left}%`,
                             transition: "top 0.2s, left 0.2s",
+                            width: "10vw",
+                            height: "5vw"
                         }}
                     >
                         <button
-                            className="btn btn-primary"
+                            className="btn btn-warning"
                             style={{ width: "100px", height: "50px" }}
                             onClick={handleButtonClick}
                             tabIndex="-1" // Evitar navegación con tabulador
