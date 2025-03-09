@@ -12,6 +12,18 @@
         "points": 5
     },
     {
+        "name": "aimlabs",
+        "rules": [
+            "Click on the button to raise points",
+            "Each time you click on the button, it changes it's position",
+            "You have limited time to raise as much points as you can",
+            "You have limited time to click on the button"
+        ],
+        "points": 1,
+        "game_time": 10,
+        "click_time": 2
+    },
+    {
         "name": "Cookie Clicker Clone",
         "description": "Accumulate points by clicking as fast as you can!",
         "rules": [
