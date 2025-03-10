@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { createNewUser } from "../../services/APIServices";
 
 const UserRegister = () => {
 
     const [userName, setUserName] = useState("");
-    const [name, setName] = useState("");
-    const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -15,6 +14,7 @@ const UserRegister = () => {
 
 
     const handleOnSubmit = (e) => {
+
         e.preventDefault();
 
         if (!checkPassword()) {
@@ -27,6 +27,7 @@ const UserRegister = () => {
         setError("");
 
         // Hacer llamada a la api aquí
+        handleSingup()
     }
 
     const checkPassword = () => {
@@ -35,6 +36,14 @@ const UserRegister = () => {
 
     const handleGotoLogin = () => {
         navigate('/user-login');
+    }
+
+    const handleSingup = () =>{
+
+        createNewUser(userName,email,password)
+
+        navigate("/user-login")
+
     }
 
     return (
@@ -48,7 +57,7 @@ const UserRegister = () => {
                 </div>
             )}
 
-            <form onSubmit={handleOnSubmit}>
+            <form onSubmit={(e)=>handleOnSubmit(e)}>
                 <div className="row mb-5">
                     <div className="col-lg-2 col-md-12">
                         <h6 className="text">USERNAME</h6>
@@ -61,36 +70,6 @@ const UserRegister = () => {
                             placeholder="Enter your user name"
                             onChange={(e) => setUserName(e.target.value)}
                             required
-                        />
-                    </div>
-                </div>
-
-                <div className="row mb-5">
-                    <div className="col-lg-2 col-md-12">
-                        <h6>NAME</h6>
-                    </div>
-                    <div className="col-lg-10 col-md-12">
-                        <input
-                            type="text"
-                            className="form-control"
-                            id="name"
-                            placeholder="Enter your name"
-                            onChange={(e) => setName(e.target.value)}
-                            required
-                        />
-                    </div>
-                </div>
-
-                <div className="row mb-5">
-                    <div className="col-lg-2 col-md-12">
-                        <h6>LAST NAME</h6>
-                    </div>
-                    <div className="col-lg-10 col-md-12">
-                        <input type="text"
-                            className="form-control"
-                            id="last-name"
-                            placeholder="Enter your last name"
-                            onChange={(e) => setLastName(e.target.value)}
                         />
                     </div>
                 </div>

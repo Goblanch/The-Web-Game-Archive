@@ -1,14 +1,16 @@
-import { useNavigate } from "react-router-dom"
 
 
-const urlApi = import.meta.env.BACKEND_URL
+const urlApi = process.env.BACKEND_URL
 
-const navigate = useNavigate()
+console.log(urlApi);
+
+
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////----SERVICIOS DE LA API SOBRE LOS USUARIOS////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-export const createNewUser = async (infoUser) => {
+export const createNewUser = async (userName,email,password) => {
 
     try {
 
@@ -17,13 +19,13 @@ export const createNewUser = async (infoUser) => {
             method: "POST",
             body: JSON.stringify({
 
-                "user_name": infoUser.user_name,
-                "name": infoUser.name,
-                "last_name":infoUser.last_name,
-                "user_img":infoUser.user_img,
-                "email": infoUser.email,
-                "password": infoUser.password,
-                "total_points": infoUser.total_points
+                "user_name": userName,
+                "name": null,
+                "last_name": null,
+                "user_img": null,
+                "email": email,
+                "password": password,
+                "total_points": 0
 
             }),
             headers:{"Content-Type": "application/json"}
@@ -33,7 +35,7 @@ export const createNewUser = async (infoUser) => {
 
         if(response.ok){
 
-            return print(`El usuario : ${infoUser.email} se ha creado correctamente`)
+            return print(`El usuario : ${email} se ha creado correctamente`)
         }
     
     } catch (error){
@@ -45,160 +47,161 @@ export const createNewUser = async (infoUser) => {
 
 }
 
-export const editUser = async (infoUser) => {
+// export const editUser = async (infoUser) => {
 
-    try{
+//     try{
 
-        const response = await fetch( urlApi + "")
-
-
-    } catch (error){
+//         const response = await fetch( urlApi + "")
 
 
-
-    }
-
-
-}
-
-export const logIn = async (infoUser) => {
-
-
-    try{
-
-        const response = await fetch( urlApi + "user/login" , {
-
-            method: "POST",
-            body: JSON.stringify({
-
-                "email": infoUser.email,
-                "passwword": infoUser.password
-
-            }),
-            headers: {"Content-Type": "application/json"}
-
-
-        })
-
-        const data = await response.json
-
-        if(response.ok){
-
-
-            sessionStorage.setItem("token", data.token)
-
-            navigate("/private")
-
-        }
+//     } catch (error){
 
 
 
-    } catch (error){
+//     }
 
 
-        console.log(error);
+// }
+
+// export const logIn = async (infoUser,navigate) => {
+
+    
+
+//     try{
+
+//         const response = await fetch( urlApi + "user/login" , {
+
+//             method: "POST",
+//             body: JSON.stringify({
+
+//                 "email": infoUser.email,
+//                 "passwword": infoUser.password
+
+//             }),
+//             headers: {"Content-Type": "application/json"}
+
+
+//         })
+
+//         const data = await response.json
+
+//         if(response.ok){
+
+
+//             sessionStorage.setItem("token", data.token)
+
+//             navigate("/private")
+
+//         }
+
+
+
+//     } catch (error){
+
+
+//         console.log(error);
         
 
-    }
+//     }
 
-}
+// }
 
-export const privateRoute = async (infoUser) => {
+// export const privateRoute = async (infoUser) => {
 
 
-    try{
+//     try{
 
-        const token = sessionStorage.getItem("token")
+//         const token = sessionStorage.getItem("token")
 
-        const response = await fetch( urlApi + "user/private" , {
+//         const response = await fetch( urlApi + "user/private" , {
 
-            method: "GET",
-            headers: {"Content-Type": "application/json",
-                      "Authorization": `Bearer ${token}`
+//             method: "GET",
+//             headers: {"Content-Type": "application/json",
+//                       "Authorization": `Bearer ${token}`
 
-            }
+//             }
 
-        })
+//         })
 
-        if(response.ok){
+//         if(response.ok){
 
-            console.log("Puedes entrar a private");
+//             console.log("Puedes entrar a private");
             
-            return true
-        }
+//             return true
+//         }
 
-    } catch (error){
+//     } catch (error){
 
-        console.log(error, "Error al entrar a private")
+//         console.log(error, "Error al entrar a private")
 
-    }
-
-
-
-}
-
-export const addTotalPoints = async (sumTotalPoints,id_user) => {
-
-    try{
-
-        const response = await fetch( urlApi + `user/totalpoints/${id_user}`,{
-
-            method: "POST",
-            body: JSON.stringify({
-
-                "total_points": sumPoints
-
-            })
+//     }
 
 
 
-        })
+// }
 
-    } catch (error){
+// export const addTotalPoints = async (sumTotalPoints,id_user) => {
 
-        console.log(error, "Error al sumar los Total Points")
+//     try{
 
-    }
+//         const response = await fetch( urlApi + `user/totalpoints/${id_user}`,{
 
+//             method: "POST",
+//             body: JSON.stringify({
 
+//                 "total_points": sumPoints
 
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////----SERVICIOS DE LA API SOBRE LOS MINIGAMES////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//             })
 
 
+
+//         })
+
+//     } catch (error){
+
+//         console.log(error, "Error al sumar los Total Points")
+
+//     }
+
+
+
+// }
+
+
+// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ///////////////////////////////----SERVICIOS DE LA API SOBRE LOS MINIGAMES////////////////////////////////////////////////////////////////////////////////////
+// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////----SERVICIOS DE LA API SOBRE LOS PLAYED GAMES////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const addGamePoints = async (sumGamePoints,id_played_game) => {
 
-    try{
+// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ///////////////////////////////----SERVICIOS DE LA API SOBRE LOS PLAYED GAMES////////////////////////////////////////////////////////////////////////////////////
+// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        const response = await fetch( urlApi + `played_games/game_points/${id_played_game}`,{
+// export const addGamePoints = async (sumGamePoints,id_played_game) => {
 
-            method: "POST",
-            body: JSON.stringify({
+//     try{
 
-                "game_points": sumGamePoints
+//         const response = await fetch( urlApi + `played_games/game_points/${id_played_game}`,{
 
-            })
+//             method: "POST",
+//             body: JSON.stringify({
 
-        })
+//                 "game_points": sumGamePoints
 
-    } catch (error){
+//             })
 
-        console.log(error,"Error al sumar los Game Points");
+//         })
+
+//     } catch (error){
+
+//         console.log(error,"Error al sumar los Game Points");
         
-    }
+//     }
 
-}
+// }
 
