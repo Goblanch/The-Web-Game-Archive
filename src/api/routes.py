@@ -93,8 +93,8 @@ def delete_user(id_us):
 
     return jsonify({'msg': "No existe el usuario que deseas borrar con este id:" + id_us}),400
     
-@api.route('/user/<int:id_us>', methods = ['PUT'])
-def update_user(id_us):
+@api.route('/user', methods = ['PUT'])
+def update_user():
 
     data = request.get_json()
 
@@ -102,7 +102,7 @@ def update_user(id_us):
 
          return jsonify({'msg':"No has enviado la data para modificar"}), 404 
 
-    user_to_update = User.query.filter_by(id_user = id_us).first()
+    user_to_update = User.query.filter_by(email = data["email"]).first()
 
     if user_to_update is None:
 
@@ -383,11 +383,6 @@ def post_played_games():
 
         return({"msg" : "No has enviado la informacion parta crear el played_game"}), 400
     
-    played_game = Played_games.query.filter_by(user_id = data["user_id"] , minigame_id = data["minigame_id"]).first()
-
-    if played_game is not None:
-
-        return({"msg" : "El played_game ya existe no se puede crear"}), 400
 
     new_played_game = Played_games(
                                     user_id = data["user_id"],
