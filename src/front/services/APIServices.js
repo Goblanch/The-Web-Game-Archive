@@ -71,48 +71,54 @@ export const createNewUser = async (userName,email,password) => {
 
 
 
-// export const logIn = async (infoUser) => {
+export const logIn = async (email,password,navigate) => {
 
-    
+   
 
-//     try{
-
-//         const response = await fetch( urlApi + "user/login" , {
-
-//             method: "POST",
-//             body: JSON.stringify({
-
-//                 "email": infoUser.email,
-//                 "passwword": infoUser.password
-
-//             }),
-//             headers: {"Content-Type": "application/json"}
+    try{
 
 
-//         })
+        const response = await fetch( urlApi + "user/login" , {
 
-//         const data = await response.json
+            method: "POST",
+            body: JSON.stringify({
 
-//         if(response.ok){
+                "email": email,
+                "password": password
 
-
-//             sessionStorage.setItem("token", data.token)
-
-//             navigate("/private")
-
-//         }
+            }),
+            headers: {"Content-Type": "application/json"}
 
 
+        })
 
-//     } catch (error){
-
-
-//         console.log(error);
         
 
-//     }
+        const data = await response.json()
 
-// }
+        console.log(data)
+
+        if(response.ok){
+
+
+            sessionStorage.setItem("token", data.token)
+
+            navigate("/users")
+
+        }
+
+
+
+    } catch (error){
+
+        console.log("es aqui");
+        
+        console.log(error);
+        
+
+    }
+
+}
 
 // export const privateRoute = async (infoUser) => {
 

@@ -30,7 +30,7 @@ class User(db.Model):
             "last_name": self.last_name,
             "user_img": self.user_img,
             "email": self.email,
-            "total_points": self.total_points
+            "total_points": self.total_points,
 
             # do not serialize the password, its a security breach
         }

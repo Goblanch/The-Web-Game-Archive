@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { logIn } from "../../services/APIServices";
 
 const UserLogin = () => {
-
+   
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -13,7 +14,11 @@ const UserLogin = () => {
         e.preventDefault();
 
         // Hacer la llamada a la api aquí
+        
+        logIn(email,password,navigate)
+
     }
+
 
     const handleGotoRegister = () => {
         navigate('/user-register');
@@ -64,7 +69,7 @@ const UserLogin = () => {
 
                 <div className="d-flex flex-column align-items-center mb-4">
                     <button type="submit" className="btn" style={{ background: "rgb(205, 67, 26)", color: "white", fontSize: "23px" }}>
-                        REGISTER
+                        LOG IN
                     </button>
                 </div>
 
