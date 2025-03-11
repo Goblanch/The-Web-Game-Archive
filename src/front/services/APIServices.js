@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 
 const urlApi = process.env.BACKEND_URL
 
-const navigate = useNavigate()
 
 console.log(urlApi);
 
