@@ -14,7 +14,7 @@ console.log(urlApi);
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //////////////////------TESTED--------/////////////////
-export const createNewUser = async (userName,email,password) => {
+export const createNewUser = async (userName,email,password,navigate) => {
 
     try {
 
@@ -39,8 +39,9 @@ export const createNewUser = async (userName,email,password) => {
 
         if(response.ok){
 
-            return print(`El usuario : ${email} se ha creado correctamente`)
+            navigate("/user-login")
 
+            return print(`El usuario : ${email} se ha creado correctamente`)
 
         }
     
@@ -70,8 +71,8 @@ export const createNewUser = async (userName,email,password) => {
 // }
 
 
-
-export const logIn = async (email,password,navigate) => {
+//////////////////------TESTED--------/////////////////
+export const logIn = async (infoUser,navigate) => {
 
    
 
@@ -83,8 +84,8 @@ export const logIn = async (email,password,navigate) => {
             method: "POST",
             body: JSON.stringify({
 
-                "email": email,
-                "password": password
+                "email": infoUser.email,
+                "password": infoUser.password
 
             }),
             headers: {"Content-Type": "application/json"}
