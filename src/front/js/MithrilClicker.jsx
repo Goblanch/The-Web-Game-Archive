@@ -6,9 +6,6 @@ import MithtrilUpgradeList from './component/MithrilUpgradeList.jsx';
 import MithrilInventory from './component/MithrilInventory.jsx';
 
 // TODO: arreglar la imagen de los items comprados
-// TODO: que cuando haya muchos items del mismo salga el mismo item con un número de cuántos hay.
-// TODO: Gestionar cuándo el usuario sale del juego para cargar los datos a la DB
-// TODO: actualizar puntos en la database cada X tiempo para evitar pérdida de puntos.
 
 const MithrilAutoclicker = () => {
     const [mithril, setMithril] = useState(0);
@@ -49,15 +46,6 @@ const MithrilAutoclicker = () => {
         },
     ];
 
-    useEffect(() => {
-        if (autoClickers > 0) {
-            const interval = setInterval(() => {
-                setMithril((prevMithril) => prevMithril + autoClickers);
-            }, 1000);
-            return () => clearInterval(interval);
-        }
-    }, [autoClickers]);
-
     const handleMineClick = () => {
         setMithril(mithril + mithrilPerClick);
     };
@@ -79,6 +67,38 @@ const MithrilAutoclicker = () => {
             upgrade.onUpgrade();
         }
     };
+
+
+    useEffect(() => {
+        if (autoClickers > 0) {
+            const interval = setInterval(() => {
+                setMithril((prevMithril) => prevMithril + autoClickers);
+            }, 1000);
+            return () => clearInterval(interval);
+        }
+    }, [autoClickers]);
+
+    useEffect(() => {
+        const updateToBackEnd = () => {
+            // Añadir aquí la lógica para actualizar puntos cada x segundos
+            console.log("Updating mithril data to backend")
+        };
+
+        const interval = setInterval(updateToBackEnd, 30000);
+
+        const handleBeforeUnload = (event) => {
+            // Añadir aquí lógica para actualizar backend cuándo se sale del juego
+            console.log("Cerrando navegador. Actualizando backend");
+        }
+
+        window.addEventListener("beforeunload", handleBeforeUnload);
+
+        return () => {
+            clearInterval(interval);
+            window.removeEventListener("beforeunload", handleBeforeUnload);
+        }
+    }, [])
+
 
     return (
         <div className='container mt-4'>
