@@ -1,6 +1,9 @@
+import { useNavigate } from "react-router-dom";
 
 
 const urlApi = process.env.BACKEND_URL
+
+const navigate = useNavigate()
 
 console.log(urlApi);
 
@@ -10,6 +13,8 @@ console.log(urlApi);
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////----SERVICIOS DE LA API SOBRE LOS USUARIOS////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////------TESTED--------/////////////////
 export const createNewUser = async (userName,email,password) => {
 
     try {
@@ -36,6 +41,8 @@ export const createNewUser = async (userName,email,password) => {
         if(response.ok){
 
             return print(`El usuario : ${email} se ha creado correctamente`)
+
+
         }
     
     } catch (error){
@@ -63,7 +70,9 @@ export const createNewUser = async (userName,email,password) => {
 
 // }
 
-// export const logIn = async (infoUser,navigate) => {
+
+
+// export const logIn = async (infoUser) => {
 
     
 
