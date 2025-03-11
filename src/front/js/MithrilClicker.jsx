@@ -103,7 +103,7 @@ const MithrilAutoclicker = () => {
     return (
         <div className='container mt-4'>
             <div className='row'>
-                <div className='col-3'>
+                <div className='col-12 col-lg-3'>
                     <MithrilOreButton
                         onMine={handleMineClick}
                         mithrilPerSecond={autoClickers}
@@ -111,11 +111,11 @@ const MithrilAutoclicker = () => {
                     />
                 </div>
 
-                <div className='col-6'>
+                <div className='col-12 col-lg-6 mt-4 mt-lg-0 order-2 order-lg-1'>
                     <MithrilInventory items={purchasedUpgrades} />
                 </div>
 
-                <div className='col-3'>
+                <div className='col-12 col-lg-3 mt-4 mt-lg-0 order-1 order-lg-2'>
                     <MithtrilUpgradeList>
                         {upgrades.map((upgrade, index) => (
                             <MithrilAutoclickerUpgrade
