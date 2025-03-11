@@ -2,11 +2,52 @@ import React, { useState, useEffect } from 'react';
 
 import MithrilAutoclickerUpgrade from './component/MithrilAutoclickerUpgrade.jsx';
 import MithrilOreButton from './component/MithrilOreButton.jsx';
+import MithtrilUpgradeList from './component/MithrilUpgradeList.jsx';
+import MithrilInventory from './component/MithrilInventory.jsx';
+
+// TODO: arreglar la imagen de los items comprados
+// TODO: que cuando haya muchos items del mismo salga el mismo item con un número de cuántos hay.
+// TODO: Gestionar cuándo el usuario sale del juego para cargar los datos a la DB
+// TODO: actualizar puntos en la database cada X tiempo para evitar pérdida de puntos.
 
 const MithrilAutoclicker = () => {
     const [mithril, setMithril] = useState(0);
     const [mithrilPerClick, setMithrilPerClick] = useState(1);
     const [autoClickers, setAutoClickers] = useState(0);
+    const [purchasedUpgrades, setPurchasedUpgrades] = useState([]);
+
+    const upgrades = [
+        {
+            name: "Mithril Pickaxe",
+            description: "A pickaxe forged from mithril, increasing mithril per click by 2.",
+            cost: 10,
+            onUpgrade: () => setMithrilPerClick((prev) => prev + 2),
+        },
+        {
+            name: "Mithril Forge",
+            description: "Automates mithril extraction, generating 5 mithril per second.",
+            cost: 200,
+            onUpgrade: () => setAutoClickers((prev) => prev + 5),
+        },
+        {
+            name: "Mithril Armor",
+            description: "Enhances mining efficiency, increasing mithril per click by 5.",
+            cost: 500,
+            onUpgrade: () => setMithrilPerClick((prev) => prev + 5),
+        },
+        {
+            name: "Mithril Vein Detector",
+            description: "Detect hidden mithril veins, doubling mithril per second.",
+            cost: 1000,
+            onUpgrade: () => setAutoClickers((prev) => prev * 2),
+        },
+        {
+            name: "Elven Blessing",
+            description: "Blessings of the Elves increase mithril per click by 10.",
+            cost: 2000,
+            onUpgrade: () => setMithrilPerClick((prev) => prev + 10),
+        },
+    ];
 
     useEffect(() => {
         if (autoClickers > 0) {
@@ -31,40 +72,45 @@ const MithrilAutoclicker = () => {
         }
     };
 
-    const handleAutoClickerPurchase = () => {
-        const autoClickerCost = (autoClickers + 1) * 50;
-        if (mithril >= autoClickerCost) {
-            setMithril(mithril - autoClickerCost);
-            setAutoClickers(autoClickers + 1);
-        } else {
-            alert('Not enough mithril for auto-clicker!');
+    const handleUpgradePurchase = (upgrade) => {
+        if (mithril >= upgrade.cost) {
+            setMithril(mithril - upgrade.cost);
+            setPurchasedUpgrades((prev) => [...prev, { name: upgrade.name, image: upgrade.image }]);
+            upgrade.onUpgrade();
         }
     };
 
     return (
-        <div className="flex flex-col items-center gap-4 p-6">
-            <h1 className="text-2xl font-bold">Mithril Autoclicker</h1>
-            <p className="text-lg">Mithril: {mithril}</p>
-            <MithrilOreButton onMine={handleMineClick} />
-            {/* <button onClick={handleMineClick} className="bg-blue-500 hover:bg-blue-700 px-4 py-2 rounded">
-                Mine Mithril
-            </button> */}
-            <div className="flex gap-4">
-                <MithrilAutoclickerUpgrade
-                    name="Upgrade Pickaxe"
-                    description="Increase mithril per click by 1."
-                    cost={mithrilPerClick * 10}
-                    OnUpgrade={handleUpgradeClick}
-                    disabled={mithril < mithrilPerClick * 10}
-                />
-                <MithrilAutoclickerUpgrade
-                    name="Buy Auto-clicker"
-                    description="Automatically generate 1 mithril per second."
-                    cost={(autoClickers + 1) * 50}
-                    OnUpgrade={handleAutoClickerPurchase}
-                    disabled={mithril < (autoClickers + 1) * 50}
-                />
+        <div className='container'>
+            <div className='row'>
+                <div className='col-3'>
+                    <MithrilOreButton
+                        onMine={handleMineClick}
+                        mithrilPerSecond={autoClickers}
+                        mithril={mithril}
+                    />
+                </div>
+
+                <div className='col-6'>
+                    <MithrilInventory items={purchasedUpgrades} />
+                </div>
+
+                <div className='col-3'>
+                    <MithtrilUpgradeList>
+                        {upgrades.map((upgrade, index) => (
+                            <MithrilAutoclickerUpgrade
+                                key={index}
+                                name={upgrade.name}
+                                description={upgrade.description}
+                                cost={upgrade.cost}
+                                OnUpgrade={() => handleUpgradePurchase(upgrade)}
+                                disabled={mithril < upgrade.cost}
+                            />
+                        ))}
+                    </MithtrilUpgradeList>
+                </div>
             </div>
+
         </div>
     );
 };
