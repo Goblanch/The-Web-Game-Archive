@@ -11,7 +11,7 @@ jwt = JWTManager(app)
 class User(db.Model):
     id_user = db.Column(db.Integer, primary_key=True)
     user_name = db.Column(db.String(30), unique=True, nullable=False)
-    name = db.Column(db.String(30), unique=False, nullable=False)
+    name = db.Column(db.String(30), unique=False, nullable=True)
     last_name = db.Column(db.String(30), unique=False, nullable=True)
     user_img = db.Column(db.String(200), unique=False, nullable=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
