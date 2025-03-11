@@ -26,25 +26,25 @@ const MithrilAutoclicker = () => {
         {
             name: "Mithril Forge",
             description: "Automates mithril extraction, generating 5 mithril per second.",
-            cost: 200,
+            cost: 50,
             onUpgrade: () => setAutoClickers((prev) => prev + 5),
         },
         {
             name: "Mithril Armor",
             description: "Enhances mining efficiency, increasing mithril per click by 5.",
-            cost: 500,
+            cost: 100,
             onUpgrade: () => setMithrilPerClick((prev) => prev + 5),
         },
         {
             name: "Mithril Vein Detector",
             description: "Detect hidden mithril veins, doubling mithril per second.",
-            cost: 1000,
+            cost: 200,
             onUpgrade: () => setAutoClickers((prev) => prev * 2),
         },
         {
             name: "Elven Blessing",
             description: "Blessings of the Elves increase mithril per click by 10.",
-            cost: 2000,
+            cost: 1000,
             onUpgrade: () => setMithrilPerClick((prev) => prev + 10),
         },
     ];
@@ -81,7 +81,7 @@ const MithrilAutoclicker = () => {
     };
 
     return (
-        <div className='container'>
+        <div className='container mt-4'>
             <div className='row'>
                 <div className='col-3'>
                     <MithrilOreButton
