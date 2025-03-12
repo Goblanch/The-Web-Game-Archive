@@ -121,39 +121,45 @@ export const logIn = async (infoUser,navigate) => {
 
 }
 
-// export const privateRoute = async (infoUser) => {
+//////////////////------TESTED--------/////////////////
+export const privateRoute = async () => {
 
 
-//     try{
+    try{
 
-//         const token = sessionStorage.getItem("token")
+        const token = sessionStorage.getItem("token")
 
-//         const response = await fetch( urlApi + "user/private" , {
+        const response = await fetch( urlApi + "user/private" , {
 
-//             method: "GET",
-//             headers: {"Content-Type": "application/json",
-//                       "Authorization": `Bearer ${token}`
+            method: "GET",
+            headers: {"Content-Type": "application/json",
+                      "Authorization": `Bearer ${token}`
 
-//             }
+            }
 
-//         })
+        })
 
-//         if(response.ok){
+        if(response.ok){
 
-//             console.log("Puedes entrar a private");
+            console.log("Puedes entrar a private");
             
-//             return true
-//         }
+            return true
+        }
 
-//     } catch (error){
+        if(!response.ok){
 
-//         console.log(error, "Error al entrar a private")
+            return false
+        }
 
-//     }
+    } catch (error){
 
+        console.log(error, "Error al entrar a private")
 
+    
 
-// }
+    }
+
+}
 
 // export const addTotalPoints = async (sumTotalPoints,id_user) => {
 
