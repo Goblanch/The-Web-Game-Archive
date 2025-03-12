@@ -6,7 +6,8 @@ import profilePic from "../../img/rigo-baby.jpg"
 import backgroundImage from '../../img/fondo5.jpg'
 import '../../styles/index.css';
 import { privateRoute } from "../../services/APIServices";
-import { editUser } from "../../services/APIServices";
+import { editUser , deleteUser } from "../../services/APIServices";
+
 
 const Users = () => {
 
@@ -43,6 +44,8 @@ const Users = () => {
 
     }, []);
 
+    
+
     const handleLogOut = () => {
 
         setIsAuthenticated(null)
@@ -73,7 +76,24 @@ const Users = () => {
     const [profilePic, setProfilePic] = useState("");
 
 
-    const handleEliminarUser  = () =>{
+    const handleEliminarUser  = (e) =>{
+
+        e.preventDefault();
+
+        let verification = prompt("Vas a borrar tu Usuario y perderas tu datos. Escribe YES si quieres borrarlo de verdad , de lo contrario escribe NO", "NO")
+
+        if(verification == "YES"){
+
+            deleteUser()
+
+            navigate("/user-login")
+        }
+        else{
+
+            return alert("No se ha borrado el usuario")
+
+        }
+        
         
     }
 
@@ -147,7 +167,7 @@ const Users = () => {
                                         <button className="btn btn-danger m-3" onClick={(e) => {handleGuardarCambios(e)}}>
                                             CONFIRMAR CAMBIOS
                                         </button>
-                                        <button className="btn btn-danger" onClick={handleEliminarUser}>
+                                        <button className="btn btn-danger" onClick={(e) => {handleEliminarUser(e)}}>
                                             ELIMINAR USUARIO
                                         </button>
                                     </div>

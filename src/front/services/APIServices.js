@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 
 
 const urlApi = process.env.BACKEND_URL
@@ -103,6 +102,7 @@ export const logIn = async (infoUser,navigate) => {
 
 
             sessionStorage.setItem("token", data.token)
+            sessionStorage.setItem("id_user", data.id_user)
 
             navigate("/users")
 
@@ -166,6 +166,7 @@ export const editUser = async (infoUser) => {
 
     try{
 
+
         const response = await fetch( urlApi + "user" , {
 
             method: "PUT",
@@ -191,6 +192,35 @@ export const editUser = async (infoUser) => {
     } catch (error){
 
         console.log(error , "No se ha podido modificar el usuario");
+
+    }
+
+}
+
+export const deleteUser = async () => {
+
+    try{
+
+        const id_user = sessionStorage.getItem("id_user")
+
+        const response = await fetch(urlApi + `user/${id_user}`, {
+
+            method: "DELETE",
+            headers: {"Content-Type": "application/json"}
+
+
+        }) 
+
+        if(response.ok){
+
+            return alert("Acabas de borrar tu usuario")
+
+        }
+
+
+    } catch (error) {
+
+        console.log(error , "No se ha podido borrar el usuario");
 
     }
 
