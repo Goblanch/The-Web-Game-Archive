@@ -75,18 +75,23 @@ const FairPrice = () => {
     }
 
     return (
-        <div className="container">
-            <h2>Guess the Price!</h2>
+        <div className="container mt-4">
+            <h2>Fair Price</h2>
             {product && (
-                <div className="product">
+                <div className="d-flex flex-column align-items-center">
                     <img
                         src={product.image}
                         alt={product.title}
-                        style={{ width: "200px", height: "200px" }}
+                        className="img-fluid h-25 w-25 mb-3 me-3"
                     />
-                    <h3>{product.title}</h3>
-                    <p>Price: ${product.price}</p>
-                    <form onSubmit={handleUserGuess}>
+                    
+                    <h3 className="text text-center mb-3">{product.title}</h3>
+                    {
+                        message ? <h3 className="text fw-semibold border border-success rounded p-2 mb-3">Price: {product.price} $</h3> : 
+                        <h3 className="text fw-semibold border border-warning rounded p-2 mb-3">Price: ???</h3>
+                    }
+                    {/* <p>Price: ${product.price}</p> */}
+                    <form onSubmit={handleUserGuess} className="d-flex mb-2">
                         <input
                             type="number"
                             value={userGuess}
@@ -94,11 +99,12 @@ const FairPrice = () => {
                             placeholder="Enter your guess"
                             min="0"
                             step="0.01"
+                            className="form-control me-2"
                         />
-                        <input type="submit" value="Guess" />
+                        <input type="submit" value="Guess" className="btn btn-warning" />
                     </form>
                     {message && <p>{message}</p>}
-                    <p>Your score: {score}</p>
+                    <p className="text fw-bold">Your score: {score}</p>
                 </div>
             )}
         </div>
