@@ -14,7 +14,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					initial: "white"
 				}
 			], 
-			randomPokemon: null
+			randomPokemon: null,
+			fakeStoreProducts: [],
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -77,6 +78,22 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return randomPokemon;
 				} catch (error) {
 					console.log("Error getting random pokemon:", error);
+				}
+			},
+
+			getStoreProducts: async () => {
+				try{
+					console.log("Hola");
+					const response = await fetch("https://fakestoreapi.com/products")
+					if(!response.ok) throw new Error(response.statusText);
+
+					const products = await response.json();
+					setStore({fakeStoreProducts: products})
+					console.log(products);
+					return products;
+					
+				}catch(error){
+					console.error("Error fetching products:", error);
 				}
 			}
 		}
