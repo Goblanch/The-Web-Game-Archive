@@ -7,6 +7,7 @@ import backgroundImage from '../../img/fondo5.jpg'
 import '../../styles/index.css';
 import { privateRoute } from "../../services/APIServices";
 import { editUser , deleteUser } from "../../services/APIServices";
+import Swal from 'sweetalert2';
 
 
 const Users = () => {
@@ -76,26 +77,30 @@ const Users = () => {
     const [profilePic, setProfilePic] = useState("");
 
 
-    const handleEliminarUser  = (e) =>{
-
+    const handleEliminarUser = (e) => {
         e.preventDefault();
-
-        let verification = prompt("Vas a borrar tu Usuario y perderas tu datos. Escribe YES si quieres borrarlo de verdad , de lo contrario escribe NO", "NO")
-
-        if(verification == "YES"){
-
-            deleteUser()
-
-            navigate("/user-login")
-        }
-        else{
-
-            return alert("No se ha borrado el usuario")
-
-        }
-        
-        
-    }
+      
+        // Mostrar un SweetAlert2 de confirmación sin campo de texto
+        Swal.fire({
+          title: 'Vas a borrar tu usuario y perderás tus datos',
+          text: '¿Estás seguro de que deseas eliminar tu cuenta?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Sí, eliminar mi cuenta',
+          cancelButtonText: 'Cancelar',
+          reverseButtons: true  // Cambiar el orden de los botones
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Llamar a la función deleteUser y redirigir
+            deleteUser();
+            Swal.fire('Usuario eliminado', 'Tu cuenta ha sido eliminada con éxito', 'success');
+            navigate("/user-login");  // Redirigir al login
+          } else {
+            // Si el usuario cancela la acción
+            Swal.fire('Cancelado', 'No se ha borrado el usuario', 'info');
+          }
+        });
+      };
 
     const handleGuardarCambios  = (e) =>{
 
@@ -109,6 +114,8 @@ const Users = () => {
         }
 
         setError("");
+
+        
 
         editUser(userInfo)
         
@@ -149,7 +156,7 @@ const Users = () => {
                                     </div>
                                     <div className="mb-3">
                                         <label className="form-label">Email</label>
-                                        <input type="text" className="form-control" name="email" onChange={(e) => handleOnchange(e)} />
+                                        <input type="text" placeholder="Debes introducir tu Email para Modificar" className="form-control" name="email" onChange={(e) => handleOnchange(e)} />
                                     </div>
                                     <div className="mb-3">
                                         <label className="form-label">Nombre de usuario</label>
@@ -157,11 +164,11 @@ const Users = () => {
                                     </div>
                                     <div className="mb-3">
                                         <label className="form-label">Password</label>
-                                        <input type="password" className="form-control" name="password" onChange={(e) => handleOnchange(e)} />
+                                        <input type="password" placeholder="Debes introducir la Password para Modificar" className="form-control" name="password" onChange={(e) => handleOnchange(e)} />
                                     </div>
                                     <div className="mb-3">
                                         <label className="form-label">Confirm Password</label>
-                                        <input type="password" className="form-control" name="confirm_password" onChange={(e) => handleOnchange(e)} />
+                                        <input type="password" placeholder="Debes introducir la Password para Modificar" className="form-control" name="confirm_password" onChange={(e) => handleOnchange(e)} />
                                     </div>
                                     <div className="mb-3">
                                         <button className="btn btn-danger m-3" onClick={(e) => {handleGuardarCambios(e)}}>
