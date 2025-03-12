@@ -161,6 +161,40 @@ export const privateRoute = async () => {
 
 }
 
+//////////////////------TESTED--------/////////////////
+export const editUser = async (infoUser) => {
+
+    try{
+
+        const response = await fetch( urlApi + "user" , {
+
+            method: "PUT",
+            body: JSON.stringify({
+
+                "name": infoUser.name,
+                "last_name": infoUser.last_name,
+                "email": infoUser.email,
+                "password": infoUser.password,
+                "user_name": infoUser.user_name,
+                "user_img": infoUser.user_img
+
+            }),
+            headers: {"Content-Type": "application/json"}
+
+        })
+
+        if(response.ok){
+
+            return print(`El usuario : ${infoUser.email} se ha mofdificado correctamente`)
+        }
+
+    } catch (error){
+
+        console.log(error , "No se ha podido modificar el usuario");
+
+    }
+
+}
 // export const addTotalPoints = async (sumTotalPoints,id_user) => {
 
 //     try{

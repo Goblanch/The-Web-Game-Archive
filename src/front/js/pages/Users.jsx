@@ -6,6 +6,7 @@ import profilePic from "../../img/rigo-baby.jpg"
 import backgroundImage from '../../img/fondo5.jpg'
 import '../../styles/index.css';
 import { privateRoute } from "../../services/APIServices";
+import { editUser } from "../../services/APIServices";
 
 const Users = () => {
 
@@ -42,19 +43,54 @@ const Users = () => {
 
     }, []);
 
+    const handleLogOut = () => {
+
+        setIsAuthenticated(null)
+
+        sessionStorage.setItem("token", null)
+
+        navigate("/user-login")
+
+    }
+
+    const [userInfo,setUserInfo] = useState()
+    const [error,setError] = useState()
+
+    const handleOnchange = (event) => {
+
+
+        setUserInfo({...userInfo , [event.target.name]: event.target.value})   
+
+    }
+
+    const checkPassword = () => {
+        return userInfo.password === userInfo.confirm_password;
+    }
+
+
     ///////////////////////////////////////////////////////////////////////////
-    const [userName, setUserName] = useState("");
-    const [name, setName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+
     const [profilePic, setProfilePic] = useState("");
+
 
     const handleEliminarUser  = () =>{
         
     }
 
-    const handleGuardarCambios  = () =>{
+    const handleGuardarCambios  = (e) =>{
+
+        e.preventDefault();
+
+        if (!checkPassword()) {
+            setError("Passwords do not match. Please make sure they match.")
+            setUserInfo("password","")
+            setUserInfo("confirm_password","")
+            return;
+        }
+
+        setError("");
+
+        editUser(userInfo)
         
     }
 
@@ -69,34 +105,46 @@ const Users = () => {
 
                 :
 
+               
+
                 <div className="home-background" style={{ backgroundImage: `url(${backgroundImage})` }}>
                     <div className="container text-white">
+                    {error && (
+                    <div className="bg bg-danger border rounded mb-4 p-3">
+                        <h3 className="text text-light">Error</h3>
+                        <p className="text text-light">{error}</p>
+                    </div>
+                    )}
                         <h1 className="text-center">Tus datos</h1>
                         <form>
                             <div className="row">
                                 <div className="col-md-6">
                                     <div className="mb-3">
                                         <label className="form-label">Nombre</label>
-                                        <input type="text" className="form-control" id="name" onChange={(e) => setName(e.target.value)} />
+                                        <input type="text" className="form-control" name="name" onChange={(e) => handleOnchange(e)} />
                                     </div>
                                     <div className="mb-3">
                                         <label className="form-label">Apellidos</label>
-                                        <input type="text" className="form-control" id="last-name" onChange={(e) => setLastName(e.target.value)} />
+                                        <input type="text" className="form-control" name="last_name" onChange={(e) => handleOnchange(e)} />
                                     </div>
                                     <div className="mb-3">
                                         <label className="form-label">Email</label>
-                                        <input type="text" className="form-control" id="email" onChange={(e) => setEmail(e.target.value)} />
+                                        <input type="text" className="form-control" name="email" onChange={(e) => handleOnchange(e)} />
                                     </div>
                                     <div className="mb-3">
                                         <label className="form-label">Nombre de usuario</label>
-                                        <input type="text" className="form-control" id="user-name" onChange={(e) => setUserName(e.target.value)} />
+                                        <input type="text" className="form-control" name="user_name" onChange={(e) => handleOnchange(e)} />
                                     </div>
                                     <div className="mb-3">
                                         <label className="form-label">Password</label>
-                                        <input type="password" className="form-control" id="password" onChange={(e) => setPassword(e.target.value)} />
+                                        <input type="password" className="form-control" name="password" onChange={(e) => handleOnchange(e)} />
                                     </div>
                                     <div className="mb-3">
-                                        <button className="btn btn-danger m-3" onClick={handleGuardarCambios}>
+                                        <label className="form-label">Confirm Password</label>
+                                        <input type="password" className="form-control" name="confirm_password" onChange={(e) => handleOnchange(e)} />
+                                    </div>
+                                    <div className="mb-3">
+                                        <button className="btn btn-danger m-3" onClick={(e) => {handleGuardarCambios(e)}}>
                                             CONFIRMAR CAMBIOS
                                         </button>
                                         <button className="btn btn-danger" onClick={handleEliminarUser}>
@@ -119,8 +167,12 @@ const Users = () => {
                                         type="text"
                                         className="form-control w-75 mt-2"
                                         placeholder="URL de la nueva imagen"
-                                        onChange={(e) => setProfilePic(e.target.value)}
+                                        name="user_img"
+                                        onChange={(e) => handleOnchange(e)}
                                     />
+                                    <button className="btn btn-warning m-3" onClick={handleLogOut}>
+                                            LOG OUT
+                                    </button>
                                 </div>
                             </div>
                         </form>
