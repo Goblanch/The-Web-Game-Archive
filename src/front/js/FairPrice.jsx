@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Context } from "./store/appContext";
 
+import MinigameRulesModal from "./component/MinigameRulesModal.jsx";
+
 const FairPrice = () => {
 
     const { store, actions } = useContext(Context);
@@ -76,6 +78,7 @@ const FairPrice = () => {
 
     return (
         <div className="container mt-4">
+            <MinigameRulesModal gameName={"fair-price"} />
             <h2>Fair Price</h2>
             {product && (
                 <div className="d-flex flex-column align-items-center">
