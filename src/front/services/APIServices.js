@@ -42,7 +42,11 @@ export const createNewUser = async (userName,email,password,navigate) => {
 
             navigate("/user-login")
 
-            return print(`El usuario : ${email} se ha creado correctamente`)
+            return Swal.fire({
+                icon: 'success',
+                title: `Bienvenido: ${userName}`,
+                text: `${data["msg"]}`,
+              });    
 
         }
         else{
@@ -116,7 +120,17 @@ export const logIn = async (infoUser,navigate) => {
             sessionStorage.setItem("token", data.token)
             sessionStorage.setItem("id_user", data.id_user)
 
-            navigate("/users")
+            navigate("/users") 
+
+        }
+        else{
+
+            return Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: `${data["msg"]}`,
+              });  
+
 
         }
 
@@ -221,6 +235,7 @@ export const editUser = async (infoUser) => {
 
 }
 
+
 export const deleteUser = async () => {
 
     try{
@@ -237,7 +252,11 @@ export const deleteUser = async () => {
 
         if(response.ok){
 
-            return alert("Acabas de borrar tu usuario")
+            return Swal.fire({
+                icon: 'success',
+                title: 'Información',
+                text: `${data["msg"]}`,
+              });      
 
         }
 

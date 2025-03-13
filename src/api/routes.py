@@ -224,7 +224,7 @@ def login():
 
     access_token = create_access_token(identity = str(user.id_user))
 
-    return jsonify({ "token": access_token,"id_user": user.id_user})
+    return jsonify({"token": access_token,"id_user": user.id_user})
 
 @api.route('/user/password/<int:id_us>', methods = ['PUT'])
 def change_password(id_us):
