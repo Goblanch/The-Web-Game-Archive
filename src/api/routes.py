@@ -49,11 +49,18 @@ def post_user():
                           
         return jsonify({"msg": "Tienes que introducir email y password para poder registrarte"}), 400
 
-   user = User.query.filter_by(email = request_new_user["email"]).first()
+   user_email = User.query.filter_by(email = request_new_user["email"]).first()
 
-   if user is not None:
+   if user_email is not None:
        
-       return jsonify({"msg": "Ya existe el usuario que deseas crear"}), 400
+       return jsonify({"msg": "Ya hay una cuenta con este Email usa otro"}), 400
+   
+   user_by_user_name = User.query.filter_by(user_name = request_new_user["user_name"]).first()
+   
+   if user_by_user_name is not None:
+       
+        return jsonify({"msg": "Ya hay una cuenta con este User Name usa otro"}), 400
+
    
    new_user = User(
                    email = request_new_user["email"], 
@@ -93,8 +100,8 @@ def delete_user(id_us):
 
     return jsonify({'msg': "No existe el usuario que deseas borrar con este id:" + id_us}),400
     
-@api.route('/user', methods = ['PUT'])
-def update_user():
+@api.route('/user/<int:id_us>', methods = ['PUT'])
+def update_user(id_us):
 
     data = request.get_json()
 
@@ -102,7 +109,7 @@ def update_user():
 
          return jsonify({'msg':"No has enviado la data para modificar"}), 404 
 
-    user_to_update = User.query.filter_by(email = data["email"]).first()
+    user_to_update = User.query.filter_by(id_user = id_us).first()
 
     if user_to_update is None:
 

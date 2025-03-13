@@ -1,4 +1,4 @@
-
+import Swal from "sweetalert2";
 
 const urlApi = process.env.BACKEND_URL
 
@@ -36,6 +36,8 @@ export const createNewUser = async (userName,email,password,navigate) => {
 
         })
 
+        const data = await response.json()
+
         if(response.ok){
 
             navigate("/user-login")
@@ -43,10 +45,20 @@ export const createNewUser = async (userName,email,password,navigate) => {
             return print(`El usuario : ${email} se ha creado correctamente`)
 
         }
+        else{
+
+            return Swal.fire({
+                          icon: 'error',
+                          title: 'Error',
+                          text: `${data["msg"]}`,
+                        });  
+            
+        }
     
     } catch (error){
 
         console.log(error , "No se ha podido crear el usuario");
+
         
 
     }
@@ -166,8 +178,9 @@ export const editUser = async (infoUser) => {
 
     try{
 
+        const id_user = sessionStorage.getItem("id_user")
 
-        const response = await fetch( urlApi + "user" , {
+        const response = await fetch( urlApi + `user/${id_user}` , {
 
             method: "PUT",
             body: JSON.stringify({
@@ -192,6 +205,8 @@ export const editUser = async (infoUser) => {
     } catch (error){
 
         console.log(error , "No se ha podido modificar el usuario");
+
+        
 
     }
 

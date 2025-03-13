@@ -105,15 +105,28 @@ const Users = () => {
     const handleGuardarCambios  = (e) =>{
 
         e.preventDefault();
+  
 
-        if (!checkPassword()) {
-            setError("Passwords do not match. Please make sure they match.")
-            setUserInfo("password","")
-            setUserInfo("confirm_password","")
-            return;
+        if (!userInfo) {
+            return Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Debes rellenar algun campo para poder modificar tus datos',
+            });
+          }
+
+        if(userInfo && userInfo.password){
+
+            if (!checkPassword()) {
+                setError("Passwords do not match. Please make sure they match.")
+                setUserInfo("password","")
+                setUserInfo("confirm_password","")
+                return;
+            }
+    
+            setError("");
+            
         }
-
-        setError("");
 
         
 
@@ -156,7 +169,7 @@ const Users = () => {
                                     </div>
                                     <div className="mb-3">
                                         <label className="form-label">Email</label>
-                                        <input type="text" placeholder="Debes introducir tu Email para Modificar" className="form-control" name="email" onChange={(e) => handleOnchange(e)} />
+                                        <input type="text" className="form-control" name="email" onChange={(e) => handleOnchange(e)} />
                                     </div>
                                     <div className="mb-3">
                                         <label className="form-label">Nombre de usuario</label>
@@ -164,14 +177,14 @@ const Users = () => {
                                     </div>
                                     <div className="mb-3">
                                         <label className="form-label">Password</label>
-                                        <input type="password" placeholder="Debes introducir la Password para Modificar" className="form-control" name="password" onChange={(e) => handleOnchange(e)} />
+                                        <input type="password"  className="form-control" name="password" onChange={(e) => handleOnchange(e)} />
                                     </div>
                                     <div className="mb-3">
                                         <label className="form-label">Confirm Password</label>
-                                        <input type="password" placeholder="Debes introducir la Password para Modificar" className="form-control" name="confirm_password" onChange={(e) => handleOnchange(e)} />
+                                        <input type="password"  className="form-control" name="confirm_password" onChange={(e) => handleOnchange(e)} />
                                     </div>
                                     <div className="mb-3">
-                                        <button className="btn btn-danger m-3" onClick={(e) => {handleGuardarCambios(e)}}>
+                                        <button className="btn btn-danger m-3"  onClick={(e) => {handleGuardarCambios(e)}}>
                                             CONFIRMAR CAMBIOS
                                         </button>
                                         <button className="btn btn-danger" onClick={(e) => {handleEliminarUser(e)}}>
