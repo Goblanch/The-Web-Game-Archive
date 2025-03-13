@@ -197,16 +197,25 @@ export const editUser = async (infoUser) => {
 
         })
 
+        const data = await response.json()
+
         if(response.ok){
 
             return print(`El usuario : ${infoUser.email} se ha mofdificado correctamente`)
         }
+        else{
+
+            return Swal.fire({
+                          icon: 'error',
+                          title: 'Error',
+                          text: `${data["msg"]}`,
+                        });         
+            
+        }
 
     } catch (error){
 
-        console.log(error , "No se ha podido modificar el usuario");
-
-        
+        console.log(error , "No se ha podido modificar el usuario");  
 
     }
 

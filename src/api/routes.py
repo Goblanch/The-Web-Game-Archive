@@ -111,9 +111,40 @@ def update_user(id_us):
 
     user_to_update = User.query.filter_by(id_user = id_us).first()
 
+
     if user_to_update is None:
 
         return jsonify({'msg':"No se encuentra el usuario que intentas editar"}), 404
+    
+    if "user_name" in data and data["user_name"] is not None:
+
+        user_by_name_user = User.query.filter_by(user_name = data["user_name"]).first()
+    
+        if user_by_name_user:
+
+            if user_by_name_user.id_user == user_to_update.id_user:
+
+                return jsonify({"msg": "Estas modificando tu User Name sin hacer cambios"}), 400
+            
+            else:
+
+                return jsonify({"msg": "Ya existe ese User Name debes usar otro"}), 400
+    
+    if "email" in data and data["email"] is not None:
+
+        user_by_email = User.query.filter_by(email = data["email"]).first()
+
+        if user_by_email:
+
+            if user_by_email.id_user == user_to_update.id_user:
+       
+                return jsonify({"msg": "Estas modificando tu Email sin hacer cambios"}), 400
+            
+            else:
+            
+                return jsonify({"msg": "El Email ya existe debes usar otro"}), 400
+    
+    
     
     user_to_update.user_name = data.get('user_name', user_to_update.user_name)
     user_to_update.email = data.get('email', user_to_update.email)
@@ -124,6 +155,8 @@ def update_user(id_us):
 
       ####----Establezco el hash de la password-----######
     user_to_update.set_password(user_to_update.password)
+
+
 
     try:
 
