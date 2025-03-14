@@ -8,6 +8,9 @@ const HigherLower = () => {
 
     const apiKey = process.env.TMDB_API_KEY;
 
+    // TODO: Arreglar imagenes --> ponerla de imagen de fondo en el div
+    // TODO: Dar feedback cuando se pierde con el gameover modal
+
     const fetchRandomMovie = async () => {
         const url = 'https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc';
         const options = {
@@ -116,8 +119,9 @@ const HigherLower = () => {
                             top: "45%",
                             left: "50%",
                             transform: "translate(-50%, -50%)",
-                            zIndex: 9999, // Asegura que el botón esté sobre otros elementos
+                            zIndex: 9999,
                         }}
+                        onClick={() => handleGuess(true)}
                     >
                         Higher
                     </button>
@@ -131,6 +135,7 @@ const HigherLower = () => {
                             transform: "translate(-50%, -50%)",
                             zIndex: 9999, // Asegura que el botón esté sobre otros elementos
                         }}
+                        onClick={() => handleGuess(false)}
                     >
                         Lower
                     </button>
