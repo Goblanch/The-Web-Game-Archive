@@ -53,96 +53,104 @@ const HigherLower = () => {
 
     useEffect(() => {
         startGame();
-    }, [])
+        document.body.style.overflow = "hidden";
+        return () => {
+            document.body.style.overflow = "auto";
+        };
+    }, []);
 
     if (!currentMovie || !nextMovie) return <div>Loading...</div>;
 
     return (
-        <div className="container-fluid">
-            <div className="row">
-                <div className="col-6 d-flex justify-content-center p-0 position-relative">
-                    <img
-                        src={`https://image.tmdb.org/t/p/w300${currentMovie.poster_path}`}
-                        alt={currentMovie.title}
-                        className="img-fluid h-100 w-100 mx-auto p-0"
-                        style={{
-                            objectFit: "cover",
-                            filter: "brightness(0.5)", // Oscurece la imagen un 30%
-                        }}
-                    />
-
-                    <div
-                        className="position-absolute top-0 p-5 mt-4 start-50 translate-middle text-center"
-                        style={{
-                            color: "white",
-                            textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)", // Añade sombra para mejor visibilidad
-                            fontSize: "1.5rem",
-                            fontWeight: "bold",
-                        }}
-                    >
-                        <h1 className="mt-5 fw-bold">{currentMovie.title}</h1>
-                        <h2>Vote Average: {currentMovie.vote_average}</h2>
-                    </div>
-
-                </div>
-
-                <div className="col-6 d-flex justify-content-center p-0 position-relative">
-                    <img
-                        src={`https://image.tmdb.org/t/p/w300${nextMovie.poster_path}`}
-                        alt={nextMovie.title}
-                        className="img-fluid h-100 w-100 mx-auto p-0"
-                        style={{
-                            objectFit: "cover",
-                            filter: "brightness(0.5)", // Oscurece la imagen un 30%
-                        }}
-                    />
-
-                    <div
-                        className="position-absolute top-0 p-5 mt-4 start-50 translate-middle text-center"
-                        style={{
-                            color: "white",
-                            textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)", // Añade sombra para mejor visibilidad
-                            fontSize: "1.5rem",
-                            fontWeight: "bold",
-                        }}
-                    >
-                        <h1 className="mt-5 fw-bold">{nextMovie.title}</h1>
-                        <h2>Vote Average: {isCorrect ? nextMovie.vote_average : "???"}</h2>
-                    </div>
-                </div>
-
-                <div className="position-relative">
-                    <button
-                        className="btn btn-success btn-lg"
-                        style={{
-                            position: "fixed",
-                            top: "45%",
-                            left: "50%",
-                            transform: "translate(-50%, -50%)",
-                            zIndex: 9999,
-                        }}
-                        onClick={() => handleGuess(true)}
-                    >
-                        Higher
-                    </button>
-
-                    <button
-                        className="btn btn-danger btn-lg"
-                        style={{
-                            position: "fixed",
-                            top: "55%",
-                            left: "50%",
-                            transform: "translate(-50%, -50%)",
-                            zIndex: 9999, // Asegura que el botón esté sobre otros elementos
-                        }}
-                        onClick={() => handleGuess(false)}
-                    >
-                        Lower
-                    </button>
-
+        <div
+            className="container-fluid"
+            style={{
+                height: "100vh",
+                display: "flex",
+                flexDirection: "row",
+            }}
+        >
+            {/* Panel de la película actual */}
+            <div
+                className="col-6 d-flex align-items-center justify-content-center"
+                style={{
+                    height: "100vh",
+                    backgroundImage: `url(https://image.tmdb.org/t/p/w500${currentMovie.poster_path})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
+                }}
+            >
+                <div
+                    style={{
+                        color: "white",
+                        textAlign: "center",
+                        textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)",
+                        fontSize: "1.5rem",
+                        fontWeight: "bold",
+                        backgroundColor: "rgba(0, 0, 0, 0.5)",
+                        padding: "10px 20px",
+                        borderRadius: "10px",
+                    }}
+                >
+                    <h1>{currentMovie.title}</h1>
                 </div>
             </div>
-        </div >
+
+            {/* Panel de la próxima película */}
+            <div
+                className="col-6 d-flex align-items-center justify-content-center"
+                style={{
+                    height: "100vh",
+                    backgroundImage: `url(https://image.tmdb.org/t/p/w500${nextMovie.poster_path})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
+                }}
+            >
+                <div
+                    style={{
+                        color: "white",
+                        textAlign: "center",
+                        textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)",
+                        fontSize: "1.5rem",
+                        fontWeight: "bold",
+                        backgroundColor: "rgba(0, 0, 0, 0.5)",
+                        padding: "10px 20px",
+                        borderRadius: "10px",
+                    }}
+                >
+                    <h1>{nextMovie.title}</h1>
+                </div>
+            </div>
+
+            {/* Botones de acción */}
+            <div
+                className="d-flex flex-column"
+                style={{
+                    position: "fixed",
+                    top: "55%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    zIndex: 10,
+                    display: "flex",
+                    gap: "20px",
+                }}
+            >
+                <button
+                    className="btn btn-success btn-lg mb-3"
+                    onClick={() => handleGuess(true)}
+                >
+                    Higher
+                </button>
+                <button
+                    className="btn btn-danger btn-lg mt-3"
+                    onClick={() => handleGuess(false)}
+                >
+                    Lower
+                </button>
+            </div>
+        </div>
     );
 }
 
