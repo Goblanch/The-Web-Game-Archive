@@ -122,6 +122,7 @@ export const logIn = async (infoUser,navigate) => {
 
             navigate("/users") 
 
+
         }
         else{
 
@@ -133,6 +134,8 @@ export const logIn = async (infoUser,navigate) => {
 
 
         }
+
+        window.location.reload();
 
 
 

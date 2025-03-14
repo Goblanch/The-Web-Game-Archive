@@ -47,15 +47,7 @@ const Users = () => {
 
     
 
-    const handleLogOut = () => {
-
-        setIsAuthenticated(null)
-
-        sessionStorage.setItem("token", null)
-
-        navigate("/user-login")
-
-    }
+  
 
     const [userInfo,setUserInfo] = useState()
     const [error,setError] = useState()
@@ -210,9 +202,7 @@ const Users = () => {
                                         name="user_img"
                                         onChange={(e) => handleOnchange(e)}
                                     />
-                                    <button className="btn btn-warning m-3" onClick={handleLogOut}>
-                                            LOG OUT
-                                    </button>
+                            
                                 </div>
                             </div>
                         </form>
