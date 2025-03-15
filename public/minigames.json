@@ -39,5 +39,13 @@
             "You must guess how much does it cost",
             "Depending on how close you stay, you will get more points."
         ]
+    },
+    {
+        "name": "higherlower",
+        "rules": [
+            "You will be shown two random movies",
+            "You must decide if the movie on the left has more vote average than the right one",
+            "If you fail it's Game Over!"
+        ]
     }
 ]

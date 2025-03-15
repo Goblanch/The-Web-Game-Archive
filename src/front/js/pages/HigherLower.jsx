@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import MinigameRulesModal from "../component/MinigameRulesModal.jsx"
 
 const HigherLower = () => {
     const [currentMovie, setCurrentMovie] = useState(null);
@@ -70,6 +71,7 @@ const HigherLower = () => {
                 flexDirection: "row",
             }}
         >
+            <MinigameRulesModal gameName={"higherlower"} />
             {/* Panel de la película actual */}
             <div
                 className="col-6 d-flex align-items-center justify-content-center"
