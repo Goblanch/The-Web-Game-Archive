@@ -69,7 +69,7 @@ const HigherLower = () => {
                 clearInterval(interval);
             }
             setAnimatedRating(current.toFixed(1));
-        }, 50)
+        }, 5)
     }
 
     useEffect(() => {
@@ -117,6 +117,7 @@ const HigherLower = () => {
                     }}
                 >
                     <h1>{currentMovie.title}</h1>
+                    <p>Rating: {currentMovie.vote_average}</p>
                 </div>
             </div>
 
@@ -144,6 +145,7 @@ const HigherLower = () => {
                     }}
                 >
                     <h1>{nextMovie.title}</h1>
+                    {isCorrect !== null && <p>Rating: {animatedRating}</p>}
                 </div>
             </div>
 
