@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import MinigameRulesModal from "../component/MinigameRulesModal.jsx"
+import GameOverModal from "../component/GameOverModal.jsx"
 
 const HigherLower = () => {
     const [currentMovie, setCurrentMovie] = useState(null);
     const [nextMovie, setNextMovie] = useState(null);
     const [score, setScore] = useState(0);
     const [isCorrect, setIsCorrect] = useState(null);
+    const [gameOver, setGameOver] = useState(false);
+    const [animatedRating, setAnimatedRating] = useState(0);
 
     const apiKey = process.env.TMDB_API_KEY;
 
@@ -34,6 +37,8 @@ const HigherLower = () => {
         setNextMovie(movieB);
         setScore(0);
         setIsCorrect(null);
+        setGameOver(false);
+        setAnimatedRating(0);
     }
 
     const handleGuess = (guessHigher) => {
@@ -46,10 +51,25 @@ const HigherLower = () => {
                 const newMovie = await fetchRandomMovie();
                 setNextMovie(newMovie);
                 setIsCorrect(null);
-            }, 1000);
+                setAnimatedRating(0);
+            }, 2000);
         } else {
             setIsCorrect(false);
+            setGameOver(true);
         }
+        animateRating(nextMovie.vote_average);
+    }
+
+    const animateRating = (target) => {
+        let current = 0;
+        const interval = setInterval(() => {
+            current += 0.1;
+            if (current >= target) {
+                current = target;
+                clearInterval(interval);
+            }
+            setAnimatedRating(current.toFixed(1));
+        }, 50)
     }
 
     useEffect(() => {
@@ -72,6 +92,7 @@ const HigherLower = () => {
             }}
         >
             <MinigameRulesModal gameName={"higherlower"} />
+            <GameOverModal score={score} onRetry={startGame} show={gameOver} />
             {/* Panel de la película actual */}
             <div
                 className="col-6 d-flex align-items-center justify-content-center"
