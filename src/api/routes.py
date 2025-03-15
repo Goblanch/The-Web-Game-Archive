@@ -40,6 +40,20 @@ def get_all_users():
 
     return jsonify(users_info), 200
 
+@api.route('/user/<int:id_us>', methods = ['GET'])
+def get_user_by_id(id_us):
+
+    user_by_id = User.query.filter_by(id_user = id_us).first()
+
+
+    if not user_by_id:
+
+        return jsonify({'msg':"No hay ningun usuario con ese id en la base de datos"}), 404
+
+    users_info = user_by_id.serialize() 
+
+    return jsonify(users_info), 200
+
 @api.route('/user/singup', methods = ["POST"])
 def post_user():
 

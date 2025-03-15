@@ -12,6 +12,34 @@ console.log(urlApi);
 ///////////////////////////////----SERVICIOS DE LA API SOBRE LOS USUARIOS////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+export const getInfoUser = async (id_user) => {
+
+    try{
+        const response = await fetch(urlApi + `user/${id_user}` ,{
+
+            method: "GET",
+            headers:{"Content-Type": "application/json"}
+
+
+        })
+
+        const data = await response.json()
+
+        if (response.ok) {
+            
+            return data
+        }
+
+    } catch (error){
+
+        console.log(error , "No se ha podido acceder al usuario");
+
+    }
+
+}
+
+
+
 //////////////////------TESTED--------/////////////////
 export const createNewUser = async (userName,email,password,navigate) => {
 
@@ -271,6 +299,8 @@ export const deleteUser = async () => {
     }
 
 }
+
+
 export const addTotalPoints = async (sumTotalPoints,id_user) => {
 
     try{

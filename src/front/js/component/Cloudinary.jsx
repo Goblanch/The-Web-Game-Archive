@@ -1,6 +1,8 @@
 import React from 'react'
 import { useState } from 'react'
 import { editUser } from '../../services/APIServices';
+import { useEffect } from 'react';
+
 const Cloudinary = () => {
 
     const preset_name = "yu1h90st";                       
@@ -8,8 +10,44 @@ const Cloudinary = () => {
 
     const [ image, setImage ] = useState('');      
     const [ loading, setLoading ] = useState(false) 
-  
+//    ////////////////////////////////////////////////////////// 
+//     const [allIfoUser,setAllInfoUser] = useState(null)
 
+//     const checkInfoUser = async () => {
+    
+//             setLoading(true) 
+
+//             try{
+//                 const id = sessionStorage.getItem("id_user")
+    
+//                 const info = await getInfoUser(id)
+    
+//                 console.log(info);
+    
+//                 setAllInfoUser(info)
+
+//                 setLoading(false) 
+                
+//                 return 
+    
+//             } catch(error){
+    
+//                 console.log(error, "Error al solictar la info de User")
+    
+//             }
+//         }
+
+//          useEffect(() => {
+        
+        
+               
+//                 checkInfoUser()
+               
+               
+                
+//             }, []);
+        
+// //////////////////////////////////////////////////////////////////
     const uploadImage = async (e)=>{            
         const files = e.target.files          
         const data = new FormData()             

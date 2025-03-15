@@ -9,11 +9,13 @@ import { privateRoute } from "../../services/APIServices";
 import { editUser , deleteUser } from "../../services/APIServices";
 import Swal from 'sweetalert2';
 import Cloudinary from "../component/Cloudinary.jsx";
+import { getInfoUser } from "../../services/APIServices";
 
 
 const Users = () => {
 
     const [isAuthtenticated,setIsAuthenticated] = useState(null)
+    const [allIfoUser,setAllInfoUser] = useState(null)
     const navigate = useNavigate()
 
     const checkAuth = async () => {
@@ -40,10 +42,36 @@ const Users = () => {
 
     }
 
+    const checkInfoUser = async () => {
+
+
+        try{
+            const id = sessionStorage.getItem("id_user")
+
+            const info = await getInfoUser(id)
+
+            console.log(info);
+
+            setAllInfoUser(info)
+            
+            return 
+
+        } catch(error){
+
+            console.log(error, "Error al solictar la info de User")
+
+        }
+    }
+
     useEffect(() => {
 
         checkAuth()
 
+       
+        checkInfoUser()
+       
+       
+        
     }, []);
 
     
@@ -154,23 +182,23 @@ const Users = () => {
                                 <div className="col-md-6">
                                     <div className="mb-3">
                                         <label className="form-label">Nombre</label>
-                                        <input type="text" className="form-control" name="name" onChange={(e) => handleOnchange(e)} />
+                                        <input type="text" placeholder={allIfoUser.name ? allIfoUser.name : "Todavia no has introducido un Name"} className="form-control" name="name" onChange={(e) => handleOnchange(e)} />
                                     </div>
                                     <div className="mb-3">
                                         <label className="form-label">Apellidos</label>
-                                        <input type="text" className="form-control" name="last_name" onChange={(e) => handleOnchange(e)} />
+                                        <input type="text" placeholder={allIfoUser.last_name ? allIfoUser.last_name : "Todavia no has introducido un Last Name"} className="form-control" name="last_name" onChange={(e) => handleOnchange(e)} />
                                     </div>
                                     <div className="mb-3">
                                         <label className="form-label">Email</label>
-                                        <input type="text" className="form-control" name="email" onChange={(e) => handleOnchange(e)} />
+                                        <input type="text" value={allIfoUser.email ? allIfoUser.email : "Todavia no has introducido un Email"} className="form-control" name="email" onChange={(e) => handleOnchange(e)} />
                                     </div>
                                     <div className="mb-3">
                                         <label className="form-label">Nombre de usuario</label>
-                                        <input type="text" className="form-control" name="user_name" onChange={(e) => handleOnchange(e)} />
+                                        <input type="text" value={allIfoUser.user_name ? allIfoUser.user_name : "Todavia no has introducido un User Name"} className="form-control" name="user_name" onChange={(e) => handleOnchange(e)} />
                                     </div>
                                     <div className="mb-3">
                                         <label className="form-label">Password</label>
-                                        <input type="password"  className="form-control" name="password" onChange={(e) => handleOnchange(e)} />
+                                        <input type="password" className="form-control" name="password" onChange={(e) => handleOnchange(e)} />
                                     </div>
                                     <div className="mb-3">
                                         <label className="form-label">Confirm Password</label>
