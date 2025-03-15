@@ -238,7 +238,7 @@ export const editUser = async (infoUser) => {
 
 }
 
-
+//////////////////------TESTED--------/////////////////
 export const deleteUser = async () => {
 
     try{
@@ -271,32 +271,39 @@ export const deleteUser = async () => {
     }
 
 }
-// export const addTotalPoints = async (sumTotalPoints,id_user) => {
+export const addTotalPoints = async (sumTotalPoints,id_user) => {
 
-//     try{
+    try{
 
-//         const response = await fetch( urlApi + `user/totalpoints/${id_user}`,{
+        const response = await fetch( urlApi + `user/totalpoints/${id_user}`,{
 
-//             method: "POST",
-//             body: JSON.stringify({
+            method: "POST",
+            body: JSON.stringify({
 
-//                 "total_points": sumPoints
+                "total_points": sumTotalPoints
 
-//             })
+            })
 
+        })
 
+        if(response.ok){
 
-//         })
+            console.log("Se han sumado los Total Points correctamente");
+              
 
-//     } catch (error){
+        }
+        else{
 
-//         console.log(error, "Error al sumar los Total Points")
+            console.log("No se han sumado los Total Points correctamente");
+        }
 
-//     }
+    } catch (error){
 
+        console.log(error, "Error al sumar los Total Points")
 
+    }
 
-// }
+}
 
 
 // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -313,26 +320,38 @@ export const deleteUser = async () => {
 // ///////////////////////////////----SERVICIOS DE LA API SOBRE LOS PLAYED GAMES////////////////////////////////////////////////////////////////////////////////////
 // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// export const addGamePoints = async (sumGamePoints,id_played_game) => {
+export const addGamePoints = async (sumGamePoints,id_played_game) => {
 
-//     try{
+    try{
 
-//         const response = await fetch( urlApi + `played_games/game_points/${id_played_game}`,{
+        const response = await fetch( urlApi + `played_games/game_points/${id_played_game}`,{
 
-//             method: "POST",
-//             body: JSON.stringify({
+            method: "POST",
+            body: JSON.stringify({
 
-//                 "game_points": sumGamePoints
+                "game_points": sumGamePoints
 
-//             })
+            })
 
-//         })
+        })
 
-//     } catch (error){
+        if(response.ok){
 
-//         console.log(error,"Error al sumar los Game Points");
+            console.log("Se han sumado los Game Points correctamente");
+              
+
+        }
+        else{
+
+            console.log("No se han sumado los Game Points correctamente");
+        }
+
+
+    } catch (error){
+
+        console.log(error,"Error al sumar los Game Points");
         
-//     }
+    }
 
-// }
+}
 

@@ -8,6 +8,7 @@ import '../../styles/index.css';
 import { privateRoute } from "../../services/APIServices";
 import { editUser , deleteUser } from "../../services/APIServices";
 import Swal from 'sweetalert2';
+import Cloudinary from "../component/Cloudinary.jsx";
 
 
 const Users = () => {
@@ -187,22 +188,10 @@ const Users = () => {
 
 
                                 <div className="col-md-6 d-flex flex-column align-items-center justify-content-center ">
-                                    <h2 className="form-label">Imagen de perfil</h2>
-                                    <img
-                                        src={profilePic}
-                                        className="img-fluid rounded-circle mb-3"
-                                        alt="Profile"
-                                        style={{ width: "15em", height: "15em", objectFit: "cover" }}
-                                    />
-                                    <label className="d-block">Cambiar la URL de tu imagen:</label>
-                                    <input
-                                        type="text"
-                                        className="form-control w-75 mt-2"
-                                        placeholder="URL de la nueva imagen"
-                                        name="user_img"
-                                        onChange={(e) => handleOnchange(e)}
-                                    />
-                            
+                                
+                                    <Cloudinary/>
+                                   
+                                    
                                 </div>
                             </div>
                         </form>

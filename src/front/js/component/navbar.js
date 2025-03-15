@@ -25,6 +25,7 @@ export const Navbar = () => {
 			checkVerificated()
 	
 		}, []);
+		
 
 	console.log(isVerificated);
 
