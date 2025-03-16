@@ -28,9 +28,6 @@ export const Navbar = () => {
 				const id = sessionStorage.getItem("id_user")
 	
 				const info = await getInfoUser(id)
-
-				
-				
 	  
 				if(info.user_img){
 
@@ -95,7 +92,7 @@ export const Navbar = () => {
 						</>
 					) : (
 						<>
-						    <Link to="Users" className="me-2 rounded-circle"><img src={imgUser} className='rounded-circle border border-3 border-danger' style={{ width: "3.5em", height: "3.5em", objectFit: "cover" }} alt="👤 Profile"/></Link>
+						    <Link to="Users" className="me-2 rounded-circle"><img src={imgUser} className='rounded-circle border border-2 border-danger' style={{ width: "3.5em", height: "3.5em", objectFit: "cover" }} alt="👤 Profile"/></Link>
 							<button onClick={handleLogOut} className="btn btn-outline-danger me-2">
 								Logout
 							</button>
