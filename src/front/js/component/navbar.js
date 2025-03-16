@@ -27,7 +27,6 @@ export const Navbar = () => {
 		}, []);
 		
 
-	console.log(isVerificated);
 
 	  const handleLogOut = () => {
 	

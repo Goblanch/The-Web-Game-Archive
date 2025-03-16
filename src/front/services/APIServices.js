@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 const urlApi = process.env.BACKEND_URL
 
 
-console.log(urlApi);
+
 
 
 
@@ -140,7 +140,7 @@ export const logIn = async (infoUser,navigate) => {
 
         const data = await response.json()
 
-        console.log(data)
+     
 
         if(response.ok){
 
@@ -169,7 +169,6 @@ export const logIn = async (infoUser,navigate) => {
 
     } catch (error){
 
-        console.log("es aqui");
         
         console.log(error);
         
@@ -198,7 +197,6 @@ export const privateRoute = async () => {
 
         if(response.ok){
 
-            console.log("Puedes entrar a private");
             
             return true
         }

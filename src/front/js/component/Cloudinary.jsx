@@ -2,6 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import { editUser } from '../../services/APIServices';
 import { useEffect } from 'react';
+import { getInfoUser } from '../../services/APIServices';
 
 const Cloudinary = () => {
 
@@ -10,42 +11,42 @@ const Cloudinary = () => {
 
     const [ image, setImage ] = useState('');      
     const [ loading, setLoading ] = useState(false) 
-//    ////////////////////////////////////////////////////////// 
-//     const [allIfoUser,setAllInfoUser] = useState(null)
+   ////////////////////////////////////////////////////////// 
 
-//     const checkInfoUser = async () => {
-    
-//             setLoading(true) 
 
-//             try{
-//                 const id = sessionStorage.getItem("id_user")
+    const checkInfoUser = async () => {
     
-//                 const info = await getInfoUser(id)
-    
-//                 console.log(info);
-    
-//                 setAllInfoUser(info)
+            setLoading(true) 
 
-//                 setLoading(false) 
+            try{
+                const id = sessionStorage.getItem("id_user")
+    
+                const info = await getInfoUser(id)
+    
+                console.log(info);
+    
+                setImage(info.user_img)
+
+                setLoading(false) 
                 
-//                 return 
+                return 
     
-//             } catch(error){
+            } catch(error){
     
-//                 console.log(error, "Error al solictar la info de User")
+                console.log(error, "Error al solictar la info de User")
     
-//             }
-//         }
+            }
+        }
 
-//          useEffect(() => {
+         useEffect(() => {
         
         
                
-//                 checkInfoUser()
+                checkInfoUser()
                
                
                 
-//             }, []);
+            }, []);
         
 // //////////////////////////////////////////////////////////////////
     const uploadImage = async (e)=>{            
@@ -66,11 +67,11 @@ const Cloudinary = () => {
             const file = await response.json();    
             setImage(file.secure_url);  
             
-            // const url = {"user_img": file.secure_url} 
+            const url = {"user_img": file.secure_url} 
            
-            // console.log(url);
+            console.log(url);
             
-            // editUser(url)
+            editUser(url)
             
             setLoading(false);                      
         } catch (error) {
@@ -84,7 +85,15 @@ const Cloudinary = () => {
     <div className='text-center '>
         <h1>Imagen de Perfil</h1>
 
+        {loading ? (
+            <h3>Loading...</h3>
+        ) : (
+        <img src={image} className='rounded-circle' style={{ width: "15em", height: "15em", objectFit: "cover" }} alt="imagen subida"/>
+        )}
     
+
+        <br></br>
+        
 
         <input type="file"
         name="file"
@@ -92,14 +101,6 @@ const Cloudinary = () => {
         // accept='image/png, image/jpeg' 
         onChange={(e)=>uploadImage(e)}
         />
-
-        <br></br>
-        
-        {loading ? (
-            <h3>Loading...</h3>
-        ) : (
-        <img src={image} className='rounded-circle' style={{ width: "15em", height: "15em", objectFit: "cover" }} alt="imagen subida"/>
-        )}
        
 
     </div>

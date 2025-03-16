@@ -49,8 +49,7 @@ const Users = () => {
             const id = sessionStorage.getItem("id_user")
 
             const info = await getInfoUser(id)
-
-            console.log(info);
+  
 
             setAllInfoUser(info)
             
