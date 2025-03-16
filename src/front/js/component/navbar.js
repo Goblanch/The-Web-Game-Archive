@@ -93,7 +93,17 @@ export const Navbar = () => {
 					) : (
 						<>
 						    <Link to="Users" className="me-2 rounded-circle">
-							<img src={imgUser} className='rounded-circle border border-2 border-danger' style={{ width: "3.5em", height: "3.5em", objectFit: "cover" }} alt="👤 Profile"/>
+							{
+								imgUser ? (
+								
+									<img src={imgUser} className='rounded-circle border border-2 border-danger' style={{ width: "3.5em", height: "3.5em", objectFit: "cover" }} alt="👤 Profile"/>
+								) : (
+
+									<Link to="Users" className="btn btn-danger me-2">👤 Profile</Link>
+								)
+
+							}
+					
 							
 							</Link>
 							<button onClick={handleLogOut} className="btn btn-outline-danger me-2">
