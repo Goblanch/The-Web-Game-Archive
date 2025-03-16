@@ -182,19 +182,19 @@ const Users = () => {
                                 <div className="col-md-6">
                                     <div className="mb-3">
                                         <label className="form-label">Nombre</label>
-                                        <input type="text" placeholder={allIfoUser.name ? allIfoUser.name : "Todavia no has introducido un Name"} className="form-control" name="name" onChange={(e) => handleOnchange(e)} />
+                                        <input type="text" defaultValue={allIfoUser.name ? allIfoUser.name : "No has introducido un Name"} className="form-control" name="name" onChange={(e) => handleOnchange(e)} />
                                     </div>
                                     <div className="mb-3">
                                         <label className="form-label">Apellidos</label>
-                                        <input type="text" placeholder={allIfoUser.last_name ? allIfoUser.last_name : "Todavia no has introducido un Last Name"} className="form-control" name="last_name" onChange={(e) => handleOnchange(e)} />
+                                        <input type="text" defaultValue={allIfoUser.last_name ? allIfoUser.last_name : "No has introducido un Last Name"} className="form-control" name="last_name" onChange={(e) => handleOnchange(e)} />
                                     </div>
                                     <div className="mb-3">
                                         <label className="form-label">Email</label>
-                                        <input type="text" value={allIfoUser.email ? allIfoUser.email : "Todavia no has introducido un Email"} className="form-control" name="email" onChange={(e) => handleOnchange(e)} />
+                                        <input type="text" defaultValue={allIfoUser.email} className="form-control" name="email" onChange={(e) => handleOnchange(e)} />
                                     </div>
                                     <div className="mb-3">
                                         <label className="form-label">Nombre de usuario</label>
-                                        <input type="text" value={allIfoUser.user_name ? allIfoUser.user_name : "Todavia no has introducido un User Name"} className="form-control" name="user_name" onChange={(e) => handleOnchange(e)} />
+                                        <input type="text" defaultValue={allIfoUser.user_name} className="form-control" name="user_name" onChange={(e) => handleOnchange(e)} />
                                     </div>
                                     <div className="mb-3">
                                         <label className="form-label">Password</label>

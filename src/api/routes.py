@@ -168,7 +168,9 @@ def update_user(id_us):
     user_to_update.user_img = data.get('user_img', user_to_update.user_img)
 
       ####----Establezco el hash de la password-----######
-    user_to_update.set_password(user_to_update.password)
+    if "password" in data:
+
+        user_to_update.set_password(user_to_update.password)
 
 
 
@@ -232,7 +234,7 @@ def login():
     user = User.query.filter_by(email = data['email']).first()
 
      # Verificar que el usuario existe y que la contraseña es correcta
-    if user is None or not user.check_password(data['password']):
+    if not user  or not user.check_password(data['password']):
 
         return jsonify({'msg': 'El usuario o la contraseña no coinciden'}), 401
 

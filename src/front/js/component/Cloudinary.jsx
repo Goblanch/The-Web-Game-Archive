@@ -65,13 +65,13 @@ const Cloudinary = () => {
 
             const file = await response.json();    
             setImage(file.secure_url);  
-            //
-            const url = {"user_img": file.secure_url} 
-           
-            console.log(url);
             
-            editUser(url)
-            //
+            // const url = {"user_img": file.secure_url} 
+           
+            // console.log(url);
+            
+            // editUser(url)
+            
             setLoading(false);                      
         } catch (error) {
             console.error('Error uploading image:', error);
