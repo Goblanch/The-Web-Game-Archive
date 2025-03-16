@@ -4,11 +4,13 @@ import '../../styles/index.css';
 import logo from "../../img/logo.png";
 import { useContext , useEffect} from "react";
 import { privateRoute } from "../../services/APIServices";
+import { getInfoUser } from "../../services/APIServices";
 
 export const Navbar = () => {
 	
 
 	const [isVerificated, setVerificated] = useState(false)
+	const [imgUser,setImgUser] = useState("")
 
 	const navigate = useNavigate()
 
@@ -19,10 +21,39 @@ export const Navbar = () => {
 		setVerificated(auth)
 
 	}
+	const checkInfoUser = async () => {
+	
+	
+			try{
+				const id = sessionStorage.getItem("id_user")
+	
+				const info = await getInfoUser(id)
+
+				
+				
+	  
+				if(info.user_img){
+
+					console.log(info.user_img);
+					
+					setImgUser(info.user_img)
+				}
+				
+				
+				return 
+	
+			} catch(error){
+	
+				console.log(error, "Error al solictar la info de User")
+	
+			}
+		}
 
 	 useEffect(() => {
 	
 			checkVerificated()
+
+			checkInfoUser()
 	
 		}, []);
 		
@@ -64,7 +95,7 @@ export const Navbar = () => {
 						</>
 					) : (
 						<>
-						    <Link to="Users" className="btn btn-danger me-2">👤 Profile</Link>
+						    <Link to="Users" className="me-2 rounded-circle"><img src={imgUser} className='rounded-circle border border-3 border-danger' style={{ width: "3.5em", height: "3.5em", objectFit: "cover" }} alt="👤 Profile"/></Link>
 							<button onClick={handleLogOut} className="btn btn-outline-danger me-2">
 								Logout
 							</button>
