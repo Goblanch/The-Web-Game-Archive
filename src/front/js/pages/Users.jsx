@@ -50,10 +50,8 @@ const Users = () => {
 
             const info = await getInfoUser(id)
   
-
-            setAllInfoUser(info)
             
-            return 
+            return info
 
         } catch(error){
 
@@ -67,11 +65,31 @@ const Users = () => {
         checkAuth()
 
        
-        checkInfoUser()
+        const userData = async () => {
+
+
+            try{
+                const data = await checkInfoUser()
+
+                setAllInfoUser(data)
+
+            } catch(error){
+
+                console.log("Error al traer data");
+                
+                
+
+            }
+
+
+        }
        
+        userData()
        
         
     }, []);
+
+
 
     
 
@@ -181,19 +199,19 @@ const Users = () => {
                                 <div className="col-md-6">
                                     <div className="mb-3">
                                         <label className="form-label">Nombre</label>
-                                        <input type="text" defaultValue={allIfoUser ? allIfoUser.name : "No has introducido un Name"} className="form-control" name="name" onChange={(e) => handleOnchange(e)} />
+                                        <input type="text" defaultValue={allIfoUser.name ? allIfoUser.name : "No has introducido un Name"} className="form-control" name="name" onChange={(e) => handleOnchange(e)} />
                                     </div>
                                     <div className="mb-3">
                                         <label className="form-label">Apellidos</label>
-                                        <input type="text" defaultValue={allIfoUser  ? allIfoUser.last_name : "No has introducido un Last Name"} className="form-control" name="last_name" onChange={(e) => handleOnchange(e)} />
+                                        <input type="text" defaultValue={allIfoUser.last_name  ? allIfoUser.last_name : "No has introducido un Last Name"} className="form-control" name="last_name" onChange={(e) => handleOnchange(e)} />
                                     </div>
                                     <div className="mb-3">
                                         <label className="form-label">Email</label>
-                                        <input type="text" defaultValue={allIfoUser ? allIfoUser.email : "No has introducido un email"} className="form-control" name="email" onChange={(e) => handleOnchange(e)} />
+                                        <input type="text" defaultValue={allIfoUser.email ? allIfoUser.email : "No has introducido un email"} className="form-control" name="email" onChange={(e) => handleOnchange(e)} />
                                     </div>
                                     <div className="mb-3">
                                         <label className="form-label">Nombre de usuario</label>
-                                        <input type="text" defaultValue={allIfoUser ? allIfoUser.user_name : "No has introducido el User Name"} className="form-control" name="user_name" onChange={(e) => handleOnchange(e)} />
+                                        <input type="text" defaultValue={allIfoUser.user_name ? allIfoUser.user_name : "No has introducido el User Name"} className="form-control" name="user_name" onChange={(e) => handleOnchange(e)} />
                                     </div>
                                     <div className="mb-3">
                                         <label className="form-label">Password</label>

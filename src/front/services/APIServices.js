@@ -354,38 +354,44 @@ export const addTotalPoints = async (sumTotalPoints,id_user) => {
 // ///////////////////////////////----SERVICIOS DE LA API SOBRE LOS PLAYED GAMES////////////////////////////////////////////////////////////////////////////////////
 // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-export const addGamePoints = async (sumGamePoints,id_played_game) => {
 
-    try{
 
-        const response = await fetch( urlApi + `played_games/game_points/${id_played_game}`,{
+export const createNewPlayedGame = async (infoPlayedGame) => {
+
+    try {
+
+        const response = await fetch(urlApi + "played_games" ,{
 
             method: "POST",
             body: JSON.stringify({
 
-                "game_points": sumGamePoints
+                "user_id": infoPlayedGame.user_id ,
+                "minigame_id": infoPlayedGame.minigame_id,
+                "game_data": infoPlayedGame.game_data,
+                "game_points": infoPlayedGame.game_points,
+                "record": infoPlayedGame.record,
+                "mithril_per_second": infoPlayedGame.mithril_per_second,
+                
 
-            })
+            }),
+            headers:{"Content-Type": "application/json"}
+
 
         })
 
+        const data = await response.json()
+
         if(response.ok){
 
-            console.log("Se han sumado los Game Points correctamente");
-              
+
+           console.log("Se pudo crear el Played Game",data);
+            
 
         }
-        else{
-
-            console.log("No se han sumado los Game Points correctamente");
-        }
-
-
+        
     } catch (error){
 
-        console.log(error,"Error al sumar los Game Points");
-        
+        console.log(error , "No se ha podido crear el Played Game");
     }
 
 }
-
