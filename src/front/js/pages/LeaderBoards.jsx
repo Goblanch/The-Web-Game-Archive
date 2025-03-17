@@ -107,7 +107,6 @@ const LeaderBoards = () => {
                 </table>
             </div>
         </div>
-
     )
 }
 
