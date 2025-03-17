@@ -114,10 +114,13 @@ const Pokemon = () => {
 
                     <div className="mt-3">
                         {showSilhouette ? (
-                            <SearchBar
-                                names={store.pokemonList || []} // Lista de nombres de Pokémon
-                                onSelect={handleUserGuess} // Llama al manejador de adivinanzas
-                            />
+                            <div className="d-flex">
+                                <SearchBar
+                                    names={store.pokemonList || []} // Lista de nombres de Pokémon
+                                    onSelect={handleUserGuess} // Llama al manejador de adivinanzas
+                                />
+                            </div>
+
                         ) : (
                             <button onClick={handleNextPokemon} className="btn btn-danger">
                                 Next Pokémon

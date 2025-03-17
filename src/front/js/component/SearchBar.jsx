@@ -30,15 +30,15 @@ const SearchBar = ({ names, onSelect }) => {
                 type="text"
                 value={inputValue}
                 onChange={handleInputChange}
-                className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Escribe aquí..."
+                className="form-control"
+                placeholder="Who's that Pokémon..."
             />
             {suggestions.length > 0 && (
-                <ul className="absolute w-full bg-white border rounded-md shadow-md max-h-40 overflow-y-auto mt-1 z-10">
+                <ul className="absolute w-full bg-white border rounded-md shadow-md max-h-40 overflow-y-auto mt-1 z-10 list-group">
                     {suggestions.map((suggestion, index) => (
                         <li
                             key={index}
-                            className="p-2 hover:bg-blue-500 hover:text-white cursor-pointer"
+                            className="p-2 hover:bg-blue-500 hover:text-white cursor-pointer list-group-item"
                             onClick={() => handleSuggestionClick(suggestion)}
                         >
                             {suggestion}
