@@ -53,7 +53,6 @@ const Layout = () => {
                         {/* <Route element={<Demo />} path="/demo" /> */}
                         <Route element={<h1>Not found!</h1>} />
                     </Routes>
-                    <Footer />
                 </ScrollToTop>
             </BrowserRouter>
         </div>

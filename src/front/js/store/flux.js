@@ -15,6 +15,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			], 
 			randomPokemon: null,
+			pokemonList: [],
 			fakeStoreProducts: [],
 		},
 		actions: {
@@ -78,6 +79,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return randomPokemon;
 				} catch (error) {
 					console.log("Error getting random pokemon:", error);
+				}
+			},
+
+			getPokemonList: async () => {
+				try{
+					const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=1010");
+					const data = await response.json();
+
+					const pokemonNames = data.results.map((pokemon) => pokemon.name);
+					setStore({pokemonList: pokemonNames});
+				}catch(error){
+					console.error("Error fetching Pokémon list:", error);
 				}
 			},
 

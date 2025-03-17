@@ -4,6 +4,7 @@ import logo from "../../img/logo.png";
 import "../../styles/index.css";
 import backgroundImage from '../../img/fondo5.jpg'
 import MinigameCard from "./MinigameCard.jsx";
+import { Footer } from "../component/footer.js";
 
 const cards = [
 	{
@@ -72,7 +73,7 @@ export const Home = () => {
 					))}
 				</div>
 			</div>
-
+			<Footer/>
 		</div>
 	);
 };
