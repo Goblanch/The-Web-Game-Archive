@@ -1,19 +1,31 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { logIn } from "../../services/APIServices";
 
 const UserLogin = () => {
-
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    
+    const [userPass,setUserPass] = useState()
+    //////////////////////////////////////////////////////////
     const [error, setError] = useState("");
 
     const navigate = useNavigate();
 
-    const handleOnSubmit = (e) => {
+    const handleOnLogin = (e) => {
+        
         e.preventDefault();
 
         // Hacer la llamada a la api aquí
+        
+        logIn(userPass,navigate)
+
     }
+
+    const handleOnChange = (event) => {
+
+        setUserPass({...userPass,[event.target.name]: event.target.value})
+
+    }
+
 
     const handleGotoRegister = () => {
         navigate('/user-register');
@@ -30,7 +42,7 @@ const UserLogin = () => {
                 </div>
             )}
 
-            <form onSubmit={handleOnSubmit}>
+            <form onSubmit={(e) => handleOnLogin(e)}>
                 <div className="row mb-5">
                     <div className="col-lg-2 col-md-12">
                         <h6 className="text">EMAIL</h6>
@@ -39,9 +51,10 @@ const UserLogin = () => {
                         <input
                             type="text"
                             className="form-control"
-                            id="user-name"
+                            
+                            name="email"
                             placeholder="Enter your user email"
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={(e) => {handleOnChange(e)}}
                             required
                         />
                     </div>
@@ -54,9 +67,9 @@ const UserLogin = () => {
                     <div className="col-lg-2 col-md-12">
                         <input type="password"
                             className="form-control"
-                            id="password"
+                            name="password"
                             placeholder="Enter your password"
-                            onChange={(e) => setPassword(e.target.value)}
+                            onChange={(e) => {handleOnChange(e)}}
                             required
                         />
                     </div>
@@ -64,7 +77,7 @@ const UserLogin = () => {
 
                 <div className="d-flex flex-column align-items-center mb-4">
                     <button type="submit" className="btn" style={{ background: "rgb(205, 67, 26)", color: "white", fontSize: "23px" }}>
-                        REGISTER
+                        LOG IN
                     </button>
                 </div>
 
