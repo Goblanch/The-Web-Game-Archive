@@ -1,18 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "./store/appContext";
-import MinigameRulesModal from "./component/MinigameRulesModal.jsx"
+import MinigameRulesModal from "./component/MinigameRulesModal.jsx";
 import GameOverModal from "./component/GameOverModal.jsx";
 import PokemonHints from "./component/PokemonHints.jsx";
 import PokemonGameData from "./component/PokemonGameData.jsx";
+import SearchBar from "./component/SearchBar.jsx";
 
 import WhosThatPokemonImg from "../../../public/whosthatpokemon.png";
 import minigamesData from "../../../public/minigames.json";
 
 const Pokemon = () => {
-
     const { store, actions } = useContext(Context);
 
-    const [userInput, setUserInput] = useState("");
     const [showSilhouette, setShowSilhouette] = useState(true);
     const [hintTrigger, setHintTrigger] = useState(0);
     const [lives, setLives] = useState(4);
@@ -20,40 +19,39 @@ const Pokemon = () => {
     const [streak, setStreak] = useState(0);
     const [gameOver, setGameOver] = useState(false);
 
-    const pokemonGameData = minigamesData.find(game => game.name === "pokemon");
+    const pokemonGameData = minigamesData.find((game) => game.name === "pokemon");
     const points = pokemonGameData ? pokemonGameData.points : 0;
 
-    const handleUserGuess = () => {
-        const formattedInput = userInput.toLowerCase();
+    const handleUserGuess = (guess) => {
+        const formattedInput = guess.toLowerCase();
 
         if (formattedInput === store.randomPokemon.name) {
             handleCorrectGuess();
         } else {
             handleBadGuess();
         }
-    }
+    };
 
     const handleCorrectGuess = () => {
-        console.log("SUCESS");
+        console.log("SUCCESS");
         setScore((prev) => prev + points);
-        // TODO: Añadir llamada a api de usuarios para añadir puntos.
+        // TODO: Añadir llamada a API de usuarios para añadir puntos.
         setStreak((prev) => prev + 1);
         setShowSilhouette(false);
-    }
+    };
 
     const handleBadGuess = () => {
         setHintTrigger((prev) => prev + 1);
         setLives((prev) => prev - 1);
-        setUserInput("");
         console.log(store.randomPokemon.name);
-    }
+    };
 
     const handleGameOver = () => {
         console.log("GAME OVER");
         setShowSilhouette(false);
         setGameOver(true);
-        // TODO: añadir llamada a api de usuarios para insertar nueva fila de DB de partidas jugadas.
-    }
+        // TODO: añadir llamada a API de usuarios para insertar nueva fila de DB de partidas jugadas.
+    };
 
     const handleRetry = () => {
         setGameOver(false);
@@ -63,28 +61,24 @@ const Pokemon = () => {
         setStreak(0);
         setLives(4);
         actions.getRandomPokemon();
-    }
+    };
 
     const handleNextPokemon = () => {
         actions.getRandomPokemon();
         setShowSilhouette(true);
-        setUserInput("");
         setHintTrigger(0);
         setLives(4);
-    }
+    };
 
     useEffect(() => {
+        actions.getPokemonList();
         actions.getRandomPokemon();
-    }, [])
+    }, []);
 
     return (
         <div className="container mt-4">
             <MinigameRulesModal gameName={"pokemon"} />
-            <GameOverModal
-                score={score}
-                onRetry={handleRetry}
-                show={gameOver}
-            />
+            <GameOverModal score={score} onRetry={handleRetry} show={gameOver} />
 
             <div className="row">
                 <div className="col-lg-3 order-2 order-lg-1 mt-3 mt-lg-0">
@@ -120,20 +114,10 @@ const Pokemon = () => {
 
                     <div className="mt-3">
                         {showSilhouette ? (
-                            <div className="d-flex">
-                                <input
-                                    type="text"
-                                    className="form-control me-2"
-                                    name="user-guess"
-                                    id="user-guess"
-                                    placeholder="Who's that Pokémon?"
-                                    value={userInput}
-                                    onChange={(e) => setUserInput(e.target.value)}
-                                />
-                                <button onClick={handleUserGuess} className="btn btn-danger">
-                                    Guess
-                                </button>
-                            </div>
+                            <SearchBar
+                                names={store.pokemonList || []} // Lista de nombres de Pokémon
+                                onSelect={handleUserGuess} // Llama al manejador de adivinanzas
+                            />
                         ) : (
                             <button onClick={handleNextPokemon} className="btn btn-danger">
                                 Next Pokémon
@@ -152,6 +136,6 @@ const Pokemon = () => {
             </div>
         </div>
     );
-}
+};
 
 export default Pokemon;
