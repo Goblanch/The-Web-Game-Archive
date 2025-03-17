@@ -244,7 +244,7 @@ export const editUser = async (infoUser) => {
 
         if(response.ok){
 
-            window.location.reload();
+            
             
             return print(`El usuario : ${infoUser.email} se ha mofdificado correctamente`)
         }
@@ -395,3 +395,11 @@ export const createNewPlayedGame = async (infoPlayedGame) => {
     }
 
 }
+
+////////////////Función que devuelva las 5 últimas partidas jugadas (de cualquier minijuego)///////////////
+export const getLastFiveGames = async () => {
+
+
+
+    
+} 
