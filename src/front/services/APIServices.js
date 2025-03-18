@@ -244,7 +244,7 @@ export const editUser = async (infoUser) => {
 
         if(response.ok){
 
-            
+            window.location.reload()
             
             return print(`El usuario : ${infoUser.email} se ha mofdificado correctamente`)
         }
