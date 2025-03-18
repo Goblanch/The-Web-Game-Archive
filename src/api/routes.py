@@ -304,6 +304,19 @@ def get_all_minigames():
 
     return jsonify(minigame_info), 200
 
+@api.route('/minigame/<int:id_mini>', methods=['GET'])
+def get_minigame(id_mini):
+
+    minigame_query = Minigames.query.filter_by(id_minigame = id_mini).first()
+
+    if not minigame_query:
+
+        return jsonify({'msg':"No hay ningun minijuego en la base de datos"}), 404
+
+   
+
+    return jsonify(minigame_query.serialize()), 200
+
 
 @api.route('/minigame', methods = ['POST'])
 def post_minigame():
@@ -462,11 +475,6 @@ def post_played_games():
 
         return jsonify({'msg': f"Fallo al crear played_games en la Base de datos : {str(e)}"}), 500
 
-############################################################################################################
-############################################################################################################
-############################################################################################################
-############################################################################################################
-
 
 @api.route("/played_games/<int:id_played_gam>" , methods = ['PUT'])
 def put_game_data(id_played_gam):
@@ -500,12 +508,6 @@ def put_game_data(id_played_gam):
 
 
 
-
-
-############################################################################################################
-############################################################################################################
-############################################################################################################
-############################################################################################################
 
 @api.route('/played_games/game_points/<int:id_played_gam>' , methods = ['PUT'])
 def put_game_points(id_played_gam):
@@ -567,4 +569,30 @@ def delete_played_games(id_played_gam):
 
         return jsonify({'msg': f"Fallo al borrar played_games en la Base de datos : {str(e)}"}), 500
     
+############### TESTED ################
+@api.route('/played_games/last_games/<int:id_us>', methods=['GET'])
+def get_last_games(id_us):
+    
+    last_games = Played_games.query.filter_by(user_id=id_us).order_by(Played_games.id_played_games.desc()).limit(5).all()
+    if not last_games:
+        return jsonify({'msg': 'No hay ningun juego jugado todavia'}), 400
+
+    
+    usergame_info = [usergame.serialize() for usergame in last_games]
+
+    return jsonify(usergame_info), 200
+
+############### TESTED ################
+@api.route('/played_games/best_games/<int:id_mini>', methods=['GET'])
+def get_best_games(id_mini):
+    
+    best_games = Played_games.query.filter_by(minigame_id=id_mini).order_by(Played_games.game_points.desc()).limit(5).all()
+    
+    if not best_games:
+        return jsonify({'msg': 'No hay ninguna partida jugada en ese minijuego'}), 400
+
+    
+    best_games_info = [best_games.serialize() for best_games in best_games]
+
+    return jsonify(best_games_info), 200
 

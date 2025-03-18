@@ -355,7 +355,7 @@ export const addTotalPoints = async (sumTotalPoints,id_user) => {
 // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
+//////////////////------TESTED--------/////////////////
 export const createNewPlayedGame = async (infoPlayedGame) => {
 
     try {
@@ -397,9 +397,84 @@ export const createNewPlayedGame = async (infoPlayedGame) => {
 }
 
 ////////////////Función que devuelva las 5 últimas partidas jugadas (de cualquier minijuego)///////////////
-export const getLastFiveGames = async () => {
+export const getLastFiveGames = async (id_user) => {
+
+    try{
+        const response = await fetch(urlApi + `played_games/last_games/${id_user}` ,{
+
+            method: "GET",
+            headers:{"Content-Type": "application/json"}
 
 
+        })
+
+        const data = await response.json()
+
+        if (response.ok) {
+            
+            return data
+        }
+
+    } catch (error){
+
+        console.log(error , "No se ha podido acceder al usuario");
+
+    }
 
     
+} 
+
+//////////////////Función que obtenga las 5 mejores partidas de un minijuego.//////////////
+export const getBestFiveGames = async (id_minigame) => {
+
+    try{
+        const response = await fetch(urlApi + `played_games/best_games/${id_minigame}` ,{
+
+            method: "GET",
+            headers:{"Content-Type": "application/json"}
+
+
+        })
+
+        const data = await response.json()
+
+        if (response.ok) {
+            
+            return data
+        }
+
+    } catch (error){
+
+        console.log(error , "No se ha podido acceder al usuario");
+
+    }
+
+    
+} 
+
+////////////////////////Función que devuelva todos los datos de un minijuego////////////////////////
+export const getMinigameById = async (id_minigame) => {
+
+    try{
+        const response = await fetch(urlApi + `minigame/${id_minigame}` ,{
+
+            method: "GET",
+            headers:{"Content-Type": "application/json"}
+
+
+        })
+
+        const data = await response.json()
+
+        if (response.ok) {
+            
+            return data
+        }
+
+    } catch (error){
+
+        console.log(error , "No se ha podido acceder al minigame");
+
+    }
+  
 } 

@@ -91,7 +91,7 @@ class Played_games(db.Model):
             "game_data": self.game_data,
             "game_points": self.game_points,
             "record": self.record,
-            "mithril_per_second": self.click_time
+            "mithril_per_second": self.mithril_per_second
         
             # do not serialize the password, its a security breach
         }
