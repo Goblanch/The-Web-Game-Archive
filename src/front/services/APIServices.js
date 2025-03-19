@@ -1,10 +1,9 @@
-import { useNavigate } from "react-router-dom";
-
+import Swal from "sweetalert2";
 
 const urlApi = process.env.BACKEND_URL
 
 
-console.log(urlApi);
+
 
 
 
@@ -13,8 +12,36 @@ console.log(urlApi);
 ///////////////////////////////----SERVICIOS DE LA API SOBRE LOS USUARIOS////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+export const getInfoUser = async (id_user) => {
+
+    try{
+        const response = await fetch(urlApi + `user/${id_user}` ,{
+
+            method: "GET",
+            headers:{"Content-Type": "application/json"}
+
+
+        })
+
+        const data = await response.json()
+
+        if (response.ok) {
+            
+            return data
+        }
+
+    } catch (error){
+
+        console.log(error , "No se ha podido acceder al usuario");
+
+    }
+
+}
+
+
+
 //////////////////------TESTED--------/////////////////
-export const createNewUser = async (userName,email,password) => {
+export const createNewUser = async (userName,email,password,navigate) => {
 
     try {
 
@@ -37,16 +64,33 @@ export const createNewUser = async (userName,email,password) => {
 
         })
 
+        const data = await response.json()
+
         if(response.ok){
 
-            return print(`El usuario : ${email} se ha creado correctamente`)
+            navigate("/user-login")
 
+            return Swal.fire({
+                icon: 'success',
+                title: `Bienvenido: ${userName}`,
+                text: `${data["msg"]}`,
+              });    
 
+        }
+        else{
+
+            return Swal.fire({
+                          icon: 'error',
+                          title: 'Error',
+                          text: `${data["msg"]}`,
+                        });  
+            
         }
     
     } catch (error){
 
         console.log(error , "No se ha podido crear el usuario");
+
         
 
     }
@@ -70,110 +114,230 @@ export const createNewUser = async (userName,email,password) => {
 // }
 
 
+//////////////////------TESTED--------/////////////////
+export const logIn = async (infoUser,navigate) => {
 
-// export const logIn = async (infoUser) => {
+   
+
+    try{
+
+
+        const response = await fetch( urlApi + "user/login" , {
+
+            method: "POST",
+            body: JSON.stringify({
+
+                "email": infoUser.email,
+                "password": infoUser.password
+
+            }),
+            headers: {"Content-Type": "application/json"}
+
+
+        })
+
+        
+
+        const data = await response.json()
+
+     
+
+        if(response.ok){
+
+
+            sessionStorage.setItem("token", data.token)
+            sessionStorage.setItem("id_user", data.id_user)
+
+            navigate("/users") 
+
+
+        }
+        else{
+
+            return Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: `${data["msg"]}`,
+              });  
+
+
+        }
+
+        window.location.reload();
+
+
+
+    } catch (error){
+
+        
+        console.log(error);
+        
+
+    }
+
+}
+
+//////////////////------TESTED--------/////////////////
+export const privateRoute = async () => {
+
+
+    try{
+
+        const token = sessionStorage.getItem("token")
+
+        const response = await fetch( urlApi + "user/private" , {
+
+            method: "GET",
+            headers: {"Content-Type": "application/json",
+                      "Authorization": `Bearer ${token}`
+
+            }
+
+        })
+
+        if(response.ok){
+
+            
+            return true
+        }
+
+        if(!response.ok){
+
+            return false
+        }
+
+    } catch (error){
+
+        console.log(error, "Error al entrar a private")
 
     
 
-//     try{
+    }
 
-//         const response = await fetch( urlApi + "user/login" , {
+}
 
-//             method: "POST",
-//             body: JSON.stringify({
+//////////////////------TESTED--------/////////////////
+export const editUser = async (infoUser) => {
 
-//                 "email": infoUser.email,
-//                 "passwword": infoUser.password
+    try{
 
-//             }),
-//             headers: {"Content-Type": "application/json"}
+        const id_user = sessionStorage.getItem("id_user")
 
+        const response = await fetch( urlApi + `user/${id_user}` , {
 
-//         })
+            method: "PUT",
+            body: JSON.stringify({
 
-//         const data = await response.json
+                "name": infoUser.name,
+                "last_name": infoUser.last_name,
+                "email": infoUser.email,
+                "password": infoUser.password,
+                "user_name": infoUser.user_name,
+                "user_img": infoUser.user_img
 
-//         if(response.ok){
+            }),
+            headers: {"Content-Type": "application/json"}
 
+        })
 
-//             sessionStorage.setItem("token", data.token)
+        const data = await response.json()
 
-//             navigate("/private")
+        if(response.ok){
 
-//         }
+            window.location.reload()
+            
+            return print(`El usuario : ${infoUser.email} se ha mofdificado correctamente`)
+        }
+        else{
 
+            
 
+            return Swal.fire({
+                          icon: 'error',
+                          title: 'Error',
+                          text: `${data["msg"]}`,
+                        });         
+            
+        }
 
-//     } catch (error){
-
-
-//         console.log(error);
         
 
-//     }
+    } catch (error){
 
-// }
+        console.log(error , "No se ha podido modificar el usuario");  
 
-// export const privateRoute = async (infoUser) => {
+    }
 
+}
 
-//     try{
+//////////////////------TESTED--------/////////////////
+export const deleteUser = async () => {
 
-//         const token = sessionStorage.getItem("token")
+    try{
 
-//         const response = await fetch( urlApi + "user/private" , {
+        const id_user = sessionStorage.getItem("id_user")
 
-//             method: "GET",
-//             headers: {"Content-Type": "application/json",
-//                       "Authorization": `Bearer ${token}`
+        const response = await fetch(urlApi + `user/${id_user}`, {
 
-//             }
-
-//         })
-
-//         if(response.ok){
-
-//             console.log("Puedes entrar a private");
-            
-//             return true
-//         }
-
-//     } catch (error){
-
-//         console.log(error, "Error al entrar a private")
-
-//     }
+            method: "DELETE",
+            headers: {"Content-Type": "application/json"}
 
 
+        }) 
 
-// }
+        if(response.ok){
 
-// export const addTotalPoints = async (sumTotalPoints,id_user) => {
+            return Swal.fire({
+                icon: 'success',
+                title: 'Información',
+                text: `${data["msg"]}`,
+              });      
 
-//     try{
-
-//         const response = await fetch( urlApi + `user/totalpoints/${id_user}`,{
-
-//             method: "POST",
-//             body: JSON.stringify({
-
-//                 "total_points": sumPoints
-
-//             })
+        }
 
 
+    } catch (error) {
 
-//         })
+        console.log(error , "No se ha podido borrar el usuario");
 
-//     } catch (error){
+    }
 
-//         console.log(error, "Error al sumar los Total Points")
-
-//     }
-
+}
 
 
-// }
+export const addTotalPoints = async (sumTotalPoints,id_user) => {
+
+    try{
+
+        const response = await fetch( urlApi + `user/totalpoints/${id_user}`,{
+
+            method: "POST",
+            body: JSON.stringify({
+
+                "total_points": sumTotalPoints
+
+            })
+
+        })
+
+        if(response.ok){
+
+            console.log("Se han sumado los Total Points correctamente");
+              
+
+        }
+        else{
+
+            console.log("No se han sumado los Total Points correctamente");
+        }
+
+    } catch (error){
+
+        console.log(error, "Error al sumar los Total Points")
+
+    }
+
+}
 
 
 // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -190,26 +354,127 @@ export const createNewUser = async (userName,email,password) => {
 // ///////////////////////////////----SERVICIOS DE LA API SOBRE LOS PLAYED GAMES////////////////////////////////////////////////////////////////////////////////////
 // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// export const addGamePoints = async (sumGamePoints,id_played_game) => {
 
-//     try{
+//////////////////------TESTED--------/////////////////
+export const createNewPlayedGame = async (infoPlayedGame) => {
 
-//         const response = await fetch( urlApi + `played_games/game_points/${id_played_game}`,{
+    try {
 
-//             method: "POST",
-//             body: JSON.stringify({
+        const response = await fetch(urlApi + "played_games" ,{
 
-//                 "game_points": sumGamePoints
+            method: "POST",
+            body: JSON.stringify({
 
-//             })
+                "user_id": infoPlayedGame.user_id ,
+                "minigame_id": infoPlayedGame.minigame_id,
+                "game_data": infoPlayedGame.game_data,
+                "game_points": infoPlayedGame.game_points,
+                "record": infoPlayedGame.record,
+                "mithril_per_second": infoPlayedGame.mithril_per_second,
+                
 
-//         })
+            }),
+            headers:{"Content-Type": "application/json"}
 
-//     } catch (error){
 
-//         console.log(error,"Error al sumar los Game Points");
+        })
+
+        const data = await response.json()
+
+        if(response.ok){
+
+
+           console.log("Se pudo crear el Played Game",data);
+            
+
+        }
         
-//     }
+    } catch (error){
 
-// }
+        console.log(error , "No se ha podido crear el Played Game");
+    }
 
+}
+
+////////////////Función que devuelva las 5 últimas partidas jugadas (de cualquier minijuego)///////////////
+export const getLastFiveGames = async (id_user) => {
+
+    try{
+        const response = await fetch(urlApi + `played_games/last_games/${id_user}` ,{
+
+            method: "GET",
+            headers:{"Content-Type": "application/json"}
+
+
+        })
+
+        const data = await response.json()
+
+        if (response.ok) {
+            
+            return data
+        }
+
+    } catch (error){
+
+        console.log(error , "No se ha podido acceder al usuario");
+
+    }
+
+    
+} 
+
+//////////////////Función que obtenga las 5 mejores partidas de un minijuego.//////////////
+export const getBestFiveGames = async (id_minigame) => {
+
+    try{
+        const response = await fetch(urlApi + `played_games/best_games/${id_minigame}` ,{
+
+            method: "GET",
+            headers:{"Content-Type": "application/json"}
+
+
+        })
+
+        const data = await response.json()
+
+        if (response.ok) {
+            
+            return data
+        }
+
+    } catch (error){
+
+        console.log(error , "No se ha podido acceder al usuario");
+
+    }
+
+    
+} 
+
+////////////////////////Función que devuelva todos los datos de un minijuego////////////////////////
+export const getMinigameById = async (id_minigame) => {
+
+    try{
+        const response = await fetch(urlApi + `minigame/${id_minigame}` ,{
+
+            method: "GET",
+            headers:{"Content-Type": "application/json"}
+
+
+        })
+
+        const data = await response.json()
+
+        if (response.ok) {
+            
+            return data
+        }
+
+    } catch (error){
+
+        console.log(error , "No se ha podido acceder al minigame");
+
+    }
+  
+} 

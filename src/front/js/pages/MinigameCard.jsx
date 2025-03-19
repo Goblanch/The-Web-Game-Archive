@@ -1,8 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const MinigameCard = (props) => {
-    const { image, title, description, view } = props.cards;
+const MinigameCard = ({ title, description, image, view }) => {
+    //const { image, title, description, view } = props.cards;
     const navigate = useNavigate();
 
     const handleClick = () => {
@@ -10,13 +10,13 @@ const MinigameCard = (props) => {
     };
 
     return (
-            <div className="card h-100 m-3">
-                <img src={image} className="card-img-top" style={{ height: '200px', objectFit: 'cover' }} alt="Imagen" onClick={handleClick}/>
-                <div className="card-body">
-                    <h5 className="card-title">{title}</h5>
-                    <p className="card-text">{description}</p>
-                </div>
+        <div className="card h-100 m-3">
+            <img src={image} className="card-img-top" style={{ height: '200px', objectFit: 'cover' }} alt="Imagen" onClick={handleClick} />
+            <div className="card-body">
+                <h5 className="card-title">{title}</h5>
+                <p className="card-text">{description}</p>
             </div>
+        </div>
     );
 };
 

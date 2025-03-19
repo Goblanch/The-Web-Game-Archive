@@ -40,9 +40,8 @@ const UserRegister = () => {
 
     const handleSingup = () =>{
 
-        createNewUser(userName,email,password)
-
-        navigate("/user-login")
+        createNewUser(userName,email,password,navigate)
+ 
 
     }
 

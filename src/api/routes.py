@@ -6,6 +6,7 @@ from api.models import db , User , Minigames , Played_games
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from flask_jwt_extended import create_access_token , jwt_required , get_jwt_identity
+from api.minigames import populate_minigames
 
 api = Blueprint('api', __name__)
 
@@ -21,6 +22,90 @@ def handle_hello():
     }
 
     return jsonify(response_body), 200
+
+# Población de tabla minigames
+@api.route('/populate_minigames', methods=['GET'])
+def populate_minigames_endpoint():
+    """
+    Endpoint para poblar la tabla Minigames con datos predefinidos.
+    """
+    minigames_data = [
+        {
+            "title": "Who's that Pokémon?",
+            "description": "Adivina qué Pokémon es por su silueta",
+            "points_per_win": 10,
+            "lives": 4,
+            "game_time": 300,
+            "click_time": 5
+        },
+        {
+            "title": "Aimlab",
+            "description": "Haz click en el botón lo más rápido posible y el mayor número de veces",
+            "points_per_win": 20,
+            "lives": 5,
+            "game_time": 10,
+            "click_time": 2
+        },
+        {
+            "title": "Fair Price",
+            "description": "Adivina el precio de productos aleatorios",
+            "points_per_win": 10,
+            "lives": 5,
+            "game_time": 200,
+            "click_time": 10
+        },
+        {
+            "title": "Mithril Clicker",
+            "description": "Un autoclicker de minar mithril",
+            "points_per_win": 5,
+            "lives": 5,
+            "game_time": 200,
+            "click_time": 10
+        },
+        {
+            "title": "Potterdle",
+            "description": "Adivina el personaje de Harry Potter.",
+            "points_per_win": 20,
+            "lives": 5,
+            "game_time": 200,
+            "click_time": 10
+        },
+        {
+            "title": "Movie Higher Lower",
+            "description": "Descubre qué películas tienes más puntuación que otras",
+            "points_per_win": 10,
+            "lives": 5,
+            "game_time": 200,
+            "click_time": 10
+        }
+    ]
+
+    try:
+        for game_data in minigames_data:
+            # Formatear el título para evitar duplicados (en minúsculas y sin espacios)
+            title_formatted = game_data["title"].replace(" ", "").lower()
+            # Verificar si el juego ya existe en la base de datos
+            existing_game = Minigames.query.filter_by(title=title_formatted).first()
+
+            if existing_game is None:
+                # Si no existe, agregarlo a la base de datos
+                new_game = Minigames(
+                    title=game_data["title"],
+                    description=game_data["description"],
+                    points_per_win=game_data["points_per_win"],
+                    lives=game_data["lives"],
+                    game_time=game_data["game_time"],
+                    click_time=game_data["click_time"]
+                )
+                db.session.add(new_game)
+
+        # Confirmar los cambios en la base de datos
+        db.session.commit()
+        return jsonify({"msg": "Minijuegos poblados correctamente"}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"msg": f"Error al poblar los minijuegos: {str(e)}"}), 500
+
 
 
 
@@ -40,6 +125,20 @@ def get_all_users():
 
     return jsonify(users_info), 200
 
+@api.route('/user/<int:id_us>', methods = ['GET'])
+def get_user_by_id(id_us):
+
+    user_by_id = User.query.filter_by(id_user = id_us).first()
+
+
+    if not user_by_id:
+
+        return jsonify({'msg':"No hay ningun usuario con ese id en la base de datos"}), 404
+
+    users_info = user_by_id.serialize() 
+
+    return jsonify(users_info), 200
+
 @api.route('/user/singup', methods = ["POST"])
 def post_user():
 
@@ -49,11 +148,18 @@ def post_user():
                           
         return jsonify({"msg": "Tienes que introducir email y password para poder registrarte"}), 400
 
-   user = User.query.filter_by(email = request_new_user["email"]).first()
+   user_email = User.query.filter_by(email = request_new_user["email"]).first()
 
-   if user is not None:
+   if user_email is not None:
        
-       return jsonify({"msg": "Ya existe el usuario que deseas crear"}), 400
+       return jsonify({"msg": "Ya hay una cuenta con este Email usa otro"}), 400
+   
+   user_by_user_name = User.query.filter_by(user_name = request_new_user["user_name"]).first()
+   
+   if user_by_user_name is not None:
+       
+        return jsonify({"msg": "Ya hay una cuenta con este User Name usa otro"}), 400
+
    
    new_user = User(
                    email = request_new_user["email"], 
@@ -93,8 +199,8 @@ def delete_user(id_us):
 
     return jsonify({'msg': "No existe el usuario que deseas borrar con este id:" + id_us}),400
     
-@api.route('/user', methods = ['PUT'])
-def update_user():
+@api.route('/user/<int:id_us>', methods = ['PUT'])
+def update_user(id_us):
 
     data = request.get_json()
 
@@ -102,11 +208,42 @@ def update_user():
 
          return jsonify({'msg':"No has enviado la data para modificar"}), 404 
 
-    user_to_update = User.query.filter_by(email = data["email"]).first()
+    user_to_update = User.query.filter_by(id_user = id_us).first()
+
 
     if user_to_update is None:
 
         return jsonify({'msg':"No se encuentra el usuario que intentas editar"}), 404
+    
+    if "user_name" in data and data["user_name"] is not None:
+
+        user_by_name_user = User.query.filter_by(user_name = data["user_name"]).first()
+    
+        if user_by_name_user:
+
+            if user_by_name_user.id_user == user_to_update.id_user:
+
+                return jsonify({"msg": "Estas modificando tu User Name sin hacer cambios"}), 400
+            
+            else:
+
+                return jsonify({"msg": "Ya existe ese User Name debes usar otro"}), 400
+    
+    if "email" in data and data["email"] is not None:
+
+        user_by_email = User.query.filter_by(email = data["email"]).first()
+
+        if user_by_email:
+
+            if user_by_email.id_user == user_to_update.id_user:
+       
+                return jsonify({"msg": "Estas modificando tu Email sin hacer cambios"}), 400
+            
+            else:
+            
+                return jsonify({"msg": "El Email ya existe debes usar otro"}), 400
+    
+    
     
     user_to_update.user_name = data.get('user_name', user_to_update.user_name)
     user_to_update.email = data.get('email', user_to_update.email)
@@ -116,7 +253,11 @@ def update_user():
     user_to_update.user_img = data.get('user_img', user_to_update.user_img)
 
       ####----Establezco el hash de la password-----######
-    user_to_update.set_password(user_to_update.password)
+    if "password" in data:
+
+        user_to_update.set_password(user_to_update.password)
+
+
 
     try:
 
@@ -178,13 +319,13 @@ def login():
     user = User.query.filter_by(email = data['email']).first()
 
      # Verificar que el usuario existe y que la contraseña es correcta
-    if user is None or not user.check_password(data['password']):
+    if not user  or not user.check_password(data['password']):
 
         return jsonify({'msg': 'El usuario o la contraseña no coinciden'}), 401
 
     access_token = create_access_token(identity = str(user.id_user))
 
-    return jsonify({ "token": access_token,"id_user": user.id_user})
+    return jsonify({"token": access_token,"id_user": user.id_user})
 
 @api.route('/user/password/<int:id_us>', methods = ['PUT'])
 def change_password(id_us):
@@ -248,6 +389,19 @@ def get_all_minigames():
 
     return jsonify(minigame_info), 200
 
+@api.route('/minigame/<int:id_mini>', methods=['GET'])
+def get_minigame(id_mini):
+
+    minigame_query = Minigames.query.filter_by(id_minigame = id_mini).first()
+
+    if not minigame_query:
+
+        return jsonify({'msg':"No hay ningun minijuego en la base de datos"}), 404
+
+   
+
+    return jsonify(minigame_query.serialize()), 200
+
 
 @api.route('/minigame', methods = ['POST'])
 def post_minigame():
@@ -258,16 +412,16 @@ def post_minigame():
 
         return jsonify({'msg': "No has enviado data para crear el minijuego"}), 400
     
-    title_formatted = data["title"].replace(" ", "").lower()
+    #title_formatted = data["title"].replace(" ", "").lower()
 
-    minigame = Minigames.query.filter_by(title = title_formatted).first()
+    minigame = Minigames.query.filter_by(title = data["title"]).first()
 
     if minigame is not None:
 
         return jsonify({'msg': f"Ya existe un Minigame con ese title:{data['title']}"})
 
     new_minigame = Minigames(
-                            title = title_formatted,
+                            title = data["title"],
                             description = data['description'],
                             points_per_win = data['points_per_win'],
                             lives = data['lives'],
@@ -406,11 +560,6 @@ def post_played_games():
 
         return jsonify({'msg': f"Fallo al crear played_games en la Base de datos : {str(e)}"}), 500
 
-############################################################################################################
-############################################################################################################
-############################################################################################################
-############################################################################################################
-
 
 @api.route("/played_games/<int:id_played_gam>" , methods = ['PUT'])
 def put_game_data(id_played_gam):
@@ -444,12 +593,6 @@ def put_game_data(id_played_gam):
 
 
 
-
-
-############################################################################################################
-############################################################################################################
-############################################################################################################
-############################################################################################################
 
 @api.route('/played_games/game_points/<int:id_played_gam>' , methods = ['PUT'])
 def put_game_points(id_played_gam):
@@ -511,4 +654,30 @@ def delete_played_games(id_played_gam):
 
         return jsonify({'msg': f"Fallo al borrar played_games en la Base de datos : {str(e)}"}), 500
     
+############### TESTED ################
+@api.route('/played_games/last_games/<int:id_us>', methods=['GET'])
+def get_last_games(id_us):
+    
+    last_games = Played_games.query.filter_by(user_id=id_us).order_by(Played_games.id_played_games.desc()).limit(5).all()
+    if not last_games:
+        return jsonify({'msg': 'No hay ningun juego jugado todavia'}), 400
+
+    
+    usergame_info = [usergame.serialize() for usergame in last_games]
+
+    return jsonify(usergame_info), 200
+
+############### TESTED ################
+@api.route('/played_games/best_games/<int:id_mini>', methods=['GET'])
+def get_best_games(id_mini):
+    
+    best_games = Played_games.query.filter_by(minigame_id=id_mini).order_by(Played_games.game_points.desc()).limit(5).all()
+    
+    if not best_games:
+        return jsonify({'msg': 'No hay ninguna partida jugada en ese minijuego'}), 400
+
+    
+    best_games_info = [best_games.serialize() for best_games in best_games]
+
+    return jsonify(best_games_info), 200
 

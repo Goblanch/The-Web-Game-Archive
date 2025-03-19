@@ -30,7 +30,7 @@ class User(db.Model):
             "last_name": self.last_name,
             "user_img": self.user_img,
             "email": self.email,
-            "total_points": self.total_points
+            "total_points": self.total_points,
 
             # do not serialize the password, its a security breach
         }
@@ -91,7 +91,7 @@ class Played_games(db.Model):
             "game_data": self.game_data,
             "game_points": self.game_points,
             "record": self.record,
-            "mithril_per_second": self.click_time
+            "mithril_per_second": self.mithril_per_second
         
             # do not serialize the password, its a security breach
         }
