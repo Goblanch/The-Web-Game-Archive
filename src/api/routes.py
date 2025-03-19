@@ -24,7 +24,7 @@ def handle_hello():
     return jsonify(response_body), 200
 
 # Población de tabla minigames
-@api.route('/populate_minigames', methods=['POST'])
+@api.route('/populate_minigames', methods=['GET'])
 def populate_minigames_endpoint():
     """
     Endpoint para poblar la tabla Minigames con datos predefinidos.

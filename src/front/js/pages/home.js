@@ -40,36 +40,6 @@ export const Home = () => {
 
 	//Llamada a la API
 
-	// ELIMINAR ANTES DE SUBIR A PRODUCCIÓN
-	useEffect(() => {
-		const apiUrl = process.env.BACKEND_URL;
-		// Realizamos la llamada a la API para poblar los minijuegos al montar el componente
-		const populateMinigames = async () => {
-			try {
-				const response = await fetch(apiUrl + "populate_minigames", {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-				});
-
-				const data = await response.json();
-
-				if (response.ok) {
-					console.log(data.msg);  // Imprime el mensaje de éxito en la consola
-				} else {
-					console.error(data.msg);  // Imprime el mensaje de error en la consola
-				}
-			} catch (error) {
-				console.error("Error al contactar el servidor: ", error);
-			}
-		};
-
-		// QUITAR COMENTARIOS LA PRIMERA VEZ QUE SE CARGA LA  PÁGINA
-		//populateMinigames();
-
-	}, []);
-
 	useEffect(() => {
 		setMinigames(store.minigamesData);
 	}, [store.minigamesData])
