@@ -90,18 +90,13 @@ export const Home = () => {
 			</div>
 			<div className="container">
 				<div className="row">
-					{/* {cards.map((item, index) => (
-						<div className="col-12 col-sm-6 col-md-4 col-lg-4 mb-5" key={index}>
-							<MinigameCard cards={item} />
-						</div>
-					))} */}
 					{minigames.map((item, index) => (
 						<div className="col-12 col-sm-6 col-md-4 col-lg-4 mb-5" key={index}>
 							<MinigameCard
 								title={item.title}
 								description={item.description}
-								image={cards[index]?.image || backgroundImage} // Usa la imagen del array cards o un valor por defecto
-								view={cards[index]?.view || "/"} // Usa el view del array cards o un valor por defecto
+								image={cards[index]?.image || backgroundImage}
+								view={cards[index]?.view || "/"}
 							/>
 						</div>
 					))}
