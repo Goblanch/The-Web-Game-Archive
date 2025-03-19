@@ -6,6 +6,7 @@ from api.models import db , User , Minigames , Played_games
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from flask_jwt_extended import create_access_token , jwt_required , get_jwt_identity
+from api.minigames import populate_minigames
 
 api = Blueprint('api', __name__)
 
@@ -21,6 +22,90 @@ def handle_hello():
     }
 
     return jsonify(response_body), 200
+
+# Población de tabla minigames
+@api.route('/populate_minigames', methods=['GET'])
+def populate_minigames_endpoint():
+    """
+    Endpoint para poblar la tabla Minigames con datos predefinidos.
+    """
+    minigames_data = [
+        {
+            "title": "Who's that Pokémon?",
+            "description": "Adivina qué Pokémon es por su silueta",
+            "points_per_win": 10,
+            "lives": 4,
+            "game_time": 300,
+            "click_time": 5
+        },
+        {
+            "title": "Aimlab",
+            "description": "Haz click en el botón lo más rápido posible y el mayor número de veces",
+            "points_per_win": 20,
+            "lives": 5,
+            "game_time": 10,
+            "click_time": 2
+        },
+        {
+            "title": "Fair Price",
+            "description": "Adivina el precio de productos aleatorios",
+            "points_per_win": 10,
+            "lives": 5,
+            "game_time": 200,
+            "click_time": 10
+        },
+        {
+            "title": "Mithril Clicker",
+            "description": "Un autoclicker de minar mithril",
+            "points_per_win": 5,
+            "lives": 5,
+            "game_time": 200,
+            "click_time": 10
+        },
+        {
+            "title": "Potterdle",
+            "description": "Adivina el personaje de Harry Potter.",
+            "points_per_win": 20,
+            "lives": 5,
+            "game_time": 200,
+            "click_time": 10
+        },
+        {
+            "title": "Movie Higher Lower",
+            "description": "Descubre qué películas tienes más puntuación que otras",
+            "points_per_win": 10,
+            "lives": 5,
+            "game_time": 200,
+            "click_time": 10
+        }
+    ]
+
+    try:
+        for game_data in minigames_data:
+            # Formatear el título para evitar duplicados (en minúsculas y sin espacios)
+            title_formatted = game_data["title"].replace(" ", "").lower()
+            # Verificar si el juego ya existe en la base de datos
+            existing_game = Minigames.query.filter_by(title=title_formatted).first()
+
+            if existing_game is None:
+                # Si no existe, agregarlo a la base de datos
+                new_game = Minigames(
+                    title=game_data["title"],
+                    description=game_data["description"],
+                    points_per_win=game_data["points_per_win"],
+                    lives=game_data["lives"],
+                    game_time=game_data["game_time"],
+                    click_time=game_data["click_time"]
+                )
+                db.session.add(new_game)
+
+        # Confirmar los cambios en la base de datos
+        db.session.commit()
+        return jsonify({"msg": "Minijuegos poblados correctamente"}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"msg": f"Error al poblar los minijuegos: {str(e)}"}), 500
+
 
 
 
@@ -327,16 +412,16 @@ def post_minigame():
 
         return jsonify({'msg': "No has enviado data para crear el minijuego"}), 400
     
-    title_formatted = data["title"].replace(" ", "").lower()
+    #title_formatted = data["title"].replace(" ", "").lower()
 
-    minigame = Minigames.query.filter_by(title = title_formatted).first()
+    minigame = Minigames.query.filter_by(title = data["title"]).first()
 
     if minigame is not None:
 
         return jsonify({'msg': f"Ya existe un Minigame con ese title:{data['title']}"})
 
     new_minigame = Minigames(
-                            title = title_formatted,
+                            title = data["title"],
                             description = data['description'],
                             points_per_win = data['points_per_win'],
                             lives = data['lives'],
