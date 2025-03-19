@@ -25,7 +25,7 @@ const LeaderBoards = () => {
                         <option value={null}>Selecciona un minijuego</option>
                         {/* Aquí llenamos las opciones del filtro con los títulos de los minijuegos */}
                         {store.minigamesData.map((minigame, index) => (
-                            <option key={minigame.id} value={index + 1}>
+                            <option key={index} value={index + 1}>
                                 {minigame.title}
                             </option>
                         ))}

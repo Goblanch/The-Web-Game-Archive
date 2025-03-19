@@ -248,7 +248,7 @@ const Users = () => {
                                     </div>
                                 </div>
                             </form>
-                            <LeaderBoardTable userId={sessionStorage.getItem("id_user")} />
+                            <LeaderBoardTable userId={sessionStorage.getItem("id_user")} boardTitle={"Historial"} />
                         </div>
                     </div>
 

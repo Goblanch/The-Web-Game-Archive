@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getBestFiveGames, getInfoUser, getLastFiveGames, getMinigameById } from "../../services/APIServices";
 
-const LeaderBoardTable = ({ minigameId, userId }) => {
+const LeaderBoardTable = ({ boardTitle, minigameId, userId }) => {
     const [leaderBoardData, setLeaderBoardData] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -15,6 +15,12 @@ const LeaderBoardTable = ({ minigameId, userId }) => {
                     data = await getLastFiveGames(userId);
                 } else {
                     data = await getBestFiveGames(minigameId);
+                }
+
+                // Asegurarse de que data sea un array
+                if (!Array.isArray(data) || data.length === 0) {
+                    setLeaderBoardData([]); // Asigna un array vacío si no hay datos
+                    return;
                 }
 
                 const updateData = await Promise.all(
@@ -49,7 +55,7 @@ const LeaderBoardTable = ({ minigameId, userId }) => {
 
     return (
         <div className="border rounded p-3" style={{ backgroundColor: "#001833" }}>
-            <h2 className="text text-light">Leader Board</h2>
+            <h2 className="text text-light">{boardTitle ? boardTitle : "Leader Board"}</h2>
             {loading ? (
                 <p className="text text-light">Cargando resultados...</p>
             ) : (
@@ -73,9 +79,11 @@ const LeaderBoardTable = ({ minigameId, userId }) => {
                                 </tr>
                             ))
                         ) : (
-                            <td colSpan="4" className="text-center text-light">
-                                No hay datos disponibles
-                            </td>
+                            <tr>
+                                <td colSpan="4" className="text-center text-light">
+                                    No hay datos disponibles
+                                </td>
+                            </tr>
                         )}
                     </tbody>
                 </table>
