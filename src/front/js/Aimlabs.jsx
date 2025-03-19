@@ -4,6 +4,8 @@ import minigamesData from "../../../public/minigames.json";
 import MinigameRulesModal from "./component/MinigameRulesModal.jsx";
 import GameOverModal from "./component/GameOverModal.jsx";
 import AimlabsGameData from "./component/AimlabsGameData.jsx";
+import { createNewPlayedGame, addTotalPoints } from "../services/APIServices.js";
+import Swal from "sweetalert2";
 
 const Aimlabs = () => {
     const gameData = minigamesData.find((game) => game.name === "aimlabs");
@@ -69,6 +71,40 @@ const Aimlabs = () => {
         // Detener ambos temporizadores
         if (clickTimer.current) clearTimeout(clickTimer.current);
         if (gameTimer.current) clearInterval(gameTimer.current);
+
+        
+        
+        //Llamada a la API para guardar las partida y los Total Points
+        const isLogin = sessionStorage.getItem("token")
+
+        if(isLogin){
+
+            const aimLabsInfo = {
+                user_id: sessionStorage.getItem("id_user"),
+                minigame_id: 5,
+                game_data: "Informacion sobre la partida de Aim Labs",
+                game_points: score + 1,
+                record: null,
+                mithril_per_second: null
+
+
+            }
+            
+            createNewPlayedGame(aimLabsInfo)
+
+            addTotalPoints(score,sessionStorage.getItem("id_user"))
+
+            console.log("Se ha subido tu partida");
+        }else{
+        
+            return Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: `Debes logearte para poder guardar tus partidas`,
+                          });    
+                    
+        }  
+        
     };
 
     const handleRetry = () => {

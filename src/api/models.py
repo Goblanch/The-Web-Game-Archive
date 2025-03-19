@@ -74,8 +74,8 @@ class Played_games(db.Model):
     id_played_games = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id_user'))
     minigame_id = db.Column(db.Integer, db.ForeignKey('minigames.id_minigame'))
-    game_data = db.Column(db.String(3000), unique=False, nullable=False)
-    game_points =  db.Column(db.Integer, unique=False, nullable=False)
+    game_data = db.Column(db.String(3000), unique=False, nullable=True)
+    game_points =  db.Column(db.Integer, unique=False, nullable=True)
     record = db.Column(db.Integer, unique=False, nullable=True)
     mithril_per_second = db.Column(db.Float, unique=False, nullable=True)
 

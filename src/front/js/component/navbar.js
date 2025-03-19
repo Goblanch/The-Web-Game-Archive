@@ -5,6 +5,7 @@ import logo from "../../img/logo.png";
 import { useContext , useEffect} from "react";
 import { privateRoute } from "../../services/APIServices";
 import { getInfoUser } from "../../services/APIServices";
+import Swal from "sweetalert2";
 
 export const Navbar = () => {
 	
@@ -20,6 +21,17 @@ export const Navbar = () => {
 
 		setVerificated(auth)
 
+		if (!auth) {
+
+			return Swal.fire({
+				icon: 'error',
+				title: 'Error',
+				text: `Tu sesion de Login a espirado debes vovler a hacer Login para guarda partidas`
+										 
+			})
+		   
+		}
+
 	}
 	const checkInfoUser = async () => {
 	
@@ -30,8 +42,6 @@ export const Navbar = () => {
 				const info = await getInfoUser(id)
 	  
 				if(info.user_img){
-
-					console.log(info.user_img);
 					
 					setImgUser(info.user_img)
 				}
