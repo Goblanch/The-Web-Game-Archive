@@ -3,7 +3,10 @@ import { Context } from "./store/appContext";
 
 import MinigameRulesModal from "./component/MinigameRulesModal.jsx";
 import Swal from "sweetalert2";
-import { addTotalPoints } from "../services/APIServices.js";
+import { addTotalPoints , createNewPlayedGame } from "../services/APIServices.js";
+import { useNavigate } from "react-router-dom";
+
+
 
 const FairPrice = () => {
 
@@ -14,6 +17,8 @@ const FairPrice = () => {
     const [userGuess, setUserGuess] = useState("");
     const [score, setScore] = useState(0);
     const [message, setMessage] = useState("");
+
+    const navigate = useNavigate()
 
     const getRandomProduct = () => {
         const products = store.fakeStoreProducts;
@@ -60,27 +65,35 @@ const FairPrice = () => {
             setUserGuess("");
         }, 2000)
 
-        //Sumar Puntos a Total Points
-        const isLogin = sessionStorage.getItem("token")
         
+    }
+
+    ///// Evento para salir del juego y guardar las Partidas Jugadas y Total Points
+    const handleGameOver = () => {
+
+        
+         //Llamada a la API para guardar las partida y los Total Points
+        const isLogin = sessionStorage.getItem("token")
+
         if(isLogin){
 
-            // const fairPrizeInfo = {
-            //     user_id: sessionStorage.getItem("id_user"),
-            //     minigame_id: 4,
-            //     game_data: "Informacion sobre la partida de Fair Prize",
-            //     game_points: score,
-            //     record: null,
-            //     mithril_per_second: null
+              const fairPrizeInfo = {
+                user_id: sessionStorage.getItem("id_user"),
+                minigame_id: 4,
+                game_data: "Informacion sobre la partida de Fair Prize",
+                game_points: score,
+                record: null,
+                mithril_per_second: null
 
-
-            // }
+            }
             
-            // createNewPlayedGame(fairPrizeInfo)
+            createNewPlayedGame(fairPrizeInfo)
 
-            addTotalPoints(roundScore,sessionStorage.getItem("id_user"))
+            addTotalPoints(score,sessionStorage.getItem("id_user"))
+
 
             console.log("Se ha subido tu partida");
+
         }else{
         
             return Swal.fire({
@@ -90,6 +103,8 @@ const FairPrice = () => {
                           });    
                     
         }  
+
+        navigate("/") 
     }
 
     useEffect(() => {
@@ -143,6 +158,7 @@ const FairPrice = () => {
                     <p className="text fw-bold">Your score: {score}</p>
                 </div>
             )}
+            <button type="button" onClick={handleGameOver} class="btn btn-danger m-2">Guardar partida y cerrar</button>
         </div>
     );
 }
