@@ -10,6 +10,7 @@ import { editUser, deleteUser } from "../../services/APIServices";
 import Swal from 'sweetalert2';
 import Cloudinary from "../component/Cloudinary.jsx";
 import { getInfoUser } from "../../services/APIServices";
+import LeaderBoardTable from "../component/LeaderBoardTable.jsx";
 
 
 const Users = () => {
@@ -78,28 +79,28 @@ const Users = () => {
 
             try {
                 const id = sessionStorage.getItem("id_user")
-    
+
                 const info = await getInfoUser(id)
-    
+
                 console.log("Esta es la prueba");
                 console.log(info);
 
                 updateName(info)
-                
+
                 return info
-    
+
             } catch (error) {
-    
+
                 console.log(error, "Error al solictar la info de User")
-    
+
             }
         }
 
-       
-       
+
+
         checkInfoUser()
-       
-        
+
+
 
     }, []);
 
@@ -247,39 +248,7 @@ const Users = () => {
                                     </div>
                                 </div>
                             </form>
-                            <div className="container mt-4 border-top border-2">
-                                <h2 className="text-center text-white mb-3 mt-3">Historial de las últimas 5 partidas</h2>
-                                <table className="table table-bordered text-center text-white mb-0">
-                                    <thead className="table">
-                                        <tr className="text-white">
-                                            <th>Minijuego</th>
-                                            <th>Puntos conseguidos</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Dato 1</td>
-                                            <td>Dato 2</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Dato 3</td>
-                                            <td>Dato 4</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Dato 5</td>
-                                            <td>Dato 6</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Dato 7</td>
-                                            <td>Dato 8</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Dato 9</td>
-                                            <td>Dato 10</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                            <LeaderBoardTable userId={sessionStorage.getItem("id_user")} />
                         </div>
                     </div>
 

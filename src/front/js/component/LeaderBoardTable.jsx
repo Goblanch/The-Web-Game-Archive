@@ -20,7 +20,12 @@ const LeaderBoardTable = ({ minigameId, userId }) => {
                 const updateData = await Promise.all(
                     data.map(async (entry) => {
                         const userInfo = await getInfoUser(entry.user_id);
-                        const minigameInfo = await getMinigameById(minigameId);
+                        let minigameInfo
+                        if (minigameId) {
+                            minigameInfo = await getMinigameById(minigameId);
+                        } else {
+                            minigameInfo = await getMinigameById(entry.minigame_id)
+                        }
                         return {
                             ...entry,
                             user_name: userInfo ? userInfo.user_name : "Desconocido",
