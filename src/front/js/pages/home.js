@@ -1,53 +1,78 @@
-import React, { useContext } from "react";
+import React, { act, useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContext";
 import logo from "../../img/logo.png";
 import "../../styles/index.css";
 import backgroundImage from '../../img/fondo5.jpg'
+import pokemonImg from "../../../../public/pokeball.png"
 import MinigameCard from "./MinigameCard.jsx";
+import { getMinigameById } from "../../services/APIServices.js";
 
 const cards = [
 	{
 		image: backgroundImage,
-		title: "Who's that Pokemon?",
-		description: "Descripcion1",
 		view: "Pokemon"
 	},
 	{
-		image: backgroundImage,
-		title: "Aimlab",
-		description: "Descripcion2",
+		image: pokemonImg,
 		view: "Aimlabs"
 	},
 	{
 		image: backgroundImage,
-		title: "FairPrice",
-		description: "Descripcion3",
 		view: "FairPrice"
 	},
 	{
-		image: backgroundImage,
-		title: "MithrilClicker",
-		description: "Descripcion4",
+		image: pokemonImg,
 		view: "MithrilClicker"
 	},
 	{
 		image: backgroundImage,
-		title: "Potterdle",
-		description: "Descripcion5",
 		view: "Potterdle"
 	},
 	{
 		image: backgroundImage,
-		title: "HigherLowerGame",
-		description: "Descripcion6",
 		view: "HigherLower"
 	}
 ];
 
 export const Home = () => {
 	const { store, actions } = useContext(Context);
+	const [minigames, setMinigames] = useState([]);
 
 	//Llamada a la API
+
+	// ELIMINAR ANTES DE SUBIR A PRODUCCIÓN
+	useEffect(() => {
+		const apiUrl = process.env.BACKEND_URL;
+		// Realizamos la llamada a la API para poblar los minijuegos al montar el componente
+		const populateMinigames = async () => {
+			try {
+				const response = await fetch(apiUrl + "populate_minigames", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+				});
+
+				const data = await response.json();
+
+				if (response.ok) {
+					console.log(data.msg);  // Imprime el mensaje de éxito en la consola
+				} else {
+					console.error(data.msg);  // Imprime el mensaje de error en la consola
+				}
+			} catch (error) {
+				console.error("Error al contactar el servidor: ", error);
+			}
+		};
+
+		// QUITAR COMENTARIOS LA PRIMERA VEZ QUE SE CARGA LA  PÁGINA
+		//populateMinigames();
+
+	}, []);
+
+	useEffect(() => {
+		setMinigames(store.minigamesData);
+	}, [store.minigamesData])
 
 	return (
 		<div className="text-center home-background" style={{ backgroundImage: `url(${backgroundImage})` }}>
@@ -65,9 +90,19 @@ export const Home = () => {
 			</div>
 			<div className="container">
 				<div className="row">
-					{cards.map((item, index) => (
+					{/* {cards.map((item, index) => (
 						<div className="col-12 col-sm-6 col-md-4 col-lg-4 mb-5" key={index}>
 							<MinigameCard cards={item} />
+						</div>
+					))} */}
+					{minigames.map((item, index) => (
+						<div className="col-12 col-sm-6 col-md-4 col-lg-4 mb-5" key={index}>
+							<MinigameCard
+								title={item.title}
+								description={item.description}
+								image={cards[index]?.image || backgroundImage} // Usa la imagen del array cards o un valor por defecto
+								view={cards[index]?.view || "/"} // Usa el view del array cards o un valor por defecto
+							/>
 						</div>
 					))}
 				</div>
