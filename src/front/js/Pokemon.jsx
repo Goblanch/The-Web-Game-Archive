@@ -6,7 +6,7 @@ import PokemonHints from "./component/PokemonHints.jsx";
 import PokemonGameData from "./component/PokemonGameData.jsx";
 import SearchBar from "./component/SearchBar.jsx";
 import { createNewPlayedGame , addTotalPoints } from "../services/APIServices.js";
-
+import Swal from "sweetalert2";
 import WhosThatPokemonImg from "../../../public/whosthatpokemon.png";
 import minigamesData from "../../../public/minigames.json";
 
@@ -73,7 +73,11 @@ const Pokemon = () => {
             
         }else{
 
-            console.log("No estas logeado no puedes guardar tu partida");
+            return Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: `Debes logearte para poder guardar tus partidas`,
+                          });    
             
         }   
         
