@@ -5,6 +5,7 @@ import GameOverModal from "./component/GameOverModal.jsx";
 import PokemonHints from "./component/PokemonHints.jsx";
 import PokemonGameData from "./component/PokemonGameData.jsx";
 import SearchBar from "./component/SearchBar.jsx";
+import { createNewPlayedGame , addTotalPoints } from "../services/APIServices.js";
 
 import WhosThatPokemonImg from "../../../public/whosthatpokemon.png";
 import minigamesData from "../../../public/minigames.json";
@@ -51,6 +52,32 @@ const Pokemon = () => {
         setShowSilhouette(false);
         setGameOver(true);
         // TODO: añadir llamada a API de usuarios para insertar nueva fila de DB de partidas jugadas.
+        const isLogin = sessionStorage.getItem("token")
+        if(isLogin){
+
+            const pokeInfo = {
+                user_id: sessionStorage.getItem("id_user"),
+                minigame_id: 1,
+                game_data: "Informacion sobre la partida de Whos that Pokemon",
+                game_points: score,
+                record: streak,
+                mithril_per_second: null
+            } 
+
+            
+            createNewPlayedGame(pokeInfo)
+
+            addTotalPoints(score,sessionStorage.getItem("id_user"))
+
+            console.log("Se ha subido tu partida");
+            
+        }else{
+
+            console.log("No estas logeado no puedes guardar tu partida");
+            
+        }   
+        
+           
     };
 
     const handleRetry = () => {

@@ -4,6 +4,8 @@ import PokeballSprite from "../../../../public/pokeball.png"
 const PokemonGameData = ({ remainingLives, score, streak }) => {
     const pokeballs = [1, 2, 3, 4];
 
+    
+
     return (
         <div>
             <ul className="list-group">
