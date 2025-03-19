@@ -8,6 +8,7 @@ const LeaderBoardTable = ({ minigameId, userId }) => {
     useEffect(() => {
         const fetchLeaderBoard = async () => {
             try {
+                setLoading(true);
                 let data;
 
                 if (userId) {
@@ -39,7 +40,7 @@ const LeaderBoardTable = ({ minigameId, userId }) => {
         }
 
         fetchLeaderBoard();
-    }, [])
+    }, [minigameId])
 
     return (
         <div className="border rounded p-3" style={{ backgroundColor: "#001833" }}>
