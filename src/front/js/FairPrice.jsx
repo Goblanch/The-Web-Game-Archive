@@ -2,6 +2,8 @@ import React, { useEffect, useState, useContext } from "react";
 import { Context } from "./store/appContext";
 
 import MinigameRulesModal from "./component/MinigameRulesModal.jsx";
+import Swal from "sweetalert2";
+import { addTotalPoints } from "../services/APIServices.js";
 
 const FairPrice = () => {
 
@@ -57,6 +59,37 @@ const FairPrice = () => {
             getRandomProduct();
             setUserGuess("");
         }, 2000)
+
+        //Sumar Puntos a Total Points
+        const isLogin = sessionStorage.getItem("token")
+        
+        if(isLogin){
+
+            // const fairPrizeInfo = {
+            //     user_id: sessionStorage.getItem("id_user"),
+            //     minigame_id: 4,
+            //     game_data: "Informacion sobre la partida de Fair Prize",
+            //     game_points: score,
+            //     record: null,
+            //     mithril_per_second: null
+
+
+            // }
+            
+            // createNewPlayedGame(fairPrizeInfo)
+
+            addTotalPoints(roundScore,sessionStorage.getItem("id_user"))
+
+            console.log("Se ha subido tu partida");
+        }else{
+        
+            return Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: `Debes logearte para poder guardar tus partidas`,
+                          });    
+                    
+        }  
     }
 
     useEffect(() => {

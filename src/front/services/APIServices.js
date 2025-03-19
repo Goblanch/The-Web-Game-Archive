@@ -203,9 +203,10 @@ export const privateRoute = async () => {
 
         if(!response.ok){
 
-            
+            sessionStorage.removeItem("token")
 
             return false
+            
         }
 
     } catch (error){

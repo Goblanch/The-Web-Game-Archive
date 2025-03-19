@@ -4,6 +4,9 @@ import MithrilAutoclickerUpgrade from './component/MithrilAutoclickerUpgrade.jsx
 import MithrilOreButton from './component/MithrilOreButton.jsx';
 import MithtrilUpgradeList from './component/MithrilUpgradeList.jsx';
 import MithrilInventory from './component/MithrilInventory.jsx';
+import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import { createNewPlayedGame,addTotalPoints } from '../services/APIServices.js';
 
 // TODO: arreglar la imagen de los items comprados
 
@@ -12,6 +15,8 @@ const MithrilAutoclicker = () => {
     const [mithrilPerClick, setMithrilPerClick] = useState(1);
     const [autoClickers, setAutoClickers] = useState(0);
     const [purchasedUpgrades, setPurchasedUpgrades] = useState([]);
+
+    const navigate = useNavigate();
 
     const upgrades = [
         {
@@ -67,6 +72,44 @@ const MithrilAutoclicker = () => {
             upgrade.onUpgrade();
         }
     };
+
+    ///// Evento para salir del juego y guardar las Partidas Jugadas y Total Points
+    const handleGameOver = () => {
+
+         //Llamada a la API para guardar las partida y los Total Points
+        const isLogin = sessionStorage.getItem("token")
+
+        if(isLogin){
+
+            const mithrilClicker = {
+                user_id: sessionStorage.getItem("id_user"),
+                minigame_id: 2,
+                game_data: "Informacion sobre la partida de Mithril Clicker",
+                game_points: mithril,
+                record: null,
+                mithril_per_second: null
+
+
+            }
+            
+            createNewPlayedGame(mithrilClicker)
+
+            addTotalPoints(mithril,sessionStorage.getItem("id_user"))
+
+            console.log("Se ha subido tu partida");
+
+        }else{
+        
+            return Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: `Debes logearte para poder guardar tus partidas`,
+                          });    
+                    
+        }  
+
+        navigate("/") 
+    }
 
 
     useEffect(() => {
@@ -129,8 +172,9 @@ const MithrilAutoclicker = () => {
                         ))}
                     </MithtrilUpgradeList>
                 </div>
+                
             </div>
-
+            <button type="button" onClick={handleGameOver} class="btn btn-danger m-2">Guardar partida y cerrar</button>
         </div>
     );
 };
