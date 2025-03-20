@@ -83,7 +83,7 @@ const MithrilAutoclicker = () => {
 
             const mithrilClicker = {
                 user_id: sessionStorage.getItem("id_user"),
-                minigame_id: 2,
+                minigame_id: 4,
                 game_data: "Informacion sobre la partida de Mithril Clicker",
                 game_points: mithril,
                 record: null,

@@ -65,7 +65,7 @@ const HigherLower = () => {
     
                 const higherInfo = {
                     user_id: sessionStorage.getItem("id_user"),
-                    minigame_id: 1,
+                    minigame_id: 6,
                     game_data: "Informacion sobre la partida de Higher and Lower",
                     game_points: score,
                     record: null,
