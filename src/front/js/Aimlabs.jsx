@@ -81,7 +81,7 @@ const Aimlabs = () => {
 
             const aimLabsInfo = {
                 user_id: sessionStorage.getItem("id_user"),
-                minigame_id: 5,
+                minigame_id: 2,
                 game_data: "Informacion sobre la partida de Aim Labs",
                 game_points: score + 1,
                 record: null,

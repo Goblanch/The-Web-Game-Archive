@@ -79,7 +79,7 @@ const FairPrice = () => {
 
               const fairPrizeInfo = {
                 user_id: sessionStorage.getItem("id_user"),
-                minigame_id: 4,
+                minigame_id: 3,
                 game_data: "Informacion sobre la partida de Fair Prize",
                 game_points: score,
                 record: null,

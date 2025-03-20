@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import GameOverModal from "./component/GameOverModal.jsx";
 import MinigameRulesModal from "./component/MinigameRulesModal.jsx";
+import Swal from 'sweetalert2';
+import { createNewPlayedGame,addTotalPoints } from '../services/APIServices.js';
 
 const Potterdle = () => {
   const [targetWord, setTargetWord] = useState(''); // Palabra a adivinar
@@ -39,7 +41,51 @@ const Potterdle = () => {
     };
 
     fetchWord();
+
+
   }, []);
+
+  useEffect(()=>{
+
+    if(guesses.length == maxAttempts || guesses.includes(targetWord)){
+
+      savePlayedGame()
+      
+    }
+
+
+  },[guesses])
+
+  const savePlayedGame = () => {
+
+    //Llamada a la API para guardar las partida y los Total Points
+    const isLogin = sessionStorage.getItem("token")
+    if(isLogin){
+        const potterdleInfo = {
+            user_id: sessionStorage.getItem("id_user"),
+            minigame_id: 5,
+            game_data: "Informacion sobre la partida de Potterdle",
+            game_points: score ,
+            record: null,
+            mithril_per_second: null
+        }
+        
+        createNewPlayedGame(potterdleInfo)
+        addTotalPoints(score,sessionStorage.getItem("id_user"))
+        console.log("Se ha subido tu partida");
+
+    }else{
+    
+        return Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: `Debes logearte para poder guardar tus partidas`,
+                      });    
+                
+    }  
+
+
+  }
 
   // Manejar el cambio en los inputs de la palabra
   const handleInputChange = (e, index) => {
@@ -72,6 +118,7 @@ const Potterdle = () => {
 
   const handleGameOver = () => {
     setGameOver(true);
+
 
 }
 
