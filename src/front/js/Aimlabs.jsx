@@ -16,16 +16,21 @@ const Aimlabs = () => {
     const [gameTime, setGameTime] = useState(gameData.game_time);
     const [clickTime, setClickTime] = useState(gameData.click_time);
     const [score, setScore] = useState(0);
+    const [iconColor, setIconColor] = useState("text-warning");
 
     const clickTimer = useRef(null);
     const gameTimer = useRef(null);
 
     const generateRandomPosition = () => {
-        const buttonSizeVW = 10; // Button width in vw
-        const buttonSizeVH = 5;  // Button height in vh
+        const navbarHeightVH = 30;
+        const buttonSizeVW = 10;
+        const buttonSizeVH = 5;
 
-        const randomTop = Math.random() * (100 - buttonSizeVH);
-        const randomLeft = Math.random() * (100 - buttonSizeVW);
+        const maxTop = 100 - buttonSizeVH;
+        const minTop = navbarHeightVH;
+
+        const randomTop = Math.random() * (maxTop - minTop) + minTop;
+        const randomLeft = Math.random() * (100 - buttonSizeVH);
 
         return { top: randomTop, left: randomLeft };
     };
@@ -34,6 +39,11 @@ const Aimlabs = () => {
         const newPosition = generateRandomPosition();
         setPosition(newPosition);
         setScore((prev) => prev + gameData.points);
+
+        setIconColor("text-success");
+        setTimeout(() => {
+            setIconColor("text-warning");
+        }, 250);
 
         // Eliminar el foco del ratón manualmente.
         event.target.blur();
@@ -72,12 +82,12 @@ const Aimlabs = () => {
         if (clickTimer.current) clearTimeout(clickTimer.current);
         if (gameTimer.current) clearInterval(gameTimer.current);
 
-        
-        
+
+
         //Llamada a la API para guardar las partida y los Total Points
         const isLogin = sessionStorage.getItem("token")
 
-        if(isLogin){
+        if (isLogin) {
 
             const aimLabsInfo = {
                 user_id: sessionStorage.getItem("id_user"),
@@ -89,22 +99,22 @@ const Aimlabs = () => {
 
 
             }
-            
+
             createNewPlayedGame(aimLabsInfo)
 
-            addTotalPoints(score,sessionStorage.getItem("id_user"))
+            addTotalPoints(score, sessionStorage.getItem("id_user"))
 
             console.log("Se ha subido tu partida");
-        }else{
-        
+        } else {
+
             return Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: `Debes logearte para poder guardar tus partidas`,
-                          });    
-                    
-        }  
-        
+                icon: 'error',
+                title: 'Error',
+                text: `Debes logearte para poder guardar tus partidas`,
+            });
+
+        }
+
     };
 
     const handleRetry = () => {
@@ -132,8 +142,11 @@ const Aimlabs = () => {
     }, [gameStarted, clickTime]);
 
     return (
-        <div className="container-fluid bg-secondary vh-100 d-flex flex-column justify-content-start align-items-center">
-            <h1 className="text-warning fw-bold mb-4">Aimlabs</h1>
+        <div
+            style={{ backgroundColor: "rgb(10, 35, 70)" }}
+            className="container-fluid vh-100 d-flex flex-column justify-content-start align-items-center"
+        >
+            <h1 className="text-warning fw-bold mb-4 mt-3">Aimlabs</h1>
             <MinigameRulesModal gameName={"aimlabs"} onRulesClosed={handleStart} />
 
             <AimlabsGameData gameTime={gameTime} clickTime={clickTime} score={score} />
@@ -150,17 +163,17 @@ const Aimlabs = () => {
                             height: "5vw"
                         }}
                     >
-                        <button
-                            className="btn btn-warning"
-                            style={{ width: "100px", height: "50px" }}
+                        <div
+                            style={{ width: "50px", height: "50px" }}
                             onClick={handleButtonClick}
-                            tabIndex="-1" // Evitar navegación con tabulador
+                            tabIndex="-1"
                         >
-                            Click Me!
-                        </button>
+                            <i class={`fa-solid fa-crosshairs fs-1 ${iconColor}`}></i>
+                        </div>
                     </div>
                 </div>
-            )}
+            )
+            }
 
             {/* Modal de Game Over */}
             <GameOverModal
@@ -168,7 +181,7 @@ const Aimlabs = () => {
                 onRetry={handleRetry}
                 show={gameOver}
             />
-        </div>
+        </div >
     );
 };
 
