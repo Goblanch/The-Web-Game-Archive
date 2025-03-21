@@ -16,6 +16,7 @@ const Aimlabs = () => {
     const [gameTime, setGameTime] = useState(gameData.game_time);
     const [clickTime, setClickTime] = useState(gameData.click_time);
     const [score, setScore] = useState(0);
+    const [iconColor, setIconColor] = useState("text-warning");
 
     const clickTimer = useRef(null);
     const gameTimer = useRef(null);
@@ -38,6 +39,11 @@ const Aimlabs = () => {
         const newPosition = generateRandomPosition();
         setPosition(newPosition);
         setScore((prev) => prev + gameData.points);
+
+        setIconColor("text-success");
+        setTimeout(() => {
+            setIconColor("text-warning");
+        }, 250);
 
         // Eliminar el foco del ratón manualmente.
         event.target.blur();
@@ -136,8 +142,11 @@ const Aimlabs = () => {
     }, [gameStarted, clickTime]);
 
     return (
-        <div className="container-fluid bg-secondary vh-100 d-flex flex-column justify-content-start align-items-center">
-            <h1 className="text-warning fw-bold mb-4">Aimlabs</h1>
+        <div
+            style={{ backgroundColor: "rgb(10, 35, 70)" }}
+            className="container-fluid vh-100 d-flex flex-column justify-content-start align-items-center"
+        >
+            <h1 className="text-warning fw-bold mb-4 mt-3">Aimlabs</h1>
             <MinigameRulesModal gameName={"aimlabs"} onRulesClosed={handleStart} />
 
             <AimlabsGameData gameTime={gameTime} clickTime={clickTime} score={score} />
@@ -154,17 +163,17 @@ const Aimlabs = () => {
                             height: "5vw"
                         }}
                     >
-                        <button
-                            className="btn btn-warning"
-                            style={{ width: "100px", height: "50px" }}
+                        <div
+                            style={{ width: "50px", height: "50px" }}
                             onClick={handleButtonClick}
-                            tabIndex="-1" // Evitar navegación con tabulador
+                            tabIndex="-1"
                         >
-                            Click Me!
-                        </button>
+                            <i class={`fa-solid fa-crosshairs fs-1 ${iconColor}`}></i>
+                        </div>
                     </div>
                 </div>
-            )}
+            )
+            }
 
             {/* Modal de Game Over */}
             <GameOverModal
@@ -172,7 +181,7 @@ const Aimlabs = () => {
                 onRetry={handleRetry}
                 show={gameOver}
             />
-        </div>
+        </div >
     );
 };
 
