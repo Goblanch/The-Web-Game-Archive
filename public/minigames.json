@@ -14,10 +14,10 @@
     {
         "name": "aimlabs",
         "rules": [
-            "Click on the button to raise points",
-            "Each time you click on the button, it changes it's position",
-            "You have limited time to raise as much points as you can",
-            "You have limited time to click on the button"
+            "Haz click en el botón para obtener puntos",
+            "Cada vez que haces click en el botón, cambia de posición",
+            "Tienes tiempo limitado para obtener el máximo de puntos",
+            "Tienes tiempo limitado para hacer click en el botón"
         ],
         "points": 1,
         "game_time": 10,
