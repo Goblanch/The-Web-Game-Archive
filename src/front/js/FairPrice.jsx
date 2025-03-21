@@ -2,6 +2,11 @@ import React, { useEffect, useState, useContext } from "react";
 import { Context } from "./store/appContext";
 
 import MinigameRulesModal from "./component/MinigameRulesModal.jsx";
+import Swal from "sweetalert2";
+import { addTotalPoints , createNewPlayedGame } from "../services/APIServices.js";
+import { useNavigate } from "react-router-dom";
+
+
 
 const FairPrice = () => {
 
@@ -12,6 +17,8 @@ const FairPrice = () => {
     const [userGuess, setUserGuess] = useState("");
     const [score, setScore] = useState(0);
     const [message, setMessage] = useState("");
+
+    const navigate = useNavigate()
 
     const getRandomProduct = () => {
         const products = store.fakeStoreProducts;
@@ -57,6 +64,47 @@ const FairPrice = () => {
             getRandomProduct();
             setUserGuess("");
         }, 2000)
+
+        
+    }
+
+    ///// Evento para salir del juego y guardar las Partidas Jugadas y Total Points
+    const handleGameOver = () => {
+
+        
+         //Llamada a la API para guardar las partida y los Total Points
+        const isLogin = sessionStorage.getItem("token")
+
+        if(isLogin){
+
+              const fairPrizeInfo = {
+                user_id: sessionStorage.getItem("id_user"),
+                minigame_id: 3,
+                game_data: "Informacion sobre la partida de Fair Prize",
+                game_points: score,
+                record: null,
+                mithril_per_second: null
+
+            }
+            
+            createNewPlayedGame(fairPrizeInfo)
+
+            addTotalPoints(score,sessionStorage.getItem("id_user"))
+
+
+            console.log("Se ha subido tu partida");
+
+        }else{
+        
+            return Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: `Debes logearte para poder guardar tus partidas`,
+                          });    
+                    
+        }  
+
+        navigate("/") 
     }
 
     useEffect(() => {
@@ -110,6 +158,7 @@ const FairPrice = () => {
                     <p className="text fw-bold">Your score: {score}</p>
                 </div>
             )}
+            <button type="button" onClick={handleGameOver} class="btn btn-danger m-2">Guardar partida y cerrar</button>
         </div>
     );
 }

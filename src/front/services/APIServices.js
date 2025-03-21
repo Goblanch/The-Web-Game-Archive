@@ -203,7 +203,10 @@ export const privateRoute = async () => {
 
         if(!response.ok){
 
+            sessionStorage.removeItem("token")
+
             return false
+            
         }
 
     } catch (error){
@@ -311,14 +314,16 @@ export const addTotalPoints = async (sumTotalPoints,id_user) => {
 
         const response = await fetch( urlApi + `user/totalpoints/${id_user}`,{
 
-            method: "POST",
+            method: "PUT",
             body: JSON.stringify({
 
                 "total_points": sumTotalPoints
 
-            })
+            }),
+            headers: {"Content-Type": "application/json"}
 
         })
+
 
         if(response.ok){
 

@@ -26,6 +26,7 @@ const Users = () => {
 
     })
     const [error, setError] = useState()
+    const [userScore, setUserScore] = useState(0);
 
     const navigate = useNavigate()
 
@@ -81,6 +82,7 @@ const Users = () => {
                 const id = sessionStorage.getItem("id_user")
 
                 const info = await getInfoUser(id)
+                setUserScore(info.total_points);
 
                 console.log("Esta es la prueba");
                 console.log(info);
@@ -241,7 +243,7 @@ const Users = () => {
 
 
                                     <div className="col-md-6 d-flex flex-column align-items-center justify-content-center ">
-
+                                        <h2>Puntos ganados: {userScore}</h2>
                                         <Cloudinary />
 
 
