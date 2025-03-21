@@ -24,9 +24,9 @@ export const Navbar = () => {
 		if (!auth) {
 
 			return Swal.fire({
-				icon: 'error',
-				title: 'Error',
-				text: `Tu sesion de Login a espirado debes vovler a hacer Login para guarda partidas`
+				icon: 'warning',
+				title: 'Warning',
+				text: `Tu sesion de Login a espirado debes volver a hacer Login para guardar partidas`
 										 
 			})
 		   
