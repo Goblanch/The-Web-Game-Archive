@@ -14,14 +14,14 @@
     {
         "name": "aimlabs",
         "rules": [
-            "Click on the button to raise points",
-            "Each time you click on the button, it changes it's position",
-            "You have limited time to raise as much points as you can",
-            "You have limited time to click on the button"
+            "Haz click en el botón para obtener puntos",
+            "Cada vez que haces click en el botón, cambia de posición",
+            "Tienes tiempo limitado para obtener el máximo de puntos",
+            "Tienes tiempo limitado para hacer click en el botón"
         ],
         "points": 1,
         "game_time": 10,
-        "click_time": 2
+        "click_time": 1
     },
     {
         "name": "Cookie Clicker Clone",
@@ -31,11 +31,11 @@
             "Unlock upgrades with your points to earn more per click.",
             "Compete with friends for the highest score."
         ]
-    }, 
+    },
     {
         "name": "fair-price",
         "rules": [
-            "You will be shown a random product", 
+            "You will be shown a random product",
             "You must guess how much does it cost",
             "Depending on how close you stay, you will get more points."
         ]
@@ -43,9 +43,9 @@
     {
         "name": "higherlower",
         "rules": [
-            "You will be shown two random movies",
-            "You must decide if the movie on the left has more vote average than the right one",
-            "If you fail it's Game Over!"
+            "Se van a mostrar dos películas",
+            "Debes seleccionar si la derecha tiene más o menos votos",
+            "En el momento que falles, la partida acaba"
         ]
     }
 ]

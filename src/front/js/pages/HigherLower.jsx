@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import MinigameRulesModal from "../component/MinigameRulesModal.jsx"
 import GameOverModal from "../component/GameOverModal.jsx"
 import Swal from "sweetalert2";
-import { createNewPlayedGame,addTotalPoints } from "../../services/APIServices.js";
+import { createNewPlayedGame, addTotalPoints } from "../../services/APIServices.js";
 
 const HigherLower = () => {
     const [currentMovie, setCurrentMovie] = useState(null);
@@ -44,7 +44,7 @@ const HigherLower = () => {
     }
 
     const handleGuess = (guessHigher) => {
-        const higher = nextMovie.vote_average > currentMovie.vote_average;
+        const higher = nextMovie.vote_average >= currentMovie.vote_average;
         if (guessHigher === higher) {
             setScore(score + 1);
             setIsCorrect(true);
@@ -59,10 +59,10 @@ const HigherLower = () => {
             setIsCorrect(false);
             setGameOver(true);
 
-             // TODO: añadir llamada a API de usuarios para insertar nueva fila de DB de partidas jugadas.
+            // TODO: añadir llamada a API de usuarios para insertar nueva fila de DB de partidas jugadas.
             const isLogin = sessionStorage.getItem("token")
-            if(isLogin){
-    
+            if (isLogin) {
+
                 const higherInfo = {
                     user_id: sessionStorage.getItem("id_user"),
                     minigame_id: 6,
@@ -70,17 +70,17 @@ const HigherLower = () => {
                     game_points: score,
                     record: null,
                     mithril_per_second: null
-                } 
-    
-                
+                }
+
+
                 createNewPlayedGame(higherInfo)
-    
-                addTotalPoints(score,sessionStorage.getItem("id_user"))
-    
+
+                addTotalPoints(score, sessionStorage.getItem("id_user"))
+
                 console.log("Se ha subido tu partida");
-                
-            }else{
-    
+
+            } else {
+
                 return Swal.fire({
                                 icon: 'warning',
                                 title: 'Warning',
