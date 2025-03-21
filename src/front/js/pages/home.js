@@ -4,32 +4,40 @@ import logo from "../../img/logo.png";
 import "../../styles/index.css";
 import backgroundImage from '../../img/fondo5.jpg'
 import pokemonImg from "../../../../public/pokeball.png"
+import pokemonImage from "../../img/pokemonImage.png"
+import aimLabsImage from "../../img/aimLabsImage.jpg"
+import fairPrizeImage from "../../img/fairPrizeImage.webp"
+import mithrilClickerImage from "../../img/mithrilClickerImage.webp"
+import potterdleImage from "../../img/potterdleImage.webp"
+import higherLowerImage from "../../img/higherLowerImage.png"
+
+
 import MinigameCard from "./MinigameCard.jsx";
 import { getMinigameById } from "../../services/APIServices.js";
 
 const cards = [
 	{
-		image: backgroundImage,
+		image: pokemonImage,
 		view: "Pokemon"
 	},
 	{
-		image: pokemonImg,
+		image: aimLabsImage,
 		view: "Aimlabs"
 	},
 	{
-		image: backgroundImage,
+		image: fairPrizeImage,
 		view: "FairPrice"
 	},
 	{
-		image: pokemonImg,
+		image: mithrilClickerImage,
 		view: "MithrilClicker"
 	},
 	{
-		image: backgroundImage,
+		image: potterdleImage,
 		view: "Potterdle"
 	},
 	{
-		image: backgroundImage,
+		image: higherLowerImage,
 		view: "HigherLower"
 	}
 ];
