@@ -82,12 +82,12 @@ const HigherLower = () => {
             } else {
 
                 return Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: `Debes logearte para poder guardar tus partidas`,
-                });
-
-            }
+                                icon: 'warning',
+                                title: 'Warning',
+                                text: `Debes logearte para poder guardar tus partidas`,
+                              });    
+                
+            }  
         }
         animateRating(nextMovie.vote_average);
     }
