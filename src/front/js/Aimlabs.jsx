@@ -21,11 +21,15 @@ const Aimlabs = () => {
     const gameTimer = useRef(null);
 
     const generateRandomPosition = () => {
-        const buttonSizeVW = 10; // Button width in vw
-        const buttonSizeVH = 5;  // Button height in vh
+        const navbarHeightVH = 30;
+        const buttonSizeVW = 10;
+        const buttonSizeVH = 5;
 
-        const randomTop = Math.random() * (100 - buttonSizeVH);
-        const randomLeft = Math.random() * (100 - buttonSizeVW);
+        const maxTop = 100 - buttonSizeVH;
+        const minTop = navbarHeightVH;
+
+        const randomTop = Math.random() * (maxTop - minTop) + minTop;
+        const randomLeft = Math.random() * (100 - buttonSizeVH);
 
         return { top: randomTop, left: randomLeft };
     };
@@ -72,12 +76,12 @@ const Aimlabs = () => {
         if (clickTimer.current) clearTimeout(clickTimer.current);
         if (gameTimer.current) clearInterval(gameTimer.current);
 
-        
-        
+
+
         //Llamada a la API para guardar las partida y los Total Points
         const isLogin = sessionStorage.getItem("token")
 
-        if(isLogin){
+        if (isLogin) {
 
             const aimLabsInfo = {
                 user_id: sessionStorage.getItem("id_user"),
@@ -89,22 +93,22 @@ const Aimlabs = () => {
 
 
             }
-            
+
             createNewPlayedGame(aimLabsInfo)
 
-            addTotalPoints(score,sessionStorage.getItem("id_user"))
+            addTotalPoints(score, sessionStorage.getItem("id_user"))
 
             console.log("Se ha subido tu partida");
-        }else{
-        
+        } else {
+
             return Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: `Debes logearte para poder guardar tus partidas`,
-                          });    
-                    
-        }  
-        
+                icon: 'error',
+                title: 'Error',
+                text: `Debes logearte para poder guardar tus partidas`,
+            });
+
+        }
+
     };
 
     const handleRetry = () => {
