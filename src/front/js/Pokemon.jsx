@@ -74,8 +74,8 @@ const Pokemon = () => {
         }else{
 
             return Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
+                            icon: 'warning',
+                            title: 'Warning',
                             text: `Debes logearte para poder guardar tus partidas`,
                           });    
             
