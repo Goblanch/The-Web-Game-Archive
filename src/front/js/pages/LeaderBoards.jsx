@@ -4,7 +4,7 @@ import backgroundImage from '../../img/fondo5.jpg'
 import { useState } from "react";
 import { useEffect } from "react";
 import LeaderBoardTable from "../component/LeaderBoardTable.jsx";
-import { FooterFix } from "../component/footerFix.js";
+import { Footer } from "../component/footer.js";
 
 const LeaderBoards = () => {
     const [filtro, setFiltro] = useState(null);
@@ -12,7 +12,7 @@ const LeaderBoards = () => {
 
     return (
         <>
-            <div className="home-background" style={{ backgroundImage: `url(${backgroundImage})` }}>
+            <div className="home-background vh-100" style={{ backgroundImage: `url(${backgroundImage})` }}>
                 <div className="container mt-0">
                     <h1 className="text-center text-white">Leaderboards</h1>
                     <div className="d-flex m-3">
@@ -42,7 +42,7 @@ const LeaderBoards = () => {
                     )}
                 </div>
             </div>
-            <FooterFix/>
+            <Footer/>
         </>
     );
 }

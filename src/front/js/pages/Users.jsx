@@ -196,7 +196,7 @@ const Users = () => {
 
 
 
-                    <div className="home-background" style={{ backgroundImage: `url(${backgroundImage})`, height: "1100px" }}>
+                    <div className="home-background vh-100" style={{ backgroundImage: `url(${backgroundImage})`}}>
                         <div className="container text-white">
                             {error && (
                                 <div className="bg bg-danger border rounded mb-4 p-3">
