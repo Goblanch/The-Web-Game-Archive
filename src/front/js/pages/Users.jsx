@@ -6,7 +6,7 @@ import profilePic from "../../img/rigo-baby.jpg"
 import backgroundImage from '../../img/fondo5.jpg'
 import '../../styles/index.css';
 import { privateRoute } from "../../services/APIServices";
-import { editUser, deleteUser } from "../../services/APIServices";
+import { editUser, deleteUser , deleteAllPlayedGames } from "../../services/APIServices";
 import Swal from 'sweetalert2';
 import Cloudinary from "../component/Cloudinary.jsx";
 import { getInfoUser } from "../../services/APIServices";
@@ -142,6 +142,9 @@ const Users = () => {
             if (result.isConfirmed) {
                 // Llamar a la función deleteUser y redirigir
                 deleteUser();
+                deleteAllPlayedGames();
+                sessionStorage.removeItem("token")
+			    sessionStorage.removeItem("id_user")
                 Swal.fire('Usuario eliminado', 'Tu cuenta ha sido eliminada con éxito', 'success');
                 navigate("/user-login");  // Redirigir al login
             } else {

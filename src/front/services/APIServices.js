@@ -308,6 +308,42 @@ export const deleteUser = async () => {
 }
 
 
+///////////////-----Funcion para borrar todos los played_games de un usuario---------/////////////////
+export const deleteAllPlayedGames = async () => {
+
+    try {
+
+        const id_user = sessionStorage.getItem("id_user")
+     
+        const response = await fetch( urlApi + `played_games/delete_all/${id_user}` ,{
+
+            method: "DELETE",
+            headers: {"Content-Type": "application/json"}
+
+
+
+        })
+
+        if(response.ok){
+
+            return Swal.fire({
+                icon: 'success',
+                title: 'Información',
+                text: `${data["msg"]}`,
+              });      
+
+        }
+
+        window.location.reload()
+
+    } catch (error) {
+        
+        console.log(error , "No se ha podido borrar las partidas guardadas");
+    }
+    
+}
+
+
 export const addTotalPoints = async (sumTotalPoints,id_user) => {
 
     try{
@@ -483,3 +519,5 @@ export const getMinigameById = async (id_minigame) => {
     }
   
 } 
+
+

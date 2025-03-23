@@ -649,6 +649,30 @@ def delete_played_games(id_played_gam):
 
         return jsonify({'msg': f"Fallo al borrar played_games en la Base de datos : {str(e)}"}), 500
     
+
+@api.route("/played_games/delete_all/<int:id_us>" , methods = ['DELETE'])
+def delete_all_played_games(id_us):
+
+    all_played_game_by_user = Played_games.query.filter_by(user_id = id_us).all()
+
+    if not all_played_game_by_user :
+
+        return({"msg" : "EL User no ha jugado a ningun juego"}), 400
+    
+    try:
+
+        for game in all_played_game_by_user:
+            db.session.delete(game)
+        db.session.commit()
+        return jsonify({"msg":"Se eliminaron todas las partidas del jugador"}), 200
+
+
+    except Exception as e:
+
+        db.session.rollback()
+
+        return jsonify({'msg': f"Fallo al borrar played_games en la Base de datos : {str(e)}"}), 500
+    
 ############### TESTED ################
 @api.route('/played_games/last_games/<int:id_us>', methods=['GET'])
 def get_last_games(id_us):
