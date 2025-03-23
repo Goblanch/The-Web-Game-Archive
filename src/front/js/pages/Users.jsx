@@ -11,7 +11,7 @@ import Swal from 'sweetalert2';
 import Cloudinary from "../component/Cloudinary.jsx";
 import { getInfoUser } from "../../services/APIServices";
 import LeaderBoardTable from "../component/LeaderBoardTable.jsx";
-import { FooterFix } from "../component/footerFix.js";
+import { Footer } from "../component/footer.js";
 
 
 const Users = () => {
@@ -196,7 +196,7 @@ const Users = () => {
 
 
 
-                    <div className="home-background" style={{ backgroundImage: `url(${backgroundImage})` }}>
+                    <div className="home-background" style={{ backgroundImage: `url(${backgroundImage})`, height: "1100px" }}>
                         <div className="container text-white">
                             {error && (
                                 <div className="bg bg-danger border rounded mb-4 p-3">
@@ -258,7 +258,7 @@ const Users = () => {
             }
 
 
-            <FooterFix/>
+            <Footer/>
         </>
 
 
