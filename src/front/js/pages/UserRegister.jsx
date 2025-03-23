@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createNewUser } from "../../services/APIServices";
+import { FooterFix } from "../component/footerFix";
 
 const UserRegister = () => {
 
@@ -46,6 +47,7 @@ const UserRegister = () => {
     }
 
     return (
+        <>
         <div className="container">
             <h1 className="mt-3 mb-5 text text-center">Create an Account</h1>
 
@@ -136,6 +138,8 @@ const UserRegister = () => {
             </div>
 
         </div>
+        <FooterFix/>
+        </>
     )
 }
 

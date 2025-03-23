@@ -11,6 +11,7 @@ import Swal from 'sweetalert2';
 import Cloudinary from "../component/Cloudinary.jsx";
 import { getInfoUser } from "../../services/APIServices";
 import LeaderBoardTable from "../component/LeaderBoardTable.jsx";
+import { FooterFix } from "../component/footerFix.js";
 
 
 const Users = () => {
@@ -254,11 +255,10 @@ const Users = () => {
                         </div>
                     </div>
 
-
-
             }
 
 
+            <FooterFix/>
         </>
 
 
