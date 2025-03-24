@@ -82,12 +82,12 @@ const HigherLower = () => {
             } else {
 
                 return Swal.fire({
-                                icon: 'warning',
-                                title: 'Warning',
-                                text: `Debes logearte para poder guardar tus partidas`,
-                              });    
-                
-            }  
+                    icon: 'warning',
+                    title: 'Warning',
+                    text: `Debes logearte para poder guardar tus partidas`,
+                });
+
+            }
         }
         animateRating(nextMovie.vote_average);
     }
@@ -124,7 +124,7 @@ const HigherLower = () => {
             }}
         >
             <MinigameRulesModal gameName={"higherlower"} />
-            <GameOverModal score={score} onRetry={startGame} show={gameOver} />
+            <GameOverModal score={score} onRetry={startGame} show={gameOver} minigameId={6} />
             {/* Panel de la película actual */}
             <div
                 className="col-6 d-flex align-items-center justify-content-center"

@@ -253,6 +253,7 @@ const Potterdle = () => {
             score={score}
             onRetry={resetGame}
             show={handleGameOver}
+            minigameId={5}
           />
         </div>
       )}
