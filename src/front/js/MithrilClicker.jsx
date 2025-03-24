@@ -6,7 +6,7 @@ import MithtrilUpgradeList from './component/MithrilUpgradeList.jsx';
 import MithrilInventory from './component/MithrilInventory.jsx';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { createNewPlayedGame,addTotalPoints } from '../services/APIServices.js';
+import { createNewPlayedGame, addTotalPoints } from '../services/APIServices.js';
 
 // TODO: arreglar la imagen de los items comprados
 
@@ -20,32 +20,37 @@ const MithrilAutoclicker = () => {
 
     const upgrades = [
         {
-            name: "Mithril Pickaxe",
-            description: "A pickaxe forged from mithril, increasing mithril per click by 2.",
+            name: "Pico de Mithril",
+            description: "Un pico hecho de mithril que incrementa en dos el mithril por click",
+            image: "https://img.itch.zone/aW1nLzE2ODk4NzkwLnBuZw==/original/5ychhB.png",
             cost: 10,
             onUpgrade: () => setMithrilPerClick((prev) => prev + 2),
         },
         {
-            name: "Mithril Forge",
-            description: "Automates mithril extraction, generating 5 mithril per second.",
+            name: "Forja de Mithril",
+            description: "Automatiza la extracción de Mithril generando 5 por segundo",
+            image: "https://openclipart.org/image/800px/312049",
             cost: 50,
             onUpgrade: () => setAutoClickers((prev) => prev + 5),
         },
         {
-            name: "Mithril Armor",
-            description: "Enhances mining efficiency, increasing mithril per click by 5.",
+            name: "Armadura de Mithril",
+            description: "Mejora el poder de minado, aumentando el mithril por click en 5",
+            image: "https://media.forgecdn.net/avatars/thumbnails/1190/233/256/256/638765064476214813.png",
             cost: 100,
             onUpgrade: () => setMithrilPerClick((prev) => prev + 5),
         },
         {
-            name: "Mithril Vein Detector",
-            description: "Detect hidden mithril veins, doubling mithril per second.",
+            name: "Detector de Menas de Mithril",
+            description: "Detecta menas escondidas, doblando el mithril por segundo",
+            image: "https://img.freepik.com/premium-vector/pixel-art-illustration-magical-staff-pixelated-magic-staff-wizard-witch-magical-staff-icon_1038602-589.jpg",
             cost: 200,
             onUpgrade: () => setAutoClickers((prev) => prev * 2),
         },
         {
-            name: "Elven Blessing",
-            description: "Blessings of the Elves increase mithril per click by 10.",
+            name: "Bendición Élfica",
+            description: "La bendición de los elfos te otorga 10 más de mithril por click",
+            image: "https://i.pinimg.com/originals/54/30/2e/54302e85f4d21d6a69c73bd3b456ad83.gif",
             cost: 1000,
             onUpgrade: () => setMithrilPerClick((prev) => prev + 10),
         },
@@ -76,10 +81,10 @@ const MithrilAutoclicker = () => {
     ///// Evento para salir del juego y guardar las Partidas Jugadas y Total Points
     const handleGameOver = () => {
 
-         //Llamada a la API para guardar las partida y los Total Points
+        //Llamada a la API para guardar las partida y los Total Points
         const isLogin = sessionStorage.getItem("token")
 
-        if(isLogin){
+        if (isLogin) {
 
             const mithrilClicker = {
                 user_id: sessionStorage.getItem("id_user"),
@@ -91,24 +96,24 @@ const MithrilAutoclicker = () => {
 
 
             }
-            
+
             createNewPlayedGame(mithrilClicker)
 
-            addTotalPoints(mithril,sessionStorage.getItem("id_user"))
+            addTotalPoints(mithril, sessionStorage.getItem("id_user"))
 
             console.log("Se ha subido tu partida");
 
-        }else{
-        
-            return Swal.fire({
-                    icon: 'warning',
-                    title: 'Warning',
-                    text: `Debes logearte para poder guardar tus partidas`,
-                          });    
-                    
-        }  
+        } else {
 
-        navigate("/") 
+            return Swal.fire({
+                icon: 'warning',
+                title: 'Warning',
+                text: `Debes logearte para poder guardar tus partidas`,
+            });
+
+        }
+
+        navigate("/")
     }
 
 
@@ -172,7 +177,7 @@ const MithrilAutoclicker = () => {
                         ))}
                     </MithtrilUpgradeList>
                 </div>
-                
+
             </div>
             <button type="button" onClick={handleGameOver} class="btn btn-danger m-2">Guardar partida y cerrar</button>
         </div>
