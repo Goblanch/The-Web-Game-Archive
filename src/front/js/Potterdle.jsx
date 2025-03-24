@@ -45,6 +45,8 @@ const Potterdle = () => {
 
   }, []);
 
+  console.log(targetWord);
+
   useEffect(() => {
 
     if (guesses.length == maxAttempts || guesses.includes(targetWord)) {
@@ -133,10 +135,35 @@ const Potterdle = () => {
   };
 
   // Obtener el color de las letras en los intentos
-  const getLetterColor = (letter, index) => {
-    if (targetWord[index] === letter) return 'bg-success text-white';
-    if (targetWord.includes(letter)) return 'bg-warning text-dark';
-    return 'bg-secondary text-white';
+  const getLetterColor = (letter, index, guess, targetWord) => {
+
+    const targetLetterCount = {}; // Objeto para contar cuantas veces aparece cada letra en la palabra a adivinar
+    const guessLetterCount = {}; // Objeto para contar las letras verdes que servira para asegurarse de no contar mas al momento de asignar letras amarillas
+
+    for (let i = 0; i < targetWord.length; i++) {   // Contar la frecuencia de cada letra en la palabra a adivinar
+      targetLetterCount[targetWord[i]] = (targetLetterCount[targetWord[i]] || 0) + 1;
+    }
+
+    // Identificar letras que están bien colocadas (verde)
+    const greenIndices = new Array(targetWord.length).fill(false); // Array de longitud de la palabra a adivinar que marcara a true cuando la posicion de la letra coincide exactamente (verde)
+    for (let i = 0; i < guess.length; i++) {
+      if (guess[i] === targetWord[i]) {
+        greenIndices[i] = true;
+        guessLetterCount[guess[i]] = (guessLetterCount[guess[i]] || 0) + 1;
+      }
+    }
+
+    // Determinar el color de cada letra
+    if (greenIndices[index]) {
+      return 'bg-success text-white'; // Verde si se acierta la posición
+    } else if (targetWord.includes(letter)) { // Si no es verde revisa si la letra existe en la palabra a adivinar
+      const guessedSoFar = guessLetterCount[letter] || 0;
+      if (guessedSoFar < (targetLetterCount[letter] || 0)) { // Compara cuantas veces se ha mostrado la letra (verde + amarillo) con cuantas veces existe en la palabra a adivinar (targetLetterCount)
+        guessLetterCount[letter] = guessedSoFar + 1;
+        return 'bg-warning text-dark'; // Amarillo si está en la palabra pero en otra posición
+      }
+    }
+    return 'bg-secondary text-white'; // Gris si no está en la palabra
   };
 
   // Obtener el color de las teclas del teclado virtual
@@ -179,7 +206,7 @@ const Potterdle = () => {
           {guesses.map((guess, i) => (
             <div key={i} className="d-flex mb-2">
               {guess.split('').map((letter, j) => (
-                <div key={j} className={`d-flex align-items-center justify-content-center border border-light me-1 ${getLetterColor(letter, j)}`} style={{ width: '50px', height: '50px', fontSize: '1.5rem', fontWeight: 'bold' }}>
+                <div key={j} className={`d-flex align-items-center justify-content-center border border-light me-1 ${getLetterColor(letter, j, guess, targetWord)}`} style={{ width: '50px', height: '50px', fontSize: '1.5rem', fontWeight: 'bold' }}>
                   {letter}
                 </div>
               ))}
