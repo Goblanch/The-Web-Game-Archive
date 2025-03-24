@@ -5,7 +5,7 @@ import GameOverModal from "./component/GameOverModal.jsx";
 import PokemonHints from "./component/PokemonHints.jsx";
 import PokemonGameData from "./component/PokemonGameData.jsx";
 import SearchBar from "./component/SearchBar.jsx";
-import { createNewPlayedGame , addTotalPoints } from "../services/APIServices.js";
+import { createNewPlayedGame, addTotalPoints } from "../services/APIServices.js";
 import Swal from "sweetalert2";
 import WhosThatPokemonImg from "../../../public/whosthatpokemon.png";
 import minigamesData from "../../../public/minigames.json";
@@ -53,7 +53,7 @@ const Pokemon = () => {
         setGameOver(true);
         // TODO: añadir llamada a API de usuarios para insertar nueva fila de DB de partidas jugadas.
         const isLogin = sessionStorage.getItem("token")
-        if(isLogin){
+        if (isLogin) {
 
             const pokeInfo = {
                 user_id: sessionStorage.getItem("id_user"),
@@ -62,26 +62,26 @@ const Pokemon = () => {
                 game_points: score,
                 record: streak,
                 mithril_per_second: null
-            } 
+            }
 
-            
+
             createNewPlayedGame(pokeInfo)
 
-            addTotalPoints(score,sessionStorage.getItem("id_user"))
+            addTotalPoints(score, sessionStorage.getItem("id_user"))
 
             console.log("Se ha subido tu partida");
-            
-        }else{
+
+        } else {
 
             return Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: `Debes logearte para poder guardar tus partidas`,
-                          });    
-            
-        }   
-        
-           
+                icon: 'warning',
+                title: 'Warning',
+                text: `Debes logearte para poder guardar tus partidas`,
+            });
+
+        }
+
+
     };
 
     const handleRetry = () => {
@@ -109,7 +109,7 @@ const Pokemon = () => {
     return (
         <div className="container mt-4">
             <MinigameRulesModal gameName={"pokemon"} />
-            <GameOverModal score={score} onRetry={handleRetry} show={gameOver} />
+            <GameOverModal score={score} onRetry={handleRetry} show={gameOver} minigameId={1} />
 
             <div className="row">
                 <div className="col-lg-3 order-2 order-lg-1 mt-3 mt-lg-0">

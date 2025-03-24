@@ -23,12 +23,24 @@ export const Navbar = () => {
 
 		if (!auth) {
 
-			return Swal.fire({
-				icon: 'error',
-				title: 'Error',
-				text: `Tu sesion de Login a espirado debes vovler a hacer Login para guarda partidas`
-										 
-			})
+			 // Mostrar un SweetAlert2 de confirmación sin campo de texto
+				return	Swal.fire({
+						title: 'Debes Logearte para poder guardar tus partidas',
+						text: 'Puedes seguir jugando sin guardar o pulsar el boton Login',
+						icon: 'warning',
+						showCancelButton: true,
+						confirmButtonText: 'Login',
+						cancelButtonText: 'Seguir sin registrarse',
+						reverseButtons: true  // Cambiar el orden de los botones
+					}).then((result) => {
+						if (result.isConfirmed) {
+							
+							navigate("/user-login");  // Redirigir al login
+						} else {
+							// Si el usuario cancela la acción
+							Swal.fire('Bienvenido', 'Seguiras jugando sin guardar', 'info');
+						}
+					});
 		   
 		}
 

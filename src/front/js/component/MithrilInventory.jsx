@@ -10,15 +10,20 @@ const MithrilInventory = ({ items }) => {
     }, {});
 
     const groupedItems = Object.entries(itemCounts).reduce((acc, [name, count]) => {
-        if (count >= 4) {
-            acc.push({ name, count });
-        } else {
-            for (let i = 0; i < count; i++) {
-                acc.push({ name, count: 1 });
+        const item = items.find((i) => i.name === name); 
+
+        if (item) {
+            if (count >= 4) {
+                acc.push({ name, count, image: item.image });
+            } else {
+                for (let i = 0; i < count; i++) {
+                    acc.push({ name, count: 1, image: item.image });
+                }
             }
         }
+
         return acc;
-    }, [])
+    }, []);
 
     return (
         <div className="flex-1 bg-light p-4 rounded shadow">
@@ -26,7 +31,7 @@ const MithrilInventory = ({ items }) => {
             <div className="row g-2">
                 {groupedItems.map((item, index) => (
                     <div className="col-3" key={index}>
-                        <MithrilUpgradeItem item={item} count={item.count} />
+                        <MithrilUpgradeItem item={item} count={item.count} image={item.image} />
                     </div>
                 ))}
             </div>
