@@ -141,12 +141,10 @@ const Users = () => {
         }).then((result) => {
             if (result.isConfirmed) {
                 // Llamar a la función deleteUser y redirigir
-                deleteUser();
                 deleteAllPlayedGames();
-                sessionStorage.removeItem("token")
-			    sessionStorage.removeItem("id_user")
+                deleteUser(navigate);
                 Swal.fire('Usuario eliminado', 'Tu cuenta ha sido eliminada con éxito', 'success');
-                navigate("/user-login");  // Redirigir al login
+                 
             } else {
                 // Si el usuario cancela la acción
                 Swal.fire('Cancelado', 'No se ha borrado el usuario', 'info');

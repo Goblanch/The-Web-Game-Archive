@@ -165,8 +165,6 @@ export const logIn = async (infoUser,navigate) => {
 
         window.location.reload();
 
-
-
     } catch (error){
 
         
@@ -274,7 +272,7 @@ export const editUser = async (infoUser) => {
 }
 
 //////////////////------TESTED--------/////////////////
-export const deleteUser = async () => {
+export const deleteUser = async (navigate) => {
 
     try{
 
@@ -289,6 +287,13 @@ export const deleteUser = async () => {
         }) 
 
         if(response.ok){
+
+            sessionStorage.removeItem("token")
+			sessionStorage.removeItem("id_user")
+
+            navigate("/user-login"); 
+
+            window.location.reload()
 
             return Swal.fire({
                 icon: 'success',
