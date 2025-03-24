@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import GameOverModal from "./component/GameOverModal.jsx";
 import MinigameRulesModal from "./component/MinigameRulesModal.jsx";
 import Swal from 'sweetalert2';
-import { createNewPlayedGame,addTotalPoints } from '../services/APIServices.js';
+import { createNewPlayedGame, addTotalPoints } from '../services/APIServices.js';
 
 const Potterdle = () => {
   const [targetWord, setTargetWord] = useState(''); // Palabra a adivinar
@@ -19,7 +19,7 @@ const Potterdle = () => {
     'ASDFGHJKL'.split(''),
     'ZXCVBNM'.split('')
   ];
-  
+
   // Reinicia el juego
   const resetGame = () => {
     setGameOver(false);
@@ -45,44 +45,46 @@ const Potterdle = () => {
 
   }, []);
 
-  useEffect(()=>{
+  console.log(targetWord);
 
-    if(guesses.length == maxAttempts || guesses.includes(targetWord)){
+  useEffect(() => {
+
+    if (guesses.length == maxAttempts || guesses.includes(targetWord)) {
 
       savePlayedGame()
-      
+
     }
 
 
-  },[guesses])
+  }, [guesses])
 
   const savePlayedGame = () => {
 
     //Llamada a la API para guardar las partida y los Total Points
     const isLogin = sessionStorage.getItem("token")
-    if(isLogin){
-        const potterdleInfo = {
-            user_id: sessionStorage.getItem("id_user"),
-            minigame_id: 5,
-            game_data: "Informacion sobre la partida de Potterdle",
-            game_points: score ,
-            record: null,
-            mithril_per_second: null
-        }
-        
-        createNewPlayedGame(potterdleInfo)
-        addTotalPoints(score,sessionStorage.getItem("id_user"))
-        console.log("Se ha subido tu partida");
+    if (isLogin) {
+      const potterdleInfo = {
+        user_id: sessionStorage.getItem("id_user"),
+        minigame_id: 5,
+        game_data: "Informacion sobre la partida de Potterdle",
+        game_points: score,
+        record: null,
+        mithril_per_second: null
+      }
 
-    }else{
-    
-        return Swal.fire({
-                icon: 'warning',
-                title: 'Warning',
-                text: `Debes logearte para poder guardar tus partidas`,
-                      });    
-                
-    }  
+      createNewPlayedGame(potterdleInfo)
+      addTotalPoints(score, sessionStorage.getItem("id_user"))
+      console.log("Se ha subido tu partida");
+
+    } else {
+
+      return Swal.fire({
+        icon: 'warning',
+        title: 'Warning',
+        text: `Debes logearte para poder guardar tus partidas`,
+      });
+
+    }
 
 
   }
@@ -101,7 +103,7 @@ const Potterdle = () => {
     }
   };
 
-// Maneja la tecla Backspace para moverse al input anterior
+  // Maneja la tecla Backspace para moverse al input anterior
   const handleKeyDown = (e, index) => {
     if (e.key === 'Backspace' && !currentGuess[index] && index > 0) {
       inputRefs.current[index - 1].focus();
@@ -120,7 +122,7 @@ const Potterdle = () => {
     setGameOver(true);
 
 
-}
+  }
 
   // Enviar un intento
   const handleGuess = () => {
@@ -128,15 +130,40 @@ const Potterdle = () => {
       setGuesses([...guesses, currentGuess.join('')]);
       setCurrentGuess(Array(targetWord.length).fill(''));
       inputRefs.current[0].focus();
-      setScore(score-1);
+      setScore(score - 1);
     }
   };
 
   // Obtener el color de las letras en los intentos
-  const getLetterColor = (letter, index) => {
-    if (targetWord[index] === letter) return 'bg-success text-white';
-    if (targetWord.includes(letter)) return 'bg-warning text-dark';
-    return 'bg-secondary text-white';
+  const getLetterColor = (letter, index, guess, targetWord) => {
+
+    const targetLetterCount = {}; // Objeto para contar cuantas veces aparece cada letra en la palabra a adivinar
+    const guessLetterCount = {}; // Objeto para contar las letras verdes que servira para asegurarse de no contar mas al momento de asignar letras amarillas
+
+    for (let i = 0; i < targetWord.length; i++) {   // Contar la frecuencia de cada letra en la palabra a adivinar
+      targetLetterCount[targetWord[i]] = (targetLetterCount[targetWord[i]] || 0) + 1;
+    }
+
+    // Identificar letras que están bien colocadas (verde)
+    const greenIndices = new Array(targetWord.length).fill(false); // Array de longitud de la palabra a adivinar que marcara a true cuando la posicion de la letra coincide exactamente (verde)
+    for (let i = 0; i < guess.length; i++) {
+      if (guess[i] === targetWord[i]) {
+        greenIndices[i] = true;
+        guessLetterCount[guess[i]] = (guessLetterCount[guess[i]] || 0) + 1;
+      }
+    }
+
+    // Determinar el color de cada letra
+    if (greenIndices[index]) {
+      return 'bg-success text-white'; // Verde si se acierta la posición
+    } else if (targetWord.includes(letter)) { // Si no es verde revisa si la letra existe en la palabra a adivinar
+      const guessedSoFar = guessLetterCount[letter] || 0;
+      if (guessedSoFar < (targetLetterCount[letter] || 0)) { // Compara cuantas veces se ha mostrado la letra (verde + amarillo) con cuantas veces existe en la palabra a adivinar (targetLetterCount)
+        guessLetterCount[letter] = guessedSoFar + 1;
+        return 'bg-warning text-dark'; // Amarillo si está en la palabra pero en otra posición
+      }
+    }
+    return 'bg-secondary text-white'; // Gris si no está en la palabra
   };
 
   // Obtener el color de las teclas del teclado virtual
@@ -175,11 +202,11 @@ const Potterdle = () => {
       <h3>Intentos restantes: {maxAttempts - guesses.length}</h3>
       {guesses.length < maxAttempts && !guesses.includes(targetWord) ? (
         <>
-        {/* Mostrar intentos anteriores */}
+          {/* Mostrar intentos anteriores */}
           {guesses.map((guess, i) => (
             <div key={i} className="d-flex mb-2">
               {guess.split('').map((letter, j) => (
-                <div key={j} className={`d-flex align-items-center justify-content-center border border-light me-1 ${getLetterColor(letter, j)}`} style={{ width: '50px', height: '50px', fontSize: '1.5rem', fontWeight: 'bold' }}>
+                <div key={j} className={`d-flex align-items-center justify-content-center border border-light me-1 ${getLetterColor(letter, j, guess, targetWord)}`} style={{ width: '50px', height: '50px', fontSize: '1.5rem', fontWeight: 'bold' }}>
                   {letter}
                 </div>
               ))}
@@ -200,7 +227,7 @@ const Potterdle = () => {
               />
             ))}
           </div>
-          <button onClick={() => { handleGuess(); console.log(score);}} disabled={currentGuess.some((letter) => letter === '')} className="btn btn-primary mb-3">Enter</button> {/* Disabled si hay letra sin rellenar */}
+          <button onClick={() => { handleGuess(); console.log(score); }} disabled={currentGuess.some((letter) => letter === '')} className="btn btn-primary mb-3">Enter</button> {/* Disabled si hay letra sin rellenar */}
           {/* Teclado virtual */}
           <div className="keyboard d-flex flex-column align-items-center">
             {keyboardRows.map((row, rowIndex) => (
@@ -221,12 +248,12 @@ const Potterdle = () => {
         </>
       ) : (
         <div className="text-center mt-4">
-          <h2>{guesses.includes(targetWord)  ? `¡Ganaste!` : `Perdiste. La palabra era: ${targetWord}`}</h2>
-           <GameOverModal
-                          score={score}
-                          onRetry={resetGame}
-                          show={handleGameOver}
-            />
+          <h2>{guesses.includes(targetWord) ? `¡Ganaste!` : `Perdiste. La palabra era: ${targetWord}`}</h2>
+          <GameOverModal
+            score={score}
+            onRetry={resetGame}
+            show={handleGameOver}
+          />
         </div>
       )}
     </div>
