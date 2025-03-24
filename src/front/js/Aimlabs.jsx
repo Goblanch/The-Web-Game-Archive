@@ -180,6 +180,7 @@ const Aimlabs = () => {
                 score={score}
                 onRetry={handleRetry}
                 show={gameOver}
+                minigameId={2}
             />
         </div >
     );

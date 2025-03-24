@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import GameOverModal from "./component/GameOverModal.jsx";
 import MinigameRulesModal from "./component/MinigameRulesModal.jsx";
 import Swal from 'sweetalert2';
-import { createNewPlayedGame,addTotalPoints } from '../services/APIServices.js';
+import { createNewPlayedGame, addTotalPoints } from '../services/APIServices.js';
 
 const Potterdle = () => {
   const [targetWord, setTargetWord] = useState(''); // Palabra a adivinar
@@ -19,7 +19,7 @@ const Potterdle = () => {
     'ASDFGHJKL'.split(''),
     'ZXCVBNM'.split('')
   ];
-  
+
   // Reinicia el juego
   const resetGame = () => {
     setGameOver(false);
@@ -45,44 +45,44 @@ const Potterdle = () => {
 
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
 
-    if(guesses.length == maxAttempts || guesses.includes(targetWord)){
+    if (guesses.length == maxAttempts || guesses.includes(targetWord)) {
 
       savePlayedGame()
-      
+
     }
 
 
-  },[guesses])
+  }, [guesses])
 
   const savePlayedGame = () => {
 
     //Llamada a la API para guardar las partida y los Total Points
     const isLogin = sessionStorage.getItem("token")
-    if(isLogin){
-        const potterdleInfo = {
-            user_id: sessionStorage.getItem("id_user"),
-            minigame_id: 5,
-            game_data: "Informacion sobre la partida de Potterdle",
-            game_points: score ,
-            record: null,
-            mithril_per_second: null
-        }
-        
-        createNewPlayedGame(potterdleInfo)
-        addTotalPoints(score,sessionStorage.getItem("id_user"))
-        console.log("Se ha subido tu partida");
+    if (isLogin) {
+      const potterdleInfo = {
+        user_id: sessionStorage.getItem("id_user"),
+        minigame_id: 5,
+        game_data: "Informacion sobre la partida de Potterdle",
+        game_points: score,
+        record: null,
+        mithril_per_second: null
+      }
 
-    }else{
-    
-        return Swal.fire({
-                icon: 'warning',
-                title: 'Warning',
-                text: `Debes logearte para poder guardar tus partidas`,
-                      });    
-                
-    }  
+      createNewPlayedGame(potterdleInfo)
+      addTotalPoints(score, sessionStorage.getItem("id_user"))
+      console.log("Se ha subido tu partida");
+
+    } else {
+
+      return Swal.fire({
+        icon: 'warning',
+        title: 'Warning',
+        text: `Debes logearte para poder guardar tus partidas`,
+      });
+
+    }
 
 
   }
@@ -101,7 +101,7 @@ const Potterdle = () => {
     }
   };
 
-// Maneja la tecla Backspace para moverse al input anterior
+  // Maneja la tecla Backspace para moverse al input anterior
   const handleKeyDown = (e, index) => {
     if (e.key === 'Backspace' && !currentGuess[index] && index > 0) {
       inputRefs.current[index - 1].focus();
@@ -120,7 +120,7 @@ const Potterdle = () => {
     setGameOver(true);
 
 
-}
+  }
 
   // Enviar un intento
   const handleGuess = () => {
@@ -128,7 +128,7 @@ const Potterdle = () => {
       setGuesses([...guesses, currentGuess.join('')]);
       setCurrentGuess(Array(targetWord.length).fill(''));
       inputRefs.current[0].focus();
-      setScore(score-1);
+      setScore(score - 1);
     }
   };
 
@@ -175,7 +175,7 @@ const Potterdle = () => {
       <h3>Intentos restantes: {maxAttempts - guesses.length}</h3>
       {guesses.length < maxAttempts && !guesses.includes(targetWord) ? (
         <>
-        {/* Mostrar intentos anteriores */}
+          {/* Mostrar intentos anteriores */}
           {guesses.map((guess, i) => (
             <div key={i} className="d-flex mb-2">
               {guess.split('').map((letter, j) => (
@@ -200,7 +200,7 @@ const Potterdle = () => {
               />
             ))}
           </div>
-          <button onClick={() => { handleGuess(); console.log(score);}} disabled={currentGuess.some((letter) => letter === '')} className="btn btn-primary mb-3">Enter</button> {/* Disabled si hay letra sin rellenar */}
+          <button onClick={() => { handleGuess(); console.log(score); }} disabled={currentGuess.some((letter) => letter === '')} className="btn btn-primary mb-3">Enter</button> {/* Disabled si hay letra sin rellenar */}
           {/* Teclado virtual */}
           <div className="keyboard d-flex flex-column align-items-center">
             {keyboardRows.map((row, rowIndex) => (
@@ -221,12 +221,13 @@ const Potterdle = () => {
         </>
       ) : (
         <div className="text-center mt-4">
-          <h2>{guesses.includes(targetWord)  ? `¡Ganaste!` : `Perdiste. La palabra era: ${targetWord}`}</h2>
-           <GameOverModal
-                          score={score}
-                          onRetry={resetGame}
-                          show={handleGameOver}
-            />
+          <h2>{guesses.includes(targetWord) ? `¡Ganaste!` : `Perdiste. La palabra era: ${targetWord}`}</h2>
+          <GameOverModal
+            score={score}
+            onRetry={resetGame}
+            show={handleGameOver}
+            minigameId={5}
+          />
         </div>
       )}
     </div>
