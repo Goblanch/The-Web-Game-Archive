@@ -221,11 +221,8 @@ def update_user(id_us):
     
         if user_by_name_user:
 
-            if user_by_name_user.id_user == user_to_update.id_user:
+            if user_by_name_user.id_user != user_to_update.id_user:
 
-                return jsonify({"msg": "Estas modificando tu User Name sin hacer cambios"}), 400
-            
-            else:
 
                 return jsonify({"msg": "Ya existe ese User Name debes usar otro"}), 400
     
@@ -235,32 +232,30 @@ def update_user(id_us):
 
         if user_by_email:
 
-            if user_by_email.id_user == user_to_update.id_user:
+            if user_by_email.id_user != user_to_update.id_user:
        
-                return jsonify({"msg": "Estas modificando tu Email sin hacer cambios"}), 400
-            
-            else:
             
                 return jsonify({"msg": "El Email ya existe debes usar otro"}), 400
     
     
-    
+    print(data)
     user_to_update.user_name = data.get('user_name', user_to_update.user_name)
     user_to_update.email = data.get('email', user_to_update.email)
-    user_to_update.password = data.get('password', user_to_update.password)
+    # user_to_update.password = data.get('password', user_to_update.password)
     user_to_update.name = data.get('name', user_to_update.name)
     user_to_update.last_name = data.get('last_name', user_to_update.last_name)
     user_to_update.user_img = data.get('user_img', user_to_update.user_img)
 
       ####----Establezco el hash de la password-----######
-    if "password" in data:
+    if "password" in data and data["password"] != "":
 
+        user_to_update.password = data.get('password', user_to_update.password)
         user_to_update.set_password(user_to_update.password)
 
-
+    print(user_to_update)
 
     try:
-
+        
         db.session.commit()
 
         return jsonify({"msg": "Se modifico el ususario correctamente"},user_to_update.serialize()),200
@@ -646,6 +641,30 @@ def delete_played_games(id_played_gam):
         db.session.delete(played_game)
         db.session.commit()
         return jsonify({"msg":"El played_game se ha borrado correctameente"},played_game.serialize()), 200
+
+
+    except Exception as e:
+
+        db.session.rollback()
+
+        return jsonify({'msg': f"Fallo al borrar played_games en la Base de datos : {str(e)}"}), 500
+    
+
+@api.route("/played_games/delete_all/<int:id_us>" , methods = ['DELETE'])
+def delete_all_played_games(id_us):
+
+    all_played_game_by_user = Played_games.query.filter_by(user_id = id_us).all()
+
+    if not all_played_game_by_user :
+
+        return({"msg" : "EL User no ha jugado a ningun juego"}), 400
+    
+    try:
+
+        for game in all_played_game_by_user:
+            db.session.delete(game)
+        db.session.commit()
+        return jsonify({"msg":"Se eliminaron todas las partidas del jugador"}), 200
 
 
     except Exception as e:

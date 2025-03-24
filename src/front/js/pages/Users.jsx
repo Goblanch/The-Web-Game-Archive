@@ -6,11 +6,12 @@ import profilePic from "../../img/rigo-baby.jpg"
 import backgroundImage from '../../img/fondo5.jpg'
 import '../../styles/index.css';
 import { privateRoute } from "../../services/APIServices";
-import { editUser, deleteUser } from "../../services/APIServices";
+import { editUser, deleteUser , deleteAllPlayedGames } from "../../services/APIServices";
 import Swal from 'sweetalert2';
 import Cloudinary from "../component/Cloudinary.jsx";
 import { getInfoUser } from "../../services/APIServices";
 import LeaderBoardTable from "../component/LeaderBoardTable.jsx";
+import { Footer } from "../component/footer.js";
 
 
 const Users = () => {
@@ -140,9 +141,10 @@ const Users = () => {
         }).then((result) => {
             if (result.isConfirmed) {
                 // Llamar a la función deleteUser y redirigir
-                deleteUser();
+                deleteAllPlayedGames();
+                deleteUser(navigate);
                 Swal.fire('Usuario eliminado', 'Tu cuenta ha sido eliminada con éxito', 'success');
-                navigate("/user-login");  // Redirigir al login
+                 
             } else {
                 // Si el usuario cancela la acción
                 Swal.fire('Cancelado', 'No se ha borrado el usuario', 'info');
@@ -195,7 +197,7 @@ const Users = () => {
 
 
 
-                    <div className="home-background" style={{ backgroundImage: `url(${backgroundImage})` }}>
+                    <div className="home-background vh-100" style={{ backgroundImage: `url(${backgroundImage})`}}>
                         <div className="container text-white">
                             {error && (
                                 <div className="bg bg-danger border rounded mb-4 p-3">
@@ -254,11 +256,10 @@ const Users = () => {
                         </div>
                     </div>
 
-
-
             }
 
 
+            <Footer/>
         </>
 
 
