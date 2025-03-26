@@ -184,21 +184,63 @@ def post_user():
 
         db.session.rollback()
         return jsonify({'msg': f"Error al crear el usuario: {str(e)}"}), 500
-
+####################################################################
 @api.route('/user/<int:id_us>', methods = ['DELETE'])
 def delete_user(id_us):
 
 
     user_to_delete = User.query.filter_by(id_user = id_us).first()
 
+    all_played_game_by_user = Played_games.query.filter_by(user_id = id_us).all()
+
     if user_to_delete :
 
-        db.session.delete(user_to_delete)
-        db.session.commit()
-        return jsonify({"msg":"El usuario se ha borrado correctameente"},user_to_delete.serialize()),200
+        if not all_played_game_by_user :
 
-    return jsonify({'msg': "No existe el usuario que deseas borrar con este id:" + id_us}),400
+            print("EL User no ha jugado a ningun juego")
+            
+        else:
+            for game in all_played_game_by_user:
+                db.session.delete(game)
+            db.session.commit()
+            print("Se eliminaron todas las partidas del jugador")
+
+        try:
+
+            db.session.delete(user_to_delete)
+            db.session.commit()
+            return jsonify({"msg":"El usuario se ha borrado correctameente"},user_to_delete.serialize()),200
     
+        except Exception as e:
+
+            db.session.rollback()
+
+            return jsonify({'msg': "No existe el usuario que deseas borrar con este id:" + id_us}),400
+
+
+@api.route("/played_games/delete_all/<int:id_us>" , methods = ['DELETE'])
+def delete_all_played_games(id_us):
+
+    all_played_game_by_user = Played_games.query.filter_by(user_id = id_us).all()
+
+    if not all_played_game_by_user :
+
+        return({"msg" : "EL User no ha jugado a ningun juego"}), 400
+    
+    try:
+
+        for game in all_played_game_by_user:
+            db.session.delete(game)
+        db.session.commit()
+        return jsonify({"msg":"Se eliminaron todas las partidas del jugador"}), 200
+
+
+    except Exception as e:
+
+        db.session.rollback()
+
+        return jsonify({'msg': f"Fallo al borrar played_games en la Base de datos : {str(e)}"}), 500
+ ########################################################################################################################################   
 @api.route('/user/<int:id_us>', methods = ['PUT'])
 def update_user(id_us):
 
@@ -650,28 +692,7 @@ def delete_played_games(id_played_gam):
         return jsonify({'msg': f"Fallo al borrar played_games en la Base de datos : {str(e)}"}), 500
     
 
-@api.route("/played_games/delete_all/<int:id_us>" , methods = ['DELETE'])
-def delete_all_played_games(id_us):
 
-    all_played_game_by_user = Played_games.query.filter_by(user_id = id_us).all()
-
-    if not all_played_game_by_user :
-
-        return({"msg" : "EL User no ha jugado a ningun juego"}), 400
-    
-    try:
-
-        for game in all_played_game_by_user:
-            db.session.delete(game)
-        db.session.commit()
-        return jsonify({"msg":"Se eliminaron todas las partidas del jugador"}), 200
-
-
-    except Exception as e:
-
-        db.session.rollback()
-
-        return jsonify({'msg': f"Fallo al borrar played_games en la Base de datos : {str(e)}"}), 500
     
 ############### TESTED ################
 @api.route('/played_games/last_games/<int:id_us>', methods=['GET'])

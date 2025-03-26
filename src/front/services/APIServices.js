@@ -339,7 +339,7 @@ export const deleteAllPlayedGames = async () => {
 
         }
 
-        window.location.reload()
+      
 
     } catch (error) {
         

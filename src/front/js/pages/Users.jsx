@@ -141,7 +141,6 @@ const Users = () => {
         }).then((result) => {
             if (result.isConfirmed) {
                 // Llamar a la función deleteUser y redirigir
-                deleteAllPlayedGames();
                 deleteUser(navigate);
                 Swal.fire('Usuario eliminado', 'Tu cuenta ha sido eliminada con éxito', 'success');
                  
